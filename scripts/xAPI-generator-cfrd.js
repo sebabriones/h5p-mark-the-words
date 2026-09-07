@@ -50,8 +50,35 @@ H5P.MarkTheWordsCFRD.XapiGenerator = (function ($) {
    */
   function createDefinition(markTheWords) {
     var definition = {};
+    var description = '';
+    var metadataTitle = markTheWords.contentData &&
+      markTheWords.contentData.metadata &&
+      markTheWords.contentData.metadata.title;
+    var instructions = markTheWords.params.instructions;
+    var decoder;
+
+    if (instructions && instructions.enabled && instructions.text) {
+      decoder = document.createElement('div');
+      decoder.innerHTML = instructions.text;
+      description = (decoder.textContent || decoder.innerText || '').replace(/[\n\r]+|[\s]{2,}/g, ' ').trim();
+    }
+
+    if (!description && metadataTitle) {
+      description = String(metadataTitle);
+    }
+
+    if (!description && markTheWords.params.textField) {
+      decoder = document.createElement('div');
+      decoder.innerHTML = markTheWords.params.textField;
+      description = (decoder.textContent || decoder.innerText || '')
+        .replace(/\*/g, '')
+        .replace(/\+/g, '')
+        .replace(/[\n\r]+|[\s]{2,}/g, ' ')
+        .trim();
+    }
+
     definition.description = {
-      'en-US': markTheWords.params.taskDescription,
+      'en-US': description || 'Mark the Words'
     };
     definition.type = 'http://adlnet.gov/expapi/activities/cmi.interaction';
     definition.interactionType = 'choice';
@@ -72,7 +99,11 @@ H5P.MarkTheWordsCFRD.XapiGenerator = (function ($) {
   function getChoices(markTheWords) {
     return markTheWords.selectableWords.map(function (word, index) {
       var text = word.getText();
+
       if (text.charAt(0) === '*' && text.charAt(text.length - 1) === '*') {
+        text = text.substr(1, text.length - 2);
+      }
+      else if (text.charAt(0) === '+' && text.charAt(text.length - 1) === '+') {
         text = text.substr(1, text.length - 2);
       }
 

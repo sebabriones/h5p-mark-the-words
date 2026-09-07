@@ -284,21 +284,25 @@
       ]
     },
     {
-      "label": "Mídia",
+      "label": "Context (optional)",
       "fields": [
         {
-          "label": "Tipo",
-          "description": "Mídia opcional para exibir acima da pergunta."
+          "label": "Context text",
+          "description": "Optional supporting text shown beside the text to mark."
         },
         {
-          "label": "Desativar o zoom da imagem"
+          "label": "Context image",
+          "fields": [
+            {
+              "label": "Image",
+              "description": "Optional image shown beside the text to mark."
+            },
+            {
+              "label": "Disable image zooming"
+            }
+          ]
         }
       ]
-    },
-    {
-      "label": "Descrição da tarefa",
-      "description": "Descreva como o usuário deve resolver a tarefa.",
-      "placeholder": "Clique em todos os verbos no texto a seguir."
     },
     {
       "label": "Campo de texto",
@@ -311,6 +315,14 @@
     {
       "label": "Feedback Geral",
       "fields": [
+        {
+          "label": "Popup background color",
+          "default": "#ffffff"
+        },
+        {
+          "label": "Feedback text color",
+          "default": "#333333"
+        },
         {
           "widgets": [
             {
@@ -329,6 +341,54 @@
               {
                 "label": "Feedback para a faixa de pontuação definida",
                 "placeholder": "Preencha o feedback"
+              },
+              {
+                "label": "Appearance settings",
+                "fields": [
+                  {
+                    "label": "Highlighted lead text",
+                    "placeholder": "e.g. Correct! or Incorrect"
+                  },
+                  {
+                    "label": "Bold lead text"
+                  },
+                  {
+                    "label": "Highlighted lead text color",
+                    "default": "#1a73d9"
+                  },
+                  {
+                    "label": "Text alignment",
+                    "description": "Only used when no feedback image is set. With an image, text alignment follows image position (left/right: left aligned, above: centered).",
+                    "options": [
+                      {
+                        "label": "Left"
+                      },
+                      {
+                        "label": "Center"
+                      },
+                      {
+                        "label": "Right"
+                      }
+                    ]
+                  },
+                  {
+                    "label": "Feedback image"
+                  },
+                  {
+                    "label": "Image position",
+                    "options": [
+                      {
+                        "label": "Above text"
+                      },
+                      {
+                        "label": "Left of text"
+                      },
+                      {
+                        "label": "Right of text"
+                      }
+                    ]
+                  }
+                ]
               }
             ]
           }
@@ -352,6 +412,14 @@
       "default": "Mostrar solução"
     },
     {
+      "label": "Text for overall feedback popup close button",
+      "default": "Close"
+    },
+    {
+      "label": "Text for \"Show feedback\" button",
+      "default": "Show feedback"
+    },
+    {
       "label": "Configurações comportamentais.",
       "description": "Estas opções permitirão que você controle como a tarefa se comporta.",
       "fields": [
@@ -367,6 +435,18 @@
         {
           "label": "Mostrar pontuação",
           "description": "Mostrar pontos ganhos para cada resposta."
+        },
+        {
+          "label": "Word selection mode",
+          "description": "All words: every word can be marked (default). Candidates only: only words marked with * (correct) or + (distractor) are selectable; other words are plain text.",
+          "options": [
+            {
+              "label": "All words selectable"
+            },
+            {
+              "label": "Candidates only (* correct, + distractor)"
+            }
+          ]
         }
       ]
     },
@@ -538,7 +618,7 @@
         },
         {
           "label": "Text",
-          "description": "Colors and font sizes for question and task description.",
+          "description": "Colors and font sizes for the text to mark and context.",
           "fields": [
             {
               "label": "Question text color",
@@ -550,11 +630,11 @@
               "default": 1
             },
             {
-              "label": "Task description text color",
-              "default": "#333333"
+              "label": "Context text color",
+              "default": "#555555"
             },
             {
-              "label": "Task description font size",
+              "label": "Context font size",
               "description": "Text size relative to the play area (em). Default is 1.",
               "default": 1
             }
@@ -608,6 +688,32 @@
             {
               "label": "Missed answer border color",
               "default": "#255c41"
+            }
+          ]
+        },
+        {
+          "label": "Correct/wrong feedback icons",
+          "description": "Check and cross icons shown next to marked words after checking answers.",
+          "fields": [
+            {
+              "label": "Show feedback icons",
+              "description": "When disabled, only word colors/borders indicate correct and wrong answers.",
+              "default": true
+            },
+            {
+              "label": "Correct icon color",
+              "description": "Defaults to the correct answer text color when not set.",
+              "default": "#255c41"
+            },
+            {
+              "label": "Wrong icon color",
+              "description": "Defaults to the wrong answer text color when not set.",
+              "default": "#b71c1c"
+            },
+            {
+              "label": "Feedback icon size",
+              "description": "Relative size of the correct/wrong icon in em units.",
+              "default": 1
             }
           ]
         },

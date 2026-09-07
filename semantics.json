@@ -686,64 +686,68 @@
     ]
   },
   {
-    "name": "media",
+    "name": "context",
     "type": "group",
-    "label": "Media",
-    "importance": "medium",
+    "label": "Context (optional)",
+    "importance": "low",
+    "optional": true,
     "fields": [
       {
-        "name": "type",
-        "type": "library",
-        "label": "Type",
+        "name": "text",
+        "type": "text",
+        "widget": "html",
+        "label": "Context text",
         "importance": "medium",
-        "options": [
-          "H5P.Image 1.1",
-          "H5P.Video 1.6",
-          "H5P.Audio 1.5"
-        ],
         "optional": true,
-        "description": "Optional media to display above the question."
+        "description": "Optional supporting text shown beside the text to mark.",
+        "tags": [
+          "p",
+          "br",
+          "strong",
+          "em",
+          "ul",
+          "ol",
+          "li",
+          "code"
+        ]
       },
       {
-        "name": "disableImageZooming",
-        "type": "boolean",
-        "label": "Disable image zooming",
-        "importance": "low",
-        "default": false,
+        "name": "media",
+        "type": "group",
+        "label": "Context image",
+        "importance": "medium",
         "optional": true,
-        "widget": "showWhen",
-        "showWhen": {
-          "rules": [
-            {
-              "field": "type",
-              "equals": "H5P.Image 1.1"
+        "fields": [
+          {
+            "name": "type",
+            "type": "library",
+            "label": "Image",
+            "importance": "medium",
+            "options": [
+              "H5P.Image 1.1"
+            ],
+            "optional": true,
+            "description": "Optional image shown beside the text to mark."
+          },
+          {
+            "name": "disableImageZooming",
+            "type": "boolean",
+            "label": "Disable image zooming",
+            "importance": "low",
+            "default": false,
+            "optional": true,
+            "widget": "showWhen",
+            "showWhen": {
+              "rules": [
+                {
+                  "field": "type",
+                  "equals": "H5P.Image 1.1"
+                }
+              ]
             }
-          ]
-        }
+          }
+        ]
       }
-    ]
-  },
-  {
-    "label": "Task description",
-    "importance": "high",
-    "name": "taskDescription",
-    "type": "text",
-    "widget": "html",
-    "description": "Describe how the user should solve the task.",
-    "placeholder": "Click on all the verbs in the text that follows.",
-    "enterMode": "p",
-    "tags": [
-      "strong",
-      "em",
-      "u",
-      "a",
-      "ul",
-      "ol",
-      "h2",
-      "h3",
-      "hr",
-      "pre",
-      "code"
     ]
   },
   {
@@ -762,8 +766,8 @@
     "placeholder": "This is an answer: *answer*.",
     "description": "",
     "important": {
-      "description": "<ul><li>Correct words are marked with asterisks (*) before and after the word.</li><li>Asterisks can be added within marked words by adding another asterisk, *correctword*** =&gt; correctword*.</li><li>Only words may be marked as correct. Not phrases.</li></ul>",
-      "example": "The correct words are marked like this: *correctword*, an asterisk is written like this: *correctword***."
+      "description": "<ul><li>Correct words are marked with asterisks (*) before and after the word.</li><li>Asterisks can be added within marked words by adding another asterisk, *correctword*** =&gt; correctword*.</li><li>Only words may be marked as correct. Not phrases.</li><li>In &quot;Candidates only&quot; selection mode, only words marked with * (correct) or + (distractor) are selectable. Other words stay as plain text. A literal plus is written as ++ inside the marks: +word+++ =&gt; word+.</li></ul>",
+      "example": "All words selectable: The *correct* words are marked like this. Candidates only: The *correct* and +wrong+ candidates are clickable; the rest is plain text."
     }
   },
   {
@@ -773,6 +777,30 @@
     "importance": "low",
     "expanded": true,
     "fields": [
+      {
+        "name": "popupBackgroundColor",
+        "type": "text",
+        "widget": "colorSelector",
+        "label": "Popup background color",
+        "default": "#ffffff",
+        "importance": "low",
+        "optional": true,
+        "spectrum": {
+          "showInput": true
+        }
+      },
+      {
+        "name": "feedbackTextColor",
+        "type": "text",
+        "widget": "colorSelector",
+        "label": "Feedback text color",
+        "default": "#333333",
+        "importance": "low",
+        "optional": true,
+        "spectrum": {
+          "showInput": true
+        }
+      },
       {
         "name": "overallFeedback",
         "type": "list",
@@ -814,10 +842,99 @@
             {
               "name": "feedback",
               "type": "text",
+              "maxLength": 2048,
               "label": "Feedback for defined score range",
               "importance": "low",
               "placeholder": "Fill in the feedback",
               "optional": true
+            },
+            {
+              "name": "appearance",
+              "type": "group",
+              "label": "Appearance settings",
+              "importance": "low",
+              "expanded": false,
+              "optional": true,
+              "fields": [
+                {
+                  "name": "feedbackLeadText",
+                  "type": "text",
+                  "maxLength": 2048,
+                  "label": "Highlighted lead text",
+                  "importance": "low",
+                  "placeholder": "e.g. Correct! or Incorrect",
+                  "optional": true
+                },
+                {
+                  "name": "feedbackLeadBold",
+                  "type": "boolean",
+                  "label": "Bold lead text",
+                  "importance": "low",
+                  "default": true
+                },
+                {
+                  "name": "feedbackLeadTextColor",
+                  "type": "text",
+                  "widget": "colorSelector",
+                  "label": "Highlighted lead text color",
+                  "default": "#1a73d9",
+                  "importance": "low",
+                  "optional": true,
+                  "spectrum": {
+                    "showInput": true
+                  }
+                },
+                {
+                  "name": "feedbackTextAlign",
+                  "type": "select",
+                  "label": "Text alignment",
+                  "description": "Only used when no feedback image is set. With an image, text alignment follows image position (left/right: left aligned, above: centered).",
+                  "importance": "low",
+                  "default": "left",
+                  "options": [
+                    {
+                      "value": "left",
+                      "label": "Left"
+                    },
+                    {
+                      "value": "center",
+                      "label": "Center"
+                    },
+                    {
+                      "value": "right",
+                      "label": "Right"
+                    }
+                  ]
+                },
+                {
+                  "name": "feedbackImage",
+                  "type": "image",
+                  "label": "Feedback image",
+                  "importance": "low",
+                  "optional": true
+                },
+                {
+                  "name": "feedbackImagePosition",
+                  "type": "select",
+                  "label": "Image position",
+                  "importance": "low",
+                  "default": "left",
+                  "options": [
+                    {
+                      "value": "above",
+                      "label": "Above text"
+                    },
+                    {
+                      "value": "left",
+                      "label": "Left of text"
+                    },
+                    {
+                      "value": "right",
+                      "label": "Right of text"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }
@@ -857,6 +974,24 @@
     "common": true
   },
   {
+    "name": "feedbackPopupCloseLabel",
+    "type": "text",
+    "label": "Text for overall feedback popup close button",
+    "default": "Close",
+    "importance": "low",
+    "common": true,
+    "optional": true
+  },
+  {
+    "name": "showFeedbackButtonLabel",
+    "type": "text",
+    "label": "Text for \"Show feedback\" button",
+    "default": "Show feedback",
+    "importance": "low",
+    "common": true,
+    "optional": true
+  },
+  {
     "name": "behaviour",
     "importance": "low",
     "type": "group",
@@ -894,6 +1029,24 @@
         "description": "Show points earned for each answer.",
         "importance": "low",
         "default": true
+      },
+      {
+        "name": "selectionMode",
+        "type": "select",
+        "label": "Word selection mode",
+        "description": "All words: every word can be marked (default). Candidates only: only words marked with * (correct) or + (distractor) are selectable; other words are plain text.",
+        "importance": "low",
+        "default": "all",
+        "options": [
+          {
+            "value": "all",
+            "label": "All words selectable"
+          },
+          {
+            "value": "candidatesOnly",
+            "label": "Candidates only (* correct, + distractor)"
+          }
+        ]
       }
     ]
   },
@@ -1324,7 +1477,7 @@
         "label": "Text",
         "importance": "low",
         "optional": true,
-        "description": "Colors and font sizes for question and task description.",
+        "description": "Colors and font sizes for the text to mark and context.",
         "fields": [
           {
             "name": "question",
@@ -1349,20 +1502,20 @@
             "unit": "em"
           },
           {
-            "name": "taskDescription",
+            "name": "context",
             "type": "text",
             "widget": "colorSelector",
-            "label": "Task description text color",
-            "default": "#333333",
+            "label": "Context text color",
+            "default": "#555555",
             "optional": true,
             "spectrum": {
               "showInput": true
             }
           },
           {
-            "name": "taskDescriptionFontSize",
+            "name": "contextFontSize",
             "type": "number",
-            "label": "Task description font size",
+            "label": "Context font size",
             "description": "Text size relative to the play area (em). Default is 1.",
             "default": 1,
             "min": 0.5,
@@ -1495,6 +1648,59 @@
             "spectrum": {
               "showInput": true
             }
+          }
+        ]
+      },
+      {
+        "name": "feedbackIcons",
+        "type": "group",
+        "label": "Correct/wrong feedback icons",
+        "importance": "low",
+        "optional": true,
+        "expanded": false,
+        "description": "Check and cross icons shown next to marked words after checking answers.",
+        "fields": [
+          {
+            "name": "show",
+            "type": "boolean",
+            "label": "Show feedback icons",
+            "description": "When disabled, only word colors/borders indicate correct and wrong answers.",
+            "default": true
+          },
+          {
+            "name": "correctColor",
+            "type": "text",
+            "widget": "colorSelector",
+            "label": "Correct icon color",
+            "description": "Defaults to the correct answer text color when not set.",
+            "default": "#255c41",
+            "optional": true,
+            "spectrum": {
+              "showInput": true
+            }
+          },
+          {
+            "name": "wrongColor",
+            "type": "text",
+            "widget": "colorSelector",
+            "label": "Wrong icon color",
+            "description": "Defaults to the wrong answer text color when not set.",
+            "default": "#b71c1c",
+            "optional": true,
+            "spectrum": {
+              "showInput": true
+            }
+          },
+          {
+            "name": "size",
+            "type": "number",
+            "label": "Feedback icon size",
+            "description": "Relative size of the correct/wrong icon in em units.",
+            "default": 1,
+            "min": 0.5,
+            "max": 3,
+            "decimals": 2,
+            "unit": "em"
           }
         ]
       },

@@ -32,15 +32,26 @@ H5P.MarkTheWordsCFRD.Word = (function () {
 
     var input = $word.text();
     var handledInput = input;
+    var candidatesOnly = !!(params && params.behaviour &&
+      params.behaviour.selectionMode === 'candidatesOnly');
 
-    // Check if word is an answer
-    var isAnswer = checkForAnswer();
+    // Check if word is an answer (*…*)
+    var isAnswer = checkForMarker('*');
 
-    // Remove single asterisk and escape double asterisks.
-    handleAsterisks();
+    // In candidates-only mode, +…+ marks a selectable distractor
+    var isPlusDistractor = !isAnswer && candidatesOnly && checkForMarker('+');
 
     if (isAnswer) {
+      stripMarkerChar('*');
       $word.text(handledInput);
+    }
+    else if (isPlusDistractor) {
+      stripMarkerChar('+');
+      $word.text(handledInput);
+    }
+    else {
+      // Escape double asterisks in plain selectable words (all-words mode)
+      stripMarkerChar('*');
     }
 
     const ariaText = document.createElement('span');
@@ -48,21 +59,46 @@ H5P.MarkTheWordsCFRD.Word = (function () {
     $word[0].appendChild(ariaText);
 
     /**
-     * Checks if the word is an answer by checking the first, second to last and last character of the word.
+     * Collapse doubled marker chars (e.g. ** → *, ++ → +) for detection.
      *
      * @private
-     * @return {Boolean} Returns true if the word is an answer.
+     * @param {String} wordString
+     * @param {String} marker
+     * @return {String}
      */
-    function checkForAnswer() {
-      // Check last and next to last character, in case of punctuations.
-      var wordString = removeDoubleAsterisks(input);
-      if (wordString.charAt(0) === ('*') && wordString.length > 2) {
-        if (wordString.charAt(wordString.length - 1) === ('*')) {
+    function removeDoubleMarkers(wordString, marker) {
+      var index = wordString.indexOf(marker);
+      var slicedWord = wordString;
+
+      while (index !== -1) {
+        if (wordString.indexOf(marker, index + 1) === index + 1) {
+          slicedWord = wordString.slice(0, index) +
+            wordString.slice(index + 2, wordString.length);
+        }
+        index = wordString.indexOf(marker, index + 1);
+      }
+
+      return slicedWord;
+    }
+
+    /**
+     * Detect leading/trailing marker (optionally with trailing punctuation).
+     * Updates handledInput when a full wrap is found.
+     *
+     * @private
+     * @param {String} marker
+     * @return {Boolean}
+     */
+    function checkForMarker(marker) {
+      var wordString = removeDoubleMarkers(input, marker);
+
+      if (wordString.charAt(0) === marker && wordString.length > 2) {
+        if (wordString.charAt(wordString.length - 1) === marker) {
           handledInput = input.slice(1, input.length - 1);
           return true;
         }
-        // If punctuation, add the punctuation to the end of the word.
-        else if(wordString.charAt(wordString.length - 2) === ('*')) {
+        // Punctuation after closing marker
+        else if (wordString.charAt(wordString.length - 2) === marker) {
           handledInput = input.slice(1, input.length - 2);
           return true;
         }
@@ -72,37 +108,19 @@ H5P.MarkTheWordsCFRD.Word = (function () {
     }
 
     /**
-     * Removes double asterisks from string, used to handle input.
+     * Escape doubled markers (keep one) and remove singles from handledInput.
+     * Same algorithm as upstream asterisk handling.
      *
      * @private
-     * @param {String} wordString The string which will be handled.
-     * @return {String} Returns a string without double asterisks.
+     * @param {String} marker
      */
-    function removeDoubleAsterisks(wordString) {
-      var asteriskIndex = wordString.indexOf('*');
-      var slicedWord = wordString;
+    function stripMarkerChar(marker) {
+      var index = handledInput.indexOf(marker);
 
-      while (asteriskIndex !== -1) {
-        if (wordString.indexOf('*', asteriskIndex + 1) === asteriskIndex + 1) {
-          slicedWord = wordString.slice(0, asteriskIndex) + wordString.slice(asteriskIndex + 2, input.length);
-        }
-        asteriskIndex = wordString.indexOf('*', asteriskIndex + 1);
-      }
-
-      return slicedWord;
-    }
-
-    /**
-     * Escape double asterisks ** = *, and remove single asterisk.
-     *
-     * @private
-     */
-    function handleAsterisks() {
-      var asteriskIndex = handledInput.indexOf('*');
-
-      while (asteriskIndex !== -1) {
-        handledInput = handledInput.slice(0, asteriskIndex) + handledInput.slice(asteriskIndex + 1, handledInput.length);
-        asteriskIndex = handledInput.indexOf('*', asteriskIndex + 1);
+      while (index !== -1) {
+        handledInput = handledInput.slice(0, index) +
+          handledInput.slice(index + 1, handledInput.length);
+        index = handledInput.indexOf(marker, index + 1);
       }
     }
 

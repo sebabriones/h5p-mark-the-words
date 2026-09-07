@@ -17,9 +17,9 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
     wordSelectedText: '#333333',
     wordSelectedBorder: '#388eff',
     questionText: '#333333',
-    taskDescriptionText: '#333333',
+    contextText: '#555555',
     questionFontSize: 1,
-    taskDescriptionFontSize: 1,
+    contextFontSize: 1,
     correctBackground: '#b6e4ce',
     correctText: '#255c41',
     correctBorder: '#255c41',
@@ -28,7 +28,11 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
     wrongBorder: '#b71c1c',
     missedBackground: '#b6e4ce',
     missedText: '#255c41',
-    missedBorder: '#255c41'
+    missedBorder: '#255c41',
+    feedbackIconsShow: true,
+    feedbackIconCorrectColor: '#255c41',
+    feedbackIconWrongColor: '#b71c1c',
+    feedbackIconSize: 1
   };
 
   var CSS_VAR_KEYS = {
@@ -43,7 +47,7 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
     wordSelectedText: '--mtw-word-selected-color',
     wordSelectedBorder: '--mtw-word-selected-border',
     questionText: '--mtw-question-color',
-    taskDescriptionText: '--mtw-task-description-color',
+    contextText: '--mtw-context-color',
     correctBackground: '--mtw-correct-bg',
     correctText: '--mtw-correct-color',
     correctBorder: '--mtw-correct-border',
@@ -52,12 +56,15 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
     wrongBorder: '--mtw-wrong-border',
     missedBackground: '--mtw-missed-bg',
     missedText: '--mtw-missed-color',
-    missedBorder: '--mtw-missed-border'
+    missedBorder: '--mtw-missed-border',
+    feedbackIconCorrectColor: '--mtw-feedback-icon-correct-color',
+    feedbackIconWrongColor: '--mtw-feedback-icon-wrong-color'
   };
 
   var CSS_EM_VAR_KEYS = {
     questionFontSize: '--mtw-question-font-size',
-    taskDescriptionFontSize: '--mtw-task-description-font-size'
+    contextFontSize: '--mtw-context-font-size',
+    feedbackIconSize: '--mtw-feedback-icon-size'
   };
 
   function toEm(value, fallback) {
@@ -123,6 +130,7 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
     var correct = (appearance && appearance.correctColors) || {};
     var wrong = (appearance && appearance.wrongColors) || {};
     var missed = (appearance && appearance.missedColors) || {};
+    var icons = (appearance && appearance.feedbackIcons) || {};
 
     return {
       playAreaBackground: appearance && appearance.playAreaBackground,
@@ -149,9 +157,9 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
       wordSelectedText: words.selectedText,
       wordSelectedBorder: words.selectedBorder,
       questionText: text.question,
-      taskDescriptionText: text.taskDescription,
+      contextText: text.context,
       questionFontSize: text.questionFontSize,
-      taskDescriptionFontSize: text.taskDescriptionFontSize,
+      contextFontSize: text.contextFontSize,
       correctBackground: correct.background,
       correctText: correct.text,
       correctBorder: correct.border,
@@ -160,7 +168,11 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
       wrongBorder: wrong.border,
       missedBackground: missed.background,
       missedText: missed.text,
-      missedBorder: missed.border
+      missedBorder: missed.border,
+      feedbackIconsShow: icons.show,
+      feedbackIconCorrectColor: icons.correctColor,
+      feedbackIconWrongColor: icons.wrongColor,
+      feedbackIconSize: icons.size
     };
   }
 
@@ -176,8 +188,18 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
     }
 
     for (key in fields) {
-      if (Object.prototype.hasOwnProperty.call(fields, key) &&
-          fields[key] !== undefined &&
+      if (!Object.prototype.hasOwnProperty.call(fields, key)) {
+        continue;
+      }
+
+      if (key === 'feedbackIconsShow') {
+        if (fields[key] !== undefined && fields[key] !== null && fields[key] !== '') {
+          merged[key] = isTruthy(fields[key]);
+        }
+        continue;
+      }
+
+      if (fields[key] !== undefined &&
           fields[key] !== null &&
           fields[key] !== '') {
         merged[key] = fields[key];
@@ -192,6 +214,14 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
       merged.wordSelectedText = merged.wordText;
     }
 
+    if (!fields.feedbackIconCorrectColor) {
+      merged.feedbackIconCorrectColor = merged.correctText;
+    }
+
+    if (!fields.feedbackIconWrongColor) {
+      merged.feedbackIconWrongColor = merged.wrongText;
+    }
+
     return merged;
   }
 
@@ -201,6 +231,31 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
     }
 
     return merged[key];
+  }
+
+  function applyFeedbackIconsVisibility($container, show) {
+    var visible = show !== false;
+    var i;
+    var el;
+
+    if (!$container || !$container.length) {
+      return;
+    }
+
+    for (i = 0; i < $container.length; i++) {
+      el = $container[i];
+
+      if (!el || !el.classList) {
+        continue;
+      }
+
+      if (visible) {
+        el.classList.remove('h5p-mtw-feedback-icons-hidden');
+      }
+      else {
+        el.classList.add('h5p-mtw-feedback-icons-hidden');
+      }
+    }
   }
 
   function applyAppearanceVars($container, appearance) {
@@ -232,6 +287,8 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
         }
       }
     }
+
+    applyFeedbackIconsVisibility($container, merged.feedbackIconsShow);
 
     return merged;
   }

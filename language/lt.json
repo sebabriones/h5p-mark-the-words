@@ -284,21 +284,25 @@
       ]
     },
     {
+      "label": "Context (optional)",
       "fields": [
         {
-          "label": "Tipas",
-          "description": "Medžiaga klausimo papildymui."
+          "label": "Context text",
+          "description": "Optional supporting text shown beside the text to mark."
         },
         {
-          "label": "Išjungti vaizdo didinimą"
+          "label": "Context image",
+          "fields": [
+            {
+              "label": "Image",
+              "description": "Optional image shown beside the text to mark."
+            },
+            {
+              "label": "Disable image zooming"
+            }
+          ]
         }
-      ],
-      "label": "Medija"
-    },
-    {
-      "description": "Aprašykite kaip naudotojas turėtų išspręsti užduotį.",
-      "label": "Užduoties aprašymas",
-      "placeholder": "Paspauskite visus veiksmažodžius pateikiamame tekste."
+      ]
     },
     {
       "label": "Teksto laukas",
@@ -312,7 +316,21 @@
       "label": "Bendras atsiliepimas",
       "fields": [
         {
+          "label": "Popup background color",
+          "default": "#ffffff"
+        },
+        {
+          "label": "Feedback text color",
+          "default": "#333333"
+        },
+        {
+          "widgets": [
+            {
+              "label": "Numatytasis"
+            }
+          ],
           "label": "Define custom feedback for any score range",
+          "description": "Spustelėkite mygtuką „Pridėti diapazoną“, kad pridėtumėte tiek diapazonų, kiek jums reikia. Pavyzdys: 0–20 % blogas balas, 21–91 % vidutinis balas, 91–100 % puikus rezultatas!",
           "entity": "diapazonas",
           "field": {
             "fields": [
@@ -323,15 +341,57 @@
               {
                 "label": "Atsiliepimai apibrėžtam balų diapazonui",
                 "placeholder": "Užpildykite atsiliepimą"
+              },
+              {
+                "label": "Appearance settings",
+                "fields": [
+                  {
+                    "label": "Highlighted lead text",
+                    "placeholder": "e.g. Correct! or Incorrect"
+                  },
+                  {
+                    "label": "Bold lead text"
+                  },
+                  {
+                    "label": "Highlighted lead text color",
+                    "default": "#1a73d9"
+                  },
+                  {
+                    "label": "Text alignment",
+                    "description": "Only used when no feedback image is set. With an image, text alignment follows image position (left/right: left aligned, above: centered).",
+                    "options": [
+                      {
+                        "label": "Left"
+                      },
+                      {
+                        "label": "Center"
+                      },
+                      {
+                        "label": "Right"
+                      }
+                    ]
+                  },
+                  {
+                    "label": "Feedback image"
+                  },
+                  {
+                    "label": "Image position",
+                    "options": [
+                      {
+                        "label": "Above text"
+                      },
+                      {
+                        "label": "Left of text"
+                      },
+                      {
+                        "label": "Right of text"
+                      }
+                    ]
+                  }
+                ]
               }
             ]
-          },
-          "widgets": [
-            {
-              "label": "Numatytasis"
-            }
-          ],
-          "description": "Spustelėkite mygtuką „Pridėti diapazoną“, kad pridėtumėte tiek diapazonų, kiek jums reikia. Pavyzdys: 0–20 % blogas balas, 21–91 % vidutinis balas, 91–100 % puikus rezultatas!"
+          }
         }
       ]
     },
@@ -352,6 +412,14 @@
       "default": "Show solution"
     },
     {
+      "label": "Text for overall feedback popup close button",
+      "default": "Close"
+    },
+    {
+      "label": "Text for \"Show feedback\" button",
+      "default": "Show feedback"
+    },
+    {
       "label": "Veiksenos nustatymai.",
       "fields": [
         {
@@ -366,6 +434,18 @@
         {
           "description": "Show points earned for each answer.",
           "label": "Show score points"
+        },
+        {
+          "label": "Word selection mode",
+          "description": "All words: every word can be marked (default). Candidates only: only words marked with * (correct) or + (distractor) are selectable; other words are plain text.",
+          "options": [
+            {
+              "label": "All words selectable"
+            },
+            {
+              "label": "Candidates only (* correct, + distractor)"
+            }
+          ]
         }
       ],
       "description": "These options will let you control how the task behaves."
@@ -538,7 +618,7 @@
         },
         {
           "label": "Text",
-          "description": "Colors and font sizes for question and task description.",
+          "description": "Colors and font sizes for the text to mark and context.",
           "fields": [
             {
               "label": "Question text color",
@@ -550,11 +630,11 @@
               "default": 1
             },
             {
-              "label": "Task description text color",
-              "default": "#333333"
+              "label": "Context text color",
+              "default": "#555555"
             },
             {
-              "label": "Task description font size",
+              "label": "Context font size",
               "description": "Text size relative to the play area (em). Default is 1.",
               "default": 1
             }
@@ -608,6 +688,32 @@
             {
               "label": "Missed answer border color",
               "default": "#255c41"
+            }
+          ]
+        },
+        {
+          "label": "Correct/wrong feedback icons",
+          "description": "Check and cross icons shown next to marked words after checking answers.",
+          "fields": [
+            {
+              "label": "Show feedback icons",
+              "description": "When disabled, only word colors/borders indicate correct and wrong answers.",
+              "default": true
+            },
+            {
+              "label": "Correct icon color",
+              "description": "Defaults to the correct answer text color when not set.",
+              "default": "#255c41"
+            },
+            {
+              "label": "Wrong icon color",
+              "description": "Defaults to the wrong answer text color when not set.",
+              "default": "#b71c1c"
+            },
+            {
+              "label": "Feedback icon size",
+              "description": "Relative size of the correct/wrong icon in em units.",
+              "default": 1
             }
           ]
         },

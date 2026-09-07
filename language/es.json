@@ -277,33 +277,45 @@
       ]
     },
     {
-      "label": "Medios",
+      "label": "Contexto (opcional)",
       "fields": [
         {
-          "label": "Tipo",
-          "description": "Medios opcionales mostrados encima de la pregunta."
+          "label": "Texto de contexto",
+          "description": "Texto de apoyo opcional junto al texto a marcar."
         },
         {
-          "label": "Deshabilitar acercamiento de imagen"
+          "label": "Imagen de contexto",
+          "fields": [
+            {
+              "label": "Imagen",
+              "description": "Imagen opcional junto al texto a marcar."
+            },
+            {
+              "label": "Desactivar zoom de imagen"
+            }
+          ]
         }
       ]
-    },
-    {
-      "label": "Descripción de la tarea",
-      "description": "Describe cómo debería resolver la tarea el usuario.",
-      "placeholder": "Haz clic en todos los verbos del siguiente texto."
     },
     {
       "label": "Campo de texto",
       "placeholder": "Esta es una respuesta: *respuesta*.",
       "important": {
-        "description": "<ul><li>Las palabras marcadas se agregan con un asterisco (*).</li><li>Pueden añadirse asteriscos dentro de las palabras marcadas aañadiendo otro asterisco, *palabracorrecta*** =&gt; palabracorrecta*.</li></ul>",
-        "example": "Las palabras correctas se marcan así: *palabracorrecta*, un asterisco se marca así: *palabracorrecta***."
+        "description": "<ul><li>Las palabras correctas se marcan con asteriscos (*) antes y después de la palabra.</li><li>Pueden añadirse asteriscos dentro de las palabras marcadas añadiendo otro asterisco, *palabracorrecta*** =&gt; palabracorrecta*.</li><li>Solo pueden marcarse palabras como correctas, no frases.</li><li>En el modo &quot;Solo candidatas&quot;, solo son seleccionables las palabras marcadas con * (correcta) o + (distractora). El resto queda como texto plano. Un signo más literal se escribe como ++ dentro de las marcas: +palabra+++ =&gt; palabra+.</li></ul>",
+        "example": "Todas seleccionables: Las palabras *correctas* se marcan así. Solo candidatas: Las *correctas* y las +incorrectas+ son clicables; el resto es texto plano."
       }
     },
     {
       "label": "Retroalimentación Global",
       "fields": [
+        {
+          "label": "Color de fondo de zona de retroalimentación",
+          "default": "#ffffff"
+        },
+        {
+          "label": "Color de texto de la zona de retroalimentación",
+          "default": "#333333"
+        },
         {
           "widgets": [
             {
@@ -320,8 +332,56 @@
               },
               {},
               {
-                "label": "Retroalimentación para rango de puntuación definido",
+                "label": "Retroalimentación para el rango de puntuación definido",
                 "placeholder": "Escribe tu retroalimentación"
+              },
+              {
+                "label": "Configuración de apariencia",
+                "fields": [
+                  {
+                    "label": "Texto destacado inicial",
+                    "placeholder": "p. ej. ¡Correcto! o Incorrecto"
+                  },
+                  {
+                    "label": "Texto destacado en negrita"
+                  },
+                  {
+                    "label": "Color del texto destacado",
+                    "default": "#1a73d9"
+                  },
+                  {
+                    "label": "Alineación del texto",
+                    "description": "Solo se usa cuando no hay imagen de retroalimentación. Con imagen, la alineación depende de su posición (izquierda/derecha: alineado a la izquierda; encima: centrado).",
+                    "options": [
+                      {
+                        "label": "Izquierda"
+                      },
+                      {
+                        "label": "Centro"
+                      },
+                      {
+                        "label": "Derecha"
+                      }
+                    ]
+                  },
+                  {
+                    "label": "Imagen de retroalimentación"
+                  },
+                  {
+                    "label": "Posición de la imagen",
+                    "options": [
+                      {
+                        "label": "Encima del texto"
+                      },
+                      {
+                        "label": "A la izquierda del texto"
+                      },
+                      {
+                        "label": "A la derecha del texto"
+                      }
+                    ]
+                  }
+                ]
               }
             ]
           }
@@ -345,6 +405,14 @@
       "default": "Mostrar solución"
     },
     {
+      "label": "Texto del botón cerrar del popup de retroalimentación",
+      "default": "Cerrar"
+    },
+    {
+      "label": "Texto del botón \"Mostrar retroalimentación\"",
+      "default": "Mostrar retroalimentación"
+    },
+    {
       "label": "Configuración del comportamiento.",
       "description": "Estas opciones te permitirán controlar cómo se comporta la tarea.",
       "fields": [
@@ -360,6 +428,18 @@
         {
           "label": "Mostrar resultados de puntuación",
           "description": "Mostrar los puntos obtenidos por cada respuesta."
+        },
+        {
+          "label": "Modo de selección de palabras",
+          "description": "Todas las palabras: cualquier palabra se puede marcar (predeterminado). Solo candidatas: solo son seleccionables las marcadas con * (correcta) o + (distractora); el resto es texto plano.",
+          "options": [
+            {
+              "label": "Todas las palabras seleccionables"
+            },
+            {
+              "label": "Solo candidatas (* correcta, + distractora)"
+            }
+          ]
         }
       ]
     },
@@ -531,7 +611,7 @@
         },
         {
           "label": "Texto",
-          "description": "Colores y tamaños de letra de la pregunta y la descripción de la tarea.",
+          "description": "Colores y tamaños de letra del texto a marcar y del contexto.",
           "fields": [
             {
               "label": "Color del texto de la pregunta",
@@ -543,11 +623,11 @@
               "default": 1
             },
             {
-              "label": "Color del texto de la descripción de la tarea",
-              "default": "#333333"
+              "label": "Color de texto del contexto",
+              "default": "#555555"
             },
             {
-              "label": "Tamaño de letra de la descripción de la tarea",
+              "label": "Tamaño de letra del contexto",
               "description": "Tamaño relativo al área de juego (em). El valor por defecto es 1.",
               "default": 1
             }
@@ -601,6 +681,32 @@
             {
               "label": "Color de borde de respuesta omitida",
               "default": "#255c41"
+            }
+          ]
+        },
+        {
+          "label": "Iconos de retroalimentación correcto/incorrecto",
+          "description": "Iconos de verificación y cruz junto a las palabras marcadas después de comprobar las respuestas.",
+          "fields": [
+            {
+              "label": "Mostrar iconos de retroalimentación",
+              "description": "Si se desactiva, solo los colores y bordes de las palabras indican respuestas correctas e incorrectas.",
+              "default": true
+            },
+            {
+              "label": "Color del icono correcto",
+              "description": "Si no se define, usa el color de texto de respuesta correcta.",
+              "default": "#255c41"
+            },
+            {
+              "label": "Color del icono incorrecto",
+              "description": "Si no se define, usa el color de texto de respuesta incorrecta.",
+              "default": "#b71c1c"
+            },
+            {
+              "label": "Tamaño del icono de retroalimentación",
+              "description": "Tamaño relativo del icono correcto/incorrecto en unidades em.",
+              "default": 1
             }
           ]
         },
