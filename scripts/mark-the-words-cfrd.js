@@ -1,15 +1,276 @@
 /*global H5P*/
 
+var H5P = H5P || {};
+
+/**
+ * @param {*} value
+ * @returns {boolean}
+ */
+function isTruthy(value) {
+  return value === true || value === 1 || value === '1' || value === 'true';
+}
+
+/**
+ * @param {H5P.MarkTheWordsCFRD} instance
+ * @returns {Object|null}
+ */
+function getInstructionsOptions(instance) {
+  var instructions = instance && instance.params && instance.params.instructions;
+  var text;
+
+  if (!instructions || !isTruthy(instructions.enabled)) {
+    return null;
+  }
+
+  text = (instructions.text === undefined || instructions.text === null) ?
+    '' :
+    String(instructions.text).trim();
+
+  if (!text) {
+    return null;
+  }
+
+  return {
+    id: instance.contentId || instance.id,
+    text: text,
+    displayMode: instructions.displayMode || 'both',
+    introButtonLabel: instructions.introButtonLabel || 'Start',
+    tabButtonLabel: instructions.tabButtonLabel || 'Instructions',
+    appearance: H5P.jQuery.extend(true, {}, instructions.appearance || {}),
+    animation: H5P.jQuery.extend(true, {}, instructions.animation || {}),
+    startCollapsed: instructions.startCollapsed === undefined ?
+      true :
+      isTruthy(instructions.startCollapsed)
+  };
+}
+
+/**
+ * @param {H5P.MarkTheWordsCFRD} instance
+ * @returns {boolean}
+ */
+function isEmbeddedInstance(instance) {
+  return !!(instance && typeof instance.isRoot === 'function' && !instance.isRoot());
+}
+
+/**
+ * @param {H5P.MarkTheWordsCFRD} instance
+ * @param {H5P.jQuery} $fallbackContainer
+ */
+function scheduleInstructionsAttach(instance, $fallbackContainer) {
+  if (isEmbeddedInstance(instance)) {
+    return;
+  }
+
+  [0, 200, 500].forEach(function (delay) {
+    setTimeout(function () {
+      var instructions = getInstructionsOptions(instance);
+      var $target = (instance.$playArea && instance.$playArea.length) ?
+        instance.$playArea :
+        ((instance.$instructionsTarget && instance.$instructionsTarget.length) ?
+          instance.$instructionsTarget :
+          $fallbackContainer);
+      var attached;
+
+      if (!instructions || !$target || !$target.length) {
+        return;
+      }
+
+      if (
+        $target.find('.h5p-instructions-root').length ||
+        ($target.parent().length && $target.parent().children('.h5p-instructions-root').length)
+      ) {
+        instance.trigger('resize');
+        return;
+      }
+
+      if (H5P.Instructions && typeof H5P.Instructions.attach === 'function') {
+        attached = H5P.Instructions.attach($target, instructions);
+
+        if (attached) {
+          instance.trigger('resize');
+        }
+      }
+    }, delay);
+  });
+}
+
+/**
+ * @param {H5P.MarkTheWordsCFRD} instance
+ */
+function refreshInstructionsScale(instance) {
+  var instructions = getInstructionsOptions(instance);
+  var $target = (instance.$playArea && instance.$playArea.length) ?
+    instance.$playArea :
+    ((instance.$instructionsTarget && instance.$instructionsTarget.length) ?
+      instance.$instructionsTarget :
+      null);
+
+  if (!instructions || !$target || !$target.length) {
+    return;
+  }
+
+  if (H5P.Instructions && typeof H5P.Instructions.updateScale === 'function') {
+    H5P.Instructions.updateScale($target, instructions);
+  }
+}
+
+/**
+ * Wrap activity content in an inner play area; keep evaluation footer outside flex 16:9.
+ *
+ * @param {H5P.jQuery} $container
+ * @returns {H5P.jQuery}
+ */
+function setupPlayAreaLayout($container) {
+  var $ = H5P.jQuery;
+  var $playArea = $container.children('.h5p-mtw-play-area').first();
+  var playAreaSelectors = [
+    '.h5p-question-image',
+    '.h5p-question-video',
+    '.h5p-question-audio',
+    '.h5p-question-introduction',
+    '.h5p-question-content'
+  ];
+
+  if (!$playArea.length) {
+    $playArea = $('<div>', { 'class': 'h5p-mtw-play-area' });
+    $container.prepend($playArea);
+  }
+
+  playAreaSelectors.forEach(function (selector) {
+    $container.children(selector).appendTo($playArea);
+  });
+
+  return $playArea;
+}
+
+/**
+ * Move inline scorebar/feedback out of the play area.
+ *
+ * @param {H5P.jQuery} $container
+ */
+function normalizeInlineEvaluationLayout($container) {
+  var $ = H5P.jQuery;
+  var $playArea = $container.children('.h5p-mtw-play-area').first();
+  var $feedback;
+  var $scorebar;
+  var $buttons;
+
+  if (!$playArea.length) {
+    return;
+  }
+
+  $playArea.children('.h5p-question-feedback:not(.h5p-question-popup)').appendTo($container);
+  $playArea.children('.h5p-question-scorebar').appendTo($container);
+
+  $feedback = $container.children('.h5p-question-feedback:not(.h5p-question-popup)');
+  $scorebar = $container.children('.h5p-question-scorebar');
+  $buttons = $container.children('.h5p-question-buttons');
+
+  if ($scorebar.length && $buttons.length) {
+    $scorebar.insertBefore($buttons);
+  }
+
+  if ($feedback.length && $scorebar.length) {
+    $feedback.insertBefore($scorebar);
+  }
+  else if ($feedback.length && $buttons.length) {
+    $feedback.insertBefore($buttons);
+  }
+}
+
+/**
+ * @param {H5P.jQuery} $container
+ * @param {H5P.MarkTheWordsCFRD} [instance]
+ */
+function scheduleInlineEvaluationLayout($container, instance) {
+  [0, 50, 160, 350].forEach(function (delay) {
+    setTimeout(function () {
+      if ($container && $container.length) {
+        normalizeInlineEvaluationLayout($container);
+
+        if (instance && typeof instance.trigger === 'function') {
+          instance.trigger('resize');
+        }
+      }
+    }, delay);
+  });
+}
+
+/**
+ * @param {H5P.MarkTheWordsCFRD} instance
+ */
+function scheduleDeferredResize(instance) {
+  requestAnimationFrame(function () {
+    instance.trigger('resize');
+
+    requestAnimationFrame(function () {
+      instance.trigger('resize');
+    });
+  });
+
+  [50, 150, 350].forEach(function (delay) {
+    setTimeout(function () {
+      instance.trigger('resize');
+    }, delay);
+  });
+}
+
+var PlayArea = H5P.MarkTheWordsCFRD && H5P.MarkTheWordsCFRD.PlayArea;
+var AppearanceModule = H5P.MarkTheWordsCFRD && H5P.MarkTheWordsCFRD.Appearance;
+var SavedWord = H5P.MarkTheWordsCFRD && H5P.MarkTheWordsCFRD.Word;
+var SavedXapiGenerator = H5P.MarkTheWordsCFRD && H5P.MarkTheWordsCFRD.XapiGenerator;
+
+/**
+ * @param {H5P.MarkTheWordsCFRD} instance
+ */
+function applyActivityAppearance(instance) {
+  var appearance;
+
+  if (!AppearanceModule || !instance) {
+    return;
+  }
+
+  appearance = instance.params && instance.params.appearance;
+
+  if (instance.$playArea && instance.$playArea.length) {
+    AppearanceModule.scheduleAppearance(instance.$playArea, appearance);
+  }
+
+  if (instance.$container && instance.$container.length) {
+    AppearanceModule.schedulePlayAreaRootBackground(instance.$container, appearance);
+  }
+}
+
+/**
+ * @param {H5P.MarkTheWordsCFRD} instance
+ */
+function applyActionButtonAppearance(instance) {
+  var actionButtons = instance.params &&
+    instance.params.appearance &&
+    instance.params.appearance.actionButtons;
+
+  if (!actionButtons || typeof instance.setActionButtonAppearance !== 'function') {
+    return;
+  }
+
+  if (H5P.QuestionCFRD.hasActionButtonAppearance &&
+      H5P.QuestionCFRD.hasActionButtonAppearance(actionButtons)) {
+    instance.setActionButtonAppearance(actionButtons);
+  }
+}
+
+﻿/*global H5P*/
+
 /**
  * Mark The Words module
  * @external {jQuery} $ H5P.jQuery
  */
-H5P.MarkTheWords = (function ($, Question, Word, KeyboardNav, XapiGenerator) {
+H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator) {
   /**
    * Initialize module.
    *
-   * @class H5P.MarkTheWords
-   * @extends H5P.Question
+   * @class H5P.MarkTheWordsCFRD
+   * @extends H5P.QuestionCFRD
    * @param {Object} params Behavior settings
    * @param {Number} contentId Content identification
    * @param {Object} contentData Object containing task specific content data
@@ -21,7 +282,7 @@ H5P.MarkTheWords = (function ($, Question, Word, KeyboardNav, XapiGenerator) {
     this.contentData = contentData;
     this.introductionId = 'mark-the-words-introduction-' + contentId;
 
-    Question.call(this, 'mark-the-words', { theme: true });
+    Question.call(this, 'mark-the-words');
 
     // Set default behavior.
     this.params = $.extend(true, {
@@ -51,6 +312,8 @@ H5P.MarkTheWords = (function ($, Question, Word, KeyboardNav, XapiGenerator) {
       a11yCheck: 'Check the answers. The responses will be marked as correct, incorrect, or unanswered.',
       a11yShowSolution: 'Show the solution. The task will be marked with its correct solution.',
       a11yRetry: 'Retry the task. Reset all responses and start the task over again.',
+      instructions: {},
+      appearance: {}
     }, params);
 
     this.contentData = contentData;
@@ -59,12 +322,80 @@ H5P.MarkTheWords = (function ($, Question, Word, KeyboardNav, XapiGenerator) {
     }
 
     this.keyboardNavigators = [];
+    this.playAreaSize = PlayArea ? PlayArea.getDesignSize() : null;
 
     this.initMarkTheWords();
     this.XapiGenerator = new XapiGenerator(this);
+
+    var self = this;
+    var originalAttach = self.attach;
+    self.attach = function ($container) {
+      self.$container = $container;
+      originalAttach.call(self, $container);
+      self.$playArea = setupPlayAreaLayout($container);
+      scheduleInstructionsAttach(self, self.$playArea);
+
+      if (window.ResizeObserver && !self.playAreaResizeObserver && self.$playArea.length) {
+        self.playAreaResizeObserver = new ResizeObserver(function () {
+          self.trigger('resize');
+        });
+        self.playAreaResizeObserver.observe(self.$playArea[0]);
+      }
+
+      scheduleDeferredResize(self);
+      applyActivityAppearance(self);
+      applyActionButtonAppearance(self);
+      scheduleInlineEvaluationLayout($container, self);
+    };
+
+    self.on('resize', function (event) {
+      if (event && event.data && event.data.repositionOnly) {
+        return;
+      }
+
+      var design = self.playAreaSize;
+      var rootEl;
+      var layout;
+      var fontSize;
+      var scaleKey;
+
+      if (!self.$playArea || !self.$playArea.length || !PlayArea || !design) {
+        return;
+      }
+
+      if (!self.$playArea.is(':visible')) {
+        scheduleDeferredResize(self);
+        return;
+      }
+
+      rootEl = (self.$container && self.$container.length) ?
+        self.$container[0] :
+        self.$playArea[0];
+      layout = PlayArea.getLayoutDimensions(rootEl);
+      scaleKey = layout.scale.toFixed(4);
+      fontSize = layout.fontSize + 'px';
+
+      if (self.$container && self.$container.length) {
+        self.$container.css({
+          width: layout.widthPx,
+          maxWidth: '100%',
+          height: layout.heightPx
+        });
+      }
+
+      self.$playArea.css({
+        width: '100%',
+        height: '',
+        fontSize: fontSize,
+        '--mtw-scale': scaleKey
+      });
+
+      applyActivityAppearance(self);
+      refreshInstructionsScale(self);
+    });
   }
 
-  MarkTheWords.prototype = Object.create(H5P.EventDispatcher.prototype);
+  MarkTheWords.prototype = Object.create(H5P.QuestionCFRD.prototype);
   MarkTheWords.prototype.constructor = MarkTheWords;
 
   /**
@@ -419,7 +750,7 @@ H5P.MarkTheWords = (function ($, Question, Word, KeyboardNav, XapiGenerator) {
 
     var scorePoints;
     if (self.params.behaviour.showScorePoints) {
-      scorePoints = new H5P.Question.ScorePoints();
+      scorePoints = new H5P.QuestionCFRD.ScorePoints();
     }
 
     this.selectableWords.forEach(function (entry) {
@@ -443,7 +774,7 @@ H5P.MarkTheWords = (function ($, Question, Word, KeyboardNav, XapiGenerator) {
     var score = answers.score;
 
     //replace editor variables with values, uses regexp to replace all instances.
-    var scoreText = H5P.Question.determineOverallFeedback(this.params.overallFeedback, score / this.answers).replace(/@score/g, score.toString())
+    var scoreText = H5P.QuestionCFRD.determineOverallFeedback(this.params.overallFeedback, score / this.answers).replace(/@score/g, score.toString())
       .replace(/@total/g, this.answers.toString())
       .replace(/@correct/g, answers.correct.toString())
       .replace(/@wrong/g, answers.wrong.toString())
@@ -601,6 +932,13 @@ H5P.MarkTheWords = (function ($, Question, Word, KeyboardNav, XapiGenerator) {
     this.$a11yClickableTextLabel.html(this.params.a11yClickableTextLabel);
 
     this.toggleSelectable(false);
+
+    // Nuevo intento: sin delete, setActivityStarted es no-op.
+    delete this.activityStartTime;
+    if (typeof this.setActivityStarted === 'function') {
+      this.setActivityStarted();
+    }
+
     this.trigger('resize');
   };
 
@@ -717,10 +1055,16 @@ H5P.MarkTheWords = (function ($, Question, Word, KeyboardNav, XapiGenerator) {
   };
 
   return MarkTheWords;
-}(H5P.jQuery, H5P.Question, H5P.MarkTheWords.Word, H5P.KeyboardNav, H5P.MarkTheWords.XapiGenerator));
+}(H5P.jQuery, H5P.QuestionCFRD, SavedWord, H5P.KeyboardNav, SavedXapiGenerator));
+
+H5P.MarkTheWordsCFRD.PlayArea = PlayArea;
+H5P.MarkTheWordsCFRD.Appearance = AppearanceModule;
+H5P.MarkTheWordsCFRD.Word = SavedWord;
+H5P.MarkTheWordsCFRD.XapiGenerator = SavedXapiGenerator;
+
 
 /**
- * Static utility method for parsing H5P.MarkTheWords content item questions
+ * Static utility method for parsing H5P.MarkTheWordsCFRD content item questions
  * into format useful for generating reports.
  *
  * Example input: "<p lang=\"en\">I like *pizza* and *burgers*.</p>"
@@ -751,7 +1095,7 @@ H5P.MarkTheWords = (function ($, Question, Word, KeyboardNav, XapiGenerator) {
  *
  * @param {string} question MarkTheWords textField (html)
  */
-H5P.MarkTheWords.parseText = function (question) {
+H5P.MarkTheWordsCFRD.parseText = function (question) {
 
   /**
    * Separate all words surrounded by a space and an asterisk and any other

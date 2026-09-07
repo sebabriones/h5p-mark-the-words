@@ -1,6 +1,282 @@
 {
   "semantics": [
     {
+      "label": "Instrucciones",
+      "fields": [
+        {
+          "label": "Mostrar instrucciones"
+        },
+        {
+          "label": "Texto de las instrucciones"
+        },
+        {
+          "label": "Modo de visualización",
+          "options": [
+            {
+              "label": "Solo introducción"
+            },
+            {
+              "label": "Solo pestaña"
+            },
+            {
+              "label": "Introducción y pestaña"
+            }
+          ]
+        },
+        {
+          "label": "Etiqueta del botón de introducción",
+          "default": "Comenzar"
+        },
+        {
+          "label": "Etiqueta del botón de la pestaña",
+          "default": "Instrucciones"
+        },
+        {
+          "label": "Contraer la pestaña al cargar"
+        },
+        {
+          "label": "Animación",
+          "fields": [
+            {
+              "label": "Duración de la cortina de introducción",
+              "description": "Velocidad de apertura/cierre de la cortina de introducción en milisegundos."
+            },
+            {
+              "label": "Duración de apertura/cierre de la pestaña",
+              "description": "Velocidad de apertura/cierre de la pestaña de instrucciones en milisegundos."
+            },
+            {
+              "label": "Desplazamiento extra con la pestaña cerrada",
+              "description": "Desplazamiento extra (en px) cuando la pestaña está cerrada. 0 la deja al ras; valores mayores la ocultan más."
+            }
+          ]
+        },
+        {
+          "label": "Apariencia de las instrucciones",
+          "fields": [
+            {
+              "label": "Ventana de introducción",
+              "fields": [
+                {
+                  "label": "Usar fondo degradado",
+                  "default": false
+                },
+                {
+                  "label": "Color de fondo de la introducción",
+                  "default": "#f5f5f5"
+                },
+                {
+                  "label": "Fondo degradado",
+                  "fields": [
+                    {
+                      "label": "Ángulo del degradado",
+                      "description": "Dirección en grados (0 = hacia arriba, 180 = hacia abajo).",
+                      "default": 180
+                    },
+                    {
+                      "label": "Color inicial del degradado",
+                      "default": "#f5f5f5"
+                    },
+                    {
+                      "label": "Color final del degradado",
+                      "default": "#f5f5f5"
+                    }
+                  ]
+                },
+                {
+                  "label": "Color del texto de la introducción",
+                  "default": "#333333"
+                },
+                {
+                  "label": "Botón de inicio",
+                  "fields": [
+                    {
+                      "label": "Usar fondo degradado",
+                      "default": false
+                    },
+                    {
+                      "label": "Color de fondo del botón",
+                      "default": "#1a73d9"
+                    },
+                    {
+                      "label": "Fondo degradado",
+                      "fields": [
+                        {
+                          "label": "Ángulo del degradado",
+                          "description": "Dirección en grados (0 = hacia arriba, 180 = hacia abajo).",
+                          "default": 180
+                        },
+                        {
+                          "label": "Color inicial del degradado",
+                          "default": "#1a73d9"
+                        },
+                        {
+                          "label": "Color final del degradado",
+                          "default": "#1a73d9"
+                        }
+                      ]
+                    },
+                    {
+                      "label": "Color del texto del botón",
+                      "default": "#ffffff"
+                    },
+                    {
+                      "label": "Color de fondo del botón al pasar el cursor",
+                      "default": "#1356a3"
+                    },
+                    {
+                      "label": "Color del texto del botón al pasar el cursor",
+                      "default": "#ffffff"
+                    },
+                    {
+                      "label": "Usar borde del botón",
+                      "default": false
+                    },
+                    {
+                      "label": "Ajustes del borde",
+                      "fields": [
+                        {
+                          "label": "Color del borde del botón",
+                          "default": "#1a73d9"
+                        },
+                        {
+                          "label": "Color del borde al pasar el cursor",
+                          "default": "#1356a3"
+                        }
+                      ]
+                    },
+                    {
+                      "label": "Radio del borde del botón",
+                      "description": "Redondez de las esquinas en unidades rem.",
+                      "default": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "label": "Pestaña de instrucciones",
+              "fields": [
+                {
+                  "label": "Usar fondo degradado",
+                  "default": false
+                },
+                {
+                  "label": "Color de fondo de la pestaña",
+                  "default": "#f5f5f5"
+                },
+                {
+                  "label": "Fondo degradado",
+                  "fields": [
+                    {
+                      "label": "Ángulo del degradado",
+                      "description": "Dirección en grados (0 = hacia arriba, 180 = hacia abajo).",
+                      "default": 180
+                    },
+                    {
+                      "label": "Color inicial del degradado",
+                      "default": "#f5f5f5"
+                    },
+                    {
+                      "label": "Color final del degradado",
+                      "default": "#f5f5f5"
+                    }
+                  ]
+                },
+                {
+                  "label": "Color del texto de la pestaña",
+                  "default": "#333333"
+                },
+                {
+                  "label": "Color del borde del contenido de la pestaña",
+                  "default": "#dbe2e8"
+                },
+                {
+                  "label": "Posición del botón de la pestaña",
+                  "options": [
+                    {
+                      "label": "Izquierda"
+                    },
+                    {
+                      "label": "Centro"
+                    },
+                    {
+                      "label": "Derecha"
+                    }
+                  ]
+                },
+                {
+                  "label": "Botón de la pestaña",
+                  "fields": [
+                    {
+                      "label": "Usar fondo degradado",
+                      "default": false
+                    },
+                    {
+                      "label": "Color de fondo del botón",
+                      "default": "#1a73d9"
+                    },
+                    {
+                      "label": "Fondo degradado",
+                      "fields": [
+                        {
+                          "label": "Ángulo del degradado",
+                          "description": "Dirección en grados (0 = hacia arriba, 180 = hacia abajo).",
+                          "default": 180
+                        },
+                        {
+                          "label": "Color inicial del degradado",
+                          "default": "#1a73d9"
+                        },
+                        {
+                          "label": "Color final del degradado",
+                          "default": "#1a73d9"
+                        }
+                      ]
+                    },
+                    {
+                      "label": "Color del texto del botón",
+                      "default": "#ffffff"
+                    },
+                    {
+                      "label": "Color de fondo del botón al pasar el cursor",
+                      "default": "#1356a3"
+                    },
+                    {
+                      "label": "Color del texto del botón al pasar el cursor",
+                      "default": "#ffffff"
+                    },
+                    {
+                      "label": "Usar borde del botón",
+                      "default": false
+                    },
+                    {
+                      "label": "Ajustes del borde",
+                      "fields": [
+                        {
+                          "label": "Color del borde del botón",
+                          "default": "#1a73d9"
+                        },
+                        {
+                          "label": "Color del borde al pasar el cursor",
+                          "default": "#1356a3"
+                        }
+                      ]
+                    },
+                    {
+                      "label": "Radio del borde del botón",
+                      "description": "Redondez de las esquinas en unidades rem.",
+                      "default": 0
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "label": "Medios",
       "fields": [
         {
@@ -138,6 +414,263 @@
     {
       "label": "Descripción para las tecnologías de asistencia del botón \"Intentar de nuevo\"",
       "default": "Vuelve a intentar la tarea. Borra todas tus respuestas y empieza de nuevo."
+    },
+    {
+      "label": "Apariencia",
+      "fields": [
+        {
+          "label": "Color de fondo del área de juego",
+          "default": "#ffffff"
+        },
+        {
+          "label": "Colores de palabras",
+          "fields": [
+            {
+              "label": "Usar fondo degradado",
+              "default": false
+            },
+            {
+              "label": "Color de fondo de la palabra",
+              "default": "transparent"
+            },
+            {
+              "label": "Fondo degradado",
+              "fields": [
+                {
+                  "label": "Ángulo del degradado",
+                  "description": "Dirección en grados (0 = hacia arriba, 180 = hacia abajo).",
+                  "default": 180
+                },
+                {
+                  "label": "Color inicial del degradado",
+                  "default": "transparent"
+                },
+                {
+                  "label": "Color final del degradado",
+                  "default": "transparent"
+                }
+              ]
+            },
+            {
+              "label": "Color de texto de la palabra",
+              "default": "#333333"
+            },
+            {
+              "label": "Color de borde de la palabra",
+              "default": "transparent"
+            },
+            {
+              "label": "Usar fondo degradado al pasar el cursor",
+              "default": false
+            },
+            {
+              "label": "Color de fondo al pasar el cursor",
+              "default": "#ffffff"
+            },
+            {
+              "label": "Fondo degradado al pasar el cursor",
+              "fields": [
+                {
+                  "label": "Ángulo del degradado",
+                  "description": "Dirección en grados (0 = hacia arriba, 180 = hacia abajo).",
+                  "default": 180
+                },
+                {
+                  "label": "Color inicial del degradado",
+                  "default": "#ffffff"
+                },
+                {
+                  "label": "Color final del degradado",
+                  "default": "#ffffff"
+                }
+              ]
+            },
+            {
+              "label": "Color de texto al pasar el cursor",
+              "default": "#333333"
+            },
+            {
+              "label": "Color de borde al pasar el cursor",
+              "default": "#1a73d9"
+            },
+            {
+              "label": "Usar fondo degradado al seleccionar",
+              "default": false
+            },
+            {
+              "label": "Color de fondo de palabra seleccionada",
+              "default": "#cee0f4"
+            },
+            {
+              "label": "Fondo degradado de selección",
+              "fields": [
+                {
+                  "label": "Ángulo del degradado",
+                  "description": "Dirección en grados (0 = hacia arriba, 180 = hacia abajo).",
+                  "default": 180
+                },
+                {
+                  "label": "Color inicial del degradado",
+                  "default": "#cee0f4"
+                },
+                {
+                  "label": "Color final del degradado",
+                  "default": "#cee0f4"
+                }
+              ]
+            },
+            {
+              "label": "Color de texto de palabra seleccionada",
+              "default": "#333333"
+            },
+            {
+              "label": "Color de borde de palabra seleccionada",
+              "default": "#388eff"
+            }
+          ]
+        },
+        {
+          "label": "Texto",
+          "description": "Colores y tamaños de letra de la pregunta y la descripción de la tarea.",
+          "fields": [
+            {
+              "label": "Color del texto de la pregunta",
+              "default": "#333333"
+            },
+            {
+              "label": "Tamaño de letra de la pregunta",
+              "description": "Tamaño relativo al área de juego (em). El valor por defecto es 1.",
+              "default": 1
+            },
+            {
+              "label": "Color del texto de la descripción de la tarea",
+              "default": "#333333"
+            },
+            {
+              "label": "Tamaño de letra de la descripción de la tarea",
+              "description": "Tamaño relativo al área de juego (em). El valor por defecto es 1.",
+              "default": 1
+            }
+          ]
+        },
+        {
+          "label": "Colores de respuesta correcta",
+          "fields": [
+            {
+              "label": "Color de fondo de respuesta correcta",
+              "default": "#b6e4ce"
+            },
+            {
+              "label": "Color de texto de respuesta correcta",
+              "default": "#255c41"
+            },
+            {
+              "label": "Color de borde de respuesta correcta",
+              "default": "#255c41"
+            }
+          ]
+        },
+        {
+          "label": "Colores de respuesta incorrecta",
+          "fields": [
+            {
+              "label": "Color de fondo de respuesta incorrecta",
+              "default": "#fbd7d8"
+            },
+            {
+              "label": "Color de texto de respuesta incorrecta",
+              "default": "#b71c1c"
+            },
+            {
+              "label": "Color de borde de respuesta incorrecta",
+              "default": "#b71c1c"
+            }
+          ]
+        },
+        {
+          "label": "Colores de respuesta omitida",
+          "fields": [
+            {
+              "label": "Color de fondo de respuesta omitida",
+              "default": "#b6e4ce"
+            },
+            {
+              "label": "Color de texto de respuesta omitida",
+              "default": "#255c41"
+            },
+            {
+              "label": "Color de borde de respuesta omitida",
+              "default": "#255c41"
+            }
+          ]
+        },
+        {
+          "label": "Botones de acción (Comprobar, Reintentar y Mostrar solución)",
+          "description": "Estilo compartido para los botones Comprobar, Reintentar y Mostrar solución. Los colores de borde solo aplican si el borde está activado.",
+          "fields": [
+            {
+              "label": "Usar fondo degradado",
+              "default": false
+            },
+            {
+              "label": "Color de fondo del botón",
+              "default": "#1a73d9"
+            },
+            {
+              "label": "Fondo degradado",
+              "fields": [
+                {
+                  "label": "Ángulo del degradado",
+                  "description": "Dirección en grados (0 = hacia arriba, 180 = hacia abajo).",
+                  "default": 180
+                },
+                {
+                  "label": "Color inicial del degradado",
+                  "default": "#1a73d9"
+                },
+                {
+                  "label": "Color final del degradado",
+                  "default": "#1a73d9"
+                }
+              ]
+            },
+            {
+              "label": "Color del texto del botón",
+              "default": "#ffffff"
+            },
+            {
+              "label": "Color de fondo del botón al pasar el cursor",
+              "default": "#1356a3"
+            },
+            {
+              "label": "Color del texto del botón al pasar el cursor",
+              "default": "#ffffff"
+            },
+            {
+              "label": "Usar borde del botón",
+              "default": false
+            },
+            {
+              "label": "Ajustes del borde",
+              "fields": [
+                {
+                  "label": "Color del borde del botón",
+                  "default": "#1a73d9"
+                },
+                {
+                  "label": "Color del borde al pasar el cursor",
+                  "default": "#1356a3"
+                }
+              ]
+            },
+            {
+              "label": "Radio del borde del botón",
+              "description": "El valor por defecto es 2em (Joubel UI). Valores menores son más angulosos; valores mayores, más redondeados.",
+              "default": 2
+            }
+          ]
+        }
+      ]
     }
   ]
 }

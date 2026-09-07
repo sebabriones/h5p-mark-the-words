@@ -7,7 +7,7 @@ var H5PPresave = H5PPresave || {};
  * @param finished
  * @constructor
  */
-H5PPresave['H5P.MarkTheWords'] = function (content, finished) {
+H5PPresave['H5P.MarkTheWordsCFRD'] = function (content, finished) {
   var presave = H5PEditor.Presave;
 
   if (isContentInvalid()) {

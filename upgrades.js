@@ -1,6 +1,6 @@
 var H5PUpgrades = H5PUpgrades || {};
 
-H5PUpgrades['H5P.MarkTheWords'] = (function () {
+H5PUpgrades['H5P.MarkTheWordsCFRD'] = (function () {
   return {
     1: {
       1: {

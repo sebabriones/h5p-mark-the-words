@@ -1,13 +1,13 @@
-H5P.MarkTheWords = H5P.MarkTheWords || {};
+H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
 
 /**
  * Mark the words XapiGenerator
  */
-H5P.MarkTheWords.XapiGenerator = (function ($) {
+H5P.MarkTheWordsCFRD.XapiGenerator = (function ($) {
 
   /**
    * Xapi statements Generator
-   * @param {H5P.MarkTheWords} markTheWords
+   * @param {H5P.MarkTheWordsCFRD} markTheWords
    * @constructor
    */
   function XapiGenerator(markTheWords) {
@@ -45,7 +45,7 @@ H5P.MarkTheWords.XapiGenerator = (function ($) {
   /**
    * Create object definition for question
    *
-   * @param {H5P.MarkTheWords} markTheWords
+   * @param {H5P.MarkTheWordsCFRD} markTheWords
    * @return {Object} Object definition
    */
   function createDefinition(markTheWords) {
@@ -66,7 +66,7 @@ H5P.MarkTheWords.XapiGenerator = (function ($) {
   /**
    * Get all choices that it is possible to choose between
    *
-   * @param {H5P.MarkTheWords} markTheWords
+   * @param {H5P.MarkTheWordsCFRD} markTheWords
    * @return {Array}
    */
   function getChoices(markTheWords) {
@@ -88,7 +88,7 @@ H5P.MarkTheWords.XapiGenerator = (function ($) {
   /**
    * Get selected words as a user response pattern
    *
-   * @param {H5P.MarkTheWords} markTheWords
+   * @param {H5P.MarkTheWordsCFRD} markTheWords
    * @return {string}
    */
   function getUserSelections(markTheWords) {
@@ -104,7 +104,7 @@ H5P.MarkTheWords.XapiGenerator = (function ($) {
   /**
    * Get correct response pattern from correct words
    *
-   * @param {H5P.MarkTheWords} markTheWords
+   * @param {H5P.MarkTheWordsCFRD} markTheWords
    * @return {string}
    */
   function getCorrectResponsesPattern(markTheWords) {

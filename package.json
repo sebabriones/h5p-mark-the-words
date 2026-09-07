@@ -1,0 +1,11 @@
+{
+  "name": "h5p-mark-the-words-cfrd-1.0",
+  "version": "1.0.0",
+  "description": "Mark the Words (CFRD) línea 1.0 — fork upstream 1.11.18, coreApi 1.23, Lumi.",
+  "private": true,
+  "scripts": {
+    "sync:lumi": "powershell -ExecutionPolicy Bypass -File ..\\scripts\\sync-lumi.ps1"
+  },
+  "author": "sbriones (CFRD-UDEC)",
+  "license": "MIT"
+}

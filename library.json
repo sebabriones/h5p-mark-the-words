@@ -1,37 +1,44 @@
 {
-  "title": "Mark the Words",
+  "machineName": "H5P.MarkTheWordsCFRD",
+  "title": "Mark the Words (CFRD)",
   "description": "Test your users by making them select the correct words from a text.",
+  "contentType": "Question",
+  "license": "MIT",
+  "author": "sbriones (CFRD-UDEC)",
   "majorVersion": 1,
-  "minorVersion": 11,
-  "patchVersion": 18,
-  "coreApi": {
-    "majorVersion": 1,
-    "minorVersion": 27
-  },
+  "minorVersion": 0,
+  "patchVersion": 0,
   "runnable": 1,
   "embedTypes": [
     "iframe"
   ],
-  "author": "Joubel",
-  "license": "MIT",
-  "machineName": "H5P.MarkTheWords",
+  "coreApi": {
+    "majorVersion": 1,
+    "minorVersion": 23
+  },
   "preloadedCss": [
     {
-      "path": "styles/mark-the-words.css"
+      "path": "styles/mark-the-words-cfrd.css"
     }
   ],
   "preloadedJs": [
     {
-      "path": "scripts/keyboard-nav.js"
+      "path": "scripts/play-area-scale.js"
     },
     {
-      "path": "scripts/xAPI-generator.js"
+      "path": "scripts/appearance.js"
     },
     {
-      "path": "scripts/word.js"
+      "path": "scripts/keyboard-nav-cfrd.js"
     },
     {
-      "path": "scripts/mark-the-words.js"
+      "path": "scripts/xAPI-generator-cfrd.js"
+    },
+    {
+      "path": "scripts/word-cfrd.js"
+    },
+    {
+      "path": "scripts/mark-the-words-cfrd.js"
     }
   ],
   "preloadedDependencies": [
@@ -41,14 +48,19 @@
       "minorVersion": 5
     },
     {
-      "machineName": "H5P.JoubelUI",
+      "machineName": "H5P.JoubelUICFRD",
       "majorVersion": 1,
-      "minorVersion": 3
+      "minorVersion": 0
     },
     {
-      "machineName": "H5P.Question",
+      "machineName": "H5P.QuestionCFRD",
       "majorVersion": 1,
-      "minorVersion": 5
+      "minorVersion": 0
+    },
+    {
+      "machineName": "H5P.Instructions",
+      "majorVersion": 1,
+      "minorVersion": 0
     }
   ],
   "editorDependencies": [
@@ -59,6 +71,11 @@
     },
     {
       "machineName": "H5PEditor.ShowWhen",
+      "majorVersion": 1,
+      "minorVersion": 0
+    },
+    {
+      "machineName": "H5PEditor.ColorSelectorCFRD",
       "majorVersion": 1,
       "minorVersion": 0
     }

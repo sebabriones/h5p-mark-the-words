@@ -1,0 +1,230 @@
+/* Mark the Words CFRD — layout and appearance (coreApi 1.23, no --h5p-theme-*). */
+
+.h5p-container.h5p-mark-the-words {
+  overflow: hidden;
+}
+
+.h5p-mark-the-words {
+  --mtw-play-area-bg: #ffffff;
+  --mtw-word-bg: transparent;
+  --mtw-word-color: #333333;
+  --mtw-word-border: transparent;
+  --mtw-word-hover-bg: #ffffff;
+  --mtw-word-hover-color: #333333;
+  --mtw-word-hover-border: #1a73d9;
+  --mtw-word-selected-bg: #cee0f4;
+  --mtw-word-selected-color: #333333;
+  --mtw-word-selected-border: #388eff;
+  --mtw-question-color: #333333;
+  --mtw-task-description-color: #333333;
+  --mtw-question-font-size: 1em;
+  --mtw-task-description-font-size: 1em;
+  --mtw-correct-bg: #b6e4ce;
+  --mtw-correct-color: #255c41;
+  --mtw-correct-border: #255c41;
+  --mtw-wrong-bg: #fbd7d8;
+  --mtw-wrong-color: #b71c1c;
+  --mtw-wrong-border: #b71c1c;
+  --mtw-missed-bg: #b6e4ce;
+  --mtw-missed-color: #255c41;
+  --mtw-missed-border: #255c41;
+  position: relative;
+  background-color: var(--mtw-play-area-bg, #ffffff);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.h5p-mark-the-words > .h5p-question-buttons,
+.h5p-mark-the-words > .h5p-question-scorebar,
+.h5p-mark-the-words > .h5p-question-feedback:not(.h5p-question-popup) {
+  background-color: transparent;
+}
+
+.h5p-no-frame > .h5p-question.h5p-mark-the-words > .h5p-question-buttons.h5p-question-visible {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  margin-bottom: 1em;
+}
+
+.h5p-no-frame > .h5p-question.h5p-mark-the-words > .h5p-question-scorebar.h5p-question-visible {
+  margin-left: 1em !important;
+  margin-bottom: 1em;
+}
+
+.h5p-mark-the-words .h5p-mtw-play-area {
+  --mtw-scale: 1;
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: auto;
+  background-color: var(--mtw-play-area-bg, #ffffff);
+  padding: 0.75em 1em;
+}
+
+.h5p-mark-the-words-descriptions {
+  display: none;
+}
+
+.h5p-mark-the-words .h5p-question-introduction {
+  color: var(--mtw-task-description-color, #333333);
+  font-size: var(--mtw-task-description-font-size, 1em);
+}
+
+.h5p-mark-the-words .h5p-word-inner {
+  background-color: transparent;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  color: var(--mtw-question-color, #333333);
+  font-size: var(--mtw-question-font-size, 1em);
+}
+
+.h5p-mark-the-words .h5p-word-inner p {
+  padding: 0;
+  margin: 0 0 0.5em;
+  color: inherit;
+  font-size: inherit;
+  font-weight: 500;
+}
+
+.h5p-mark-the-words button.h5p-button:before {
+  padding-right: 0.35em;
+}
+
+.h5p-mark-the-words .h5p-word-selectable-words {
+  outline: none;
+}
+
+.h5p-mark-the-words [role="option"] {
+  white-space: nowrap;
+  padding: 0.15em 0.2em;
+  border-radius: 0.2em;
+  position: relative;
+  border: 3px solid var(--mtw-word-border, transparent);
+  background: var(--mtw-word-bg, transparent);
+  color: var(--mtw-word-color, #333333);
+}
+
+.h5p-mark-the-words [role="option"]:focus {
+  outline: 2px ridge #ffffff;
+  border-radius: 4px;
+  outline-offset: 2px;
+}
+
+.h5p-mark-the-words .h5p-question-plus-one,
+.h5p-mark-the-words .h5p-question-minus-one {
+  position: unset;
+}
+
+.h5p-mark-the-words .h5p-word-selectable-words:not(.h5p-disable-hover) [role="option"]:hover {
+  box-shadow: 0 0 0.35em 0 rgba(26, 115, 217, 0.45);
+  border-color: var(--mtw-word-hover-border, #1a73d9);
+  background: var(--mtw-word-hover-bg, #ffffff);
+  color: var(--mtw-word-hover-color, #333333);
+  cursor: pointer;
+}
+
+.h5p-mark-the-words [aria-selected="true"] {
+  background: var(--mtw-word-selected-bg, #cee0f4);
+  border: 3px solid var(--mtw-word-selected-border, #388eff);
+  color: var(--mtw-word-selected-color, #333333);
+}
+
+/* Missed word */
+.h5p-mark-the-words [aria-describedby="h5p-description-missed"] {
+  color: var(--mtw-missed-color, #255c41);
+  font-weight: bold;
+  border: 2px var(--mtw-missed-border, #255c41) dashed;
+  background-color: var(--mtw-missed-bg, #b6e4ce);
+  padding: 0.25em;
+  border-radius: 0.3em;
+  margin-left: 0.15em;
+}
+
+/* Correctly answered marking */
+.h5p-mark-the-words [aria-describedby="h5p-description-correct"] {
+  display: inline-flex;
+  line-height: 1;
+  color: var(--mtw-correct-color, #255c41);
+  background-color: var(--mtw-correct-bg, #b6e4ce);
+  border: 1px solid var(--mtw-correct-border, #255c41);
+  padding: 0.25em;
+  font-weight: 600;
+}
+
+/* Wrongly answered marking */
+.h5p-mark-the-words [aria-describedby="h5p-description-incorrect"] {
+  display: inline-flex;
+  line-height: 1;
+  padding: 0.25em;
+  color: var(--mtw-wrong-color, #b71c1c);
+  background-color: var(--mtw-wrong-bg, #fbd7d8);
+  border: solid 2px var(--mtw-wrong-border, #b71c1c);
+  font-weight: bold;
+}
+
+/* Feedback icons — Font Awesome (Lumi 1.23; no h5p-theme glyph font) */
+.h5p-mark-the-words [aria-describedby="h5p-description-correct"]:after {
+  position: relative;
+  text-decoration: none;
+  content: "\f00c";
+  font-family: FontAwesome, "Font Awesome 4 Free", sans-serif;
+  color: var(--mtw-correct-color, #255c41);
+  padding-left: 0.5em;
+  font-weight: normal;
+}
+
+.h5p-mark-the-words [aria-describedby="h5p-description-incorrect"]:after {
+  position: relative;
+  display: inline-flex;
+  font-family: FontAwesome, "Font Awesome 4 Free", sans-serif;
+  text-decoration: none;
+  content: "\f00d";
+  color: var(--mtw-wrong-color, #b71c1c);
+  padding-left: 0.5em;
+  font-weight: normal;
+}
+
+.h5p-mark-the-words .h5p-question-plus-one-container,
+.h5p-mark-the-words .h5p-question-minus-one-container {
+  background: #ffffff;
+  position: absolute;
+  width: 1.923076923em;
+  height: calc(1.923076923em * 0.638297872);
+  background-size: 100% 100%;
+  right: -1.615384615em;
+  top: -0.846153846em;
+  z-index: 1;
+  opacity: 1;
+  transition: opacity 150ms linear, transform 150ms linear;
+}
+
+.h5p-mark-the-words button.h5p-button.h5p-check-button:before {
+  content: "\f058";
+}
+
+.h5p-mark-the-words button.h5p-button.h5p-retry-button:before {
+  content: "\f021";
+}
+
+.h5p-mark-the-words button.h5p-button.h5p-check-button {
+  display: inline-block;
+}
+
+button.h5p-retry-button.h5p-retry-button {
+  display: none;
+}
+
+.h5p-mark-the-words .hidden-but-read {
+  position: absolute;
+  height: 0;
+  width: 0;
+  overflow: hidden;
+}

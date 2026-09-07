@@ -1,5 +1,5 @@
-H5P.MarkTheWords = H5P.MarkTheWords || {};
-H5P.MarkTheWords.Word = (function () {
+H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
+H5P.MarkTheWordsCFRD.Word = (function () {
   /**
    * @constant
    *
@@ -144,7 +144,7 @@ H5P.MarkTheWords.Word = (function () {
      * Reveal result
      *
      * @public
-     * @param {H5P.Question.ScorePoints} scorePoints
+     * @param {H5P.QuestionCFRD.ScorePoints} scorePoints
      */
     this.markCheck = function (scorePoints) {
       if (this.isSelected()) {
