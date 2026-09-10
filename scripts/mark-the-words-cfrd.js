@@ -339,7 +339,10 @@ function scheduleInlineEvaluationLayout($container, instance) {
       if ($container && $container.length) {
         normalizeInlineEvaluationLayout($container);
 
-        if (instance && typeof instance.trigger === 'function') {
+        // Avoid resize storms while the slide/play area is hidden (e.g. Course Presentation).
+        if (instance && typeof instance.trigger === 'function' &&
+            instance.$playArea && instance.$playArea.length &&
+            instance.$playArea.is(':visible')) {
           instance.trigger('resize');
         }
       }
@@ -348,22 +351,66 @@ function scheduleInlineEvaluationLayout($container, instance) {
 }
 
 /**
+ * One-shot deferred resize batch (attach / first layout). Concurrent calls are ignored.
+ *
  * @param {H5P.MarkTheWordsCFRD} instance
  */
 function scheduleDeferredResize(instance) {
+  var delays;
+  var remaining;
+
+  if (!instance || instance._mtwDeferredResizePending) {
+    return;
+  }
+
+  instance._mtwDeferredResizePending = true;
+  delays = [50, 150, 350];
+  remaining = 2 + delays.length;
+
+  var done = function () {
+    remaining -= 1;
+    if (remaining <= 0) {
+      instance._mtwDeferredResizePending = false;
+    }
+  };
+
+  var fire = function () {
+    if (typeof instance.trigger === 'function') {
+      instance.trigger('resize');
+    }
+    done();
+  };
+
   requestAnimationFrame(function () {
-    instance.trigger('resize');
-
-    requestAnimationFrame(function () {
-      instance.trigger('resize');
-    });
+    fire();
+    requestAnimationFrame(fire);
   });
 
-  [50, 150, 350].forEach(function (delay) {
-    setTimeout(function () {
-      instance.trigger('resize');
-    }, delay);
+  delays.forEach(function (delay) {
+    setTimeout(fire, delay);
   });
+}
+
+/**
+ * Single retry when resize arrives while the play area is not visible.
+ * Prevents unbounded setTimeout/rAF chains in embedded Course Presentation slides.
+ *
+ * @param {H5P.MarkTheWordsCFRD} instance
+ */
+function scheduleHiddenResizeRetry(instance) {
+  if (!instance || instance._mtwHiddenResizeScheduled) {
+    return;
+  }
+
+  instance._mtwHiddenResizeScheduled = true;
+  setTimeout(function () {
+    instance._mtwHiddenResizeScheduled = false;
+    if (instance.$playArea && instance.$playArea.length &&
+        instance.$playArea.is(':visible') &&
+        typeof instance.trigger === 'function') {
+      instance.trigger('resize');
+    }
+  }, 200);
 }
 
 var PlayArea = H5P.MarkTheWordsCFRD && H5P.MarkTheWordsCFRD.PlayArea;
@@ -513,6 +560,12 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
 
       if (window.ResizeObserver && !self.playAreaResizeObserver && self.$playArea.length) {
         self.playAreaResizeObserver = new ResizeObserver(function () {
+          if (self._mtwIgnoreResizeObserver) {
+            return;
+          }
+          if (!self.$playArea || !self.$playArea.length || !self.$playArea.is(':visible')) {
+            return;
+          }
           self.trigger('resize');
         });
         self.playAreaResizeObserver.observe(self.$playArea[0]);
@@ -534,13 +587,14 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
       var layout;
       var fontSize;
       var scaleKey;
+      var scaleChanged;
 
       if (!self.$playArea || !self.$playArea.length || !PlayArea || !design) {
         return;
       }
 
       if (!self.$playArea.is(':visible')) {
-        scheduleDeferredResize(self);
+        scheduleHiddenResizeRetry(self);
         return;
       }
 
@@ -550,6 +604,9 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
       layout = PlayArea.getLayoutDimensions(rootEl);
       scaleKey = layout.scale.toFixed(4);
       fontSize = layout.fontSize + 'px';
+      scaleChanged = self._mtwLastScaleKey !== scaleKey;
+
+      self._mtwIgnoreResizeObserver = true;
 
       if (self.$container && self.$container.length) {
         self.$container.css({
@@ -566,9 +623,37 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
         '--mtw-scale': scaleKey
       });
 
-      applyActivityAppearance(self);
-      refreshInstructionsScale(self);
+      // Appearance CSS vars only when scale changes (or first layout).
+      if (scaleChanged) {
+        self._mtwLastScaleKey = scaleKey;
+        applyActivityAppearance(self);
+        refreshInstructionsScale(self);
+      }
+
+      requestAnimationFrame(function () {
+        self._mtwIgnoreResizeObserver = false;
+      });
     });
+
+    // Release ResizeObserver if the host tears down the question instance.
+    if (typeof self.remove === 'function') {
+      var originalRemove = self.remove;
+      self.remove = function () {
+        if (self.playAreaResizeObserver) {
+          self.playAreaResizeObserver.disconnect();
+          self.playAreaResizeObserver = null;
+        }
+        return originalRemove.apply(self, arguments);
+      };
+    }
+    else {
+      self.remove = function () {
+        if (self.playAreaResizeObserver) {
+          self.playAreaResizeObserver.disconnect();
+          self.playAreaResizeObserver = null;
+        }
+      };
+    }
   }
 
   MarkTheWords.prototype = Object.create(H5P.QuestionCFRD.prototype);

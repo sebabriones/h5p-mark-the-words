@@ -322,10 +322,9 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
       applyPlayAreaRootBackground($root, appearance);
     };
 
+    // Immediate + one short retry (covers late DOM from Question/CP). Avoid 4× style storms.
     apply();
-    setTimeout(apply, 0);
     setTimeout(apply, 50);
-    setTimeout(apply, 200);
   }
 
   function scheduleAppearance($container, appearance) {
@@ -334,9 +333,7 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
     };
 
     apply();
-    setTimeout(apply, 0);
     setTimeout(apply, 50);
-    setTimeout(apply, 200);
   }
 
   H5P.MarkTheWordsCFRD.Appearance = {
