@@ -3,6 +3,10 @@
 var H5P = H5P || {};
 
 /**
+ * Keep helpers out of the global scope (shared names collide in CP editor).
+ */
+(function () {
+/**
  * @param {*} value
  * @returns {boolean}
  */
@@ -1591,3 +1595,4 @@ H5P.MarkTheWordsCFRD.parseText = function (question) {
       }, printableQuestion)
   };
 };
+})();
