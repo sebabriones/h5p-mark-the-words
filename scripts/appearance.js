@@ -19,7 +19,9 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
     questionText: '#333333',
     contextText: '#555555',
     questionFontSize: 1,
+    questionLineHeight: 1.7,
     contextFontSize: 1,
+    contextLineHeight: 1.5,
     correctBackground: '#b6e4ce',
     correctText: '#255c41',
     correctBorder: '#255c41',
@@ -67,6 +69,11 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
     feedbackIconSize: '--mtw-feedback-icon-size'
   };
 
+  var CSS_UNITLESS_VAR_KEYS = {
+    questionLineHeight: '--mtw-question-line-height',
+    contextLineHeight: '--mtw-context-line-height'
+  };
+
   function toEm(value, fallback) {
     var num = (value !== undefined && value !== null && value !== '') ?
       Number(value) :
@@ -79,6 +86,18 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
     return num + 'em';
   }
 
+  function toUnitless(value, fallback) {
+    var num = (value !== undefined && value !== null && value !== '') ?
+      Number(value) :
+      Number(fallback);
+
+    if (isNaN(num)) {
+      num = Number(fallback);
+    }
+
+    return String(num);
+  }
+
   function isTruthy(value) {
     return value === true || value === 1 || value === '1' || value === 'true';
   }
@@ -87,6 +106,84 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
     return (value === undefined || value === null || value === '') ?
       fallback :
       String(value);
+  }
+
+  /**
+   * Empty / transparent / alpha-0 → use fallback.
+   * ColorSelector preferredFormat hex turns transparent into #000000 on save;
+   * that legacy case is handled only where opt-in (word background / border).
+   */
+  function isTransparentLike(value) {
+    var normalized;
+    var alphaMatch;
+
+    if (value === undefined || value === null || value === '') {
+      return true;
+    }
+
+    normalized = String(value).trim().toLowerCase();
+
+    if (normalized === 'transparent' ||
+        normalized === '#00000000' ||
+        normalized === '#0000') {
+      return true;
+    }
+
+    alphaMatch = normalized.match(/^rgba?\(\s*[\d.]+\s*,\s*[\d.]+\s*,\s*[\d.]+\s*(?:,\s*([\d.]+)\s*)?\)$/);
+    if (alphaMatch) {
+      return alphaMatch[1] !== undefined && Number(alphaMatch[1]) === 0;
+    }
+
+    alphaMatch = normalized.match(/^hsla?\(\s*[\d.]+\s*,\s*[\d.%]+\s*,\s*[\d.%]+\s*(?:,\s*([\d.]+)\s*)?\)$/);
+    if (alphaMatch) {
+      return alphaMatch[1] !== undefined && Number(alphaMatch[1]) === 0;
+    }
+
+    return false;
+  }
+
+  function isLegacyTransparentBlack(value) {
+    var normalized;
+
+    if (value === undefined || value === null || value === '') {
+      return false;
+    }
+
+    normalized = String(value).trim().toLowerCase();
+    return normalized === '#000000' || normalized === '#000';
+  }
+
+  function coerceSurfaceColor(value, fallback, treatSolidBlackAsTransparent) {
+    if (isTransparentLike(value)) {
+      return fallback;
+    }
+
+    if (treatSolidBlackAsTransparent && isLegacyTransparentBlack(value)) {
+      return fallback;
+    }
+
+    return pickString(value, fallback);
+  }
+
+  /**
+   * Missing key → library fallback. Explicit empty / transparent → transparent
+   * (so the author can clear hover/selected backgrounds).
+   */
+  function resolveAuthorColor(group, solidKey, fallbackSolid, treatSolidBlackAsTransparent) {
+    var raw;
+
+    if (!group || !Object.prototype.hasOwnProperty.call(group, solidKey)) {
+      return fallbackSolid;
+    }
+
+    raw = group[solidKey];
+
+    if (isTransparentLike(raw) ||
+        (treatSolidBlackAsTransparent && isLegacyTransparentBlack(raw))) {
+      return 'transparent';
+    }
+
+    return String(raw);
   }
 
   function normalizeAngle(value, fallback) {
@@ -106,7 +203,13 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
   function resolveFill(group, options) {
     var useGradientKey = options.useGradientKey || 'useGradientBackground';
     var gradientKey = options.gradientKey || 'gradientBackground';
-    var solid = pickString(group && group[options.solidKey], options.fallbackSolid);
+    var treatBlack = options.treatSolidBlackAsTransparent === true;
+    var solid = resolveAuthorColor(
+      group,
+      options.solidKey,
+      options.fallbackSolid,
+      treatBlack
+    );
     var gradient;
     var angle;
     var colorStart;
@@ -118,8 +221,12 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
 
     gradient = (group && group[gradientKey]) || {};
     angle = normalizeAngle(gradient.angle, 180);
-    colorStart = pickString(gradient.colorStart, solid);
-    colorEnd = pickString(gradient.colorEnd, colorStart);
+    colorStart = Object.prototype.hasOwnProperty.call(gradient, 'colorStart') ?
+      resolveAuthorColor(gradient, 'colorStart', solid, treatBlack) :
+      solid;
+    colorEnd = Object.prototype.hasOwnProperty.call(gradient, 'colorEnd') ?
+      resolveAuthorColor(gradient, 'colorEnd', colorStart, treatBlack) :
+      colorStart;
 
     return buildLinearGradient(angle, colorStart, colorEnd);
   }
@@ -136,10 +243,13 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
       playAreaBackground: appearance && appearance.playAreaBackground,
       wordBackground: resolveFill(words, {
         solidKey: 'background',
-        fallbackSolid: APPEARANCE_DEFAULTS.wordBackground
+        fallbackSolid: APPEARANCE_DEFAULTS.wordBackground,
+        treatSolidBlackAsTransparent: true
       }),
       wordText: words.text,
-      wordBorder: words.border,
+      wordBorder: Object.prototype.hasOwnProperty.call(words, 'border') ?
+        resolveAuthorColor(words, 'border', 'transparent', true) :
+        APPEARANCE_DEFAULTS.wordBorder,
       wordHoverBackground: resolveFill(words, {
         solidKey: 'hoverBackground',
         useGradientKey: 'useHoverGradientBackground',
@@ -159,7 +269,9 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
       questionText: text.question,
       contextText: text.context,
       questionFontSize: text.questionFontSize,
+      questionLineHeight: text.questionLineHeight,
       contextFontSize: text.contextFontSize,
+      contextLineHeight: text.contextLineHeight,
       correctBackground: correct.background,
       correctText: correct.text,
       correctBorder: correct.border,
@@ -230,6 +342,10 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
       return toEm(merged[key], APPEARANCE_DEFAULTS[key]);
     }
 
+    if (Object.prototype.hasOwnProperty.call(CSS_UNITLESS_VAR_KEYS, key)) {
+      return toUnitless(merged[key], APPEARANCE_DEFAULTS[key]);
+    }
+
     return merged[key];
   }
 
@@ -284,6 +400,12 @@ H5P.MarkTheWordsCFRD = H5P.MarkTheWordsCFRD || {};
       for (key in CSS_EM_VAR_KEYS) {
         if (Object.prototype.hasOwnProperty.call(CSS_EM_VAR_KEYS, key)) {
           el.style.setProperty(CSS_EM_VAR_KEYS[key], getCssVarValue(merged, key));
+        }
+      }
+
+      for (key in CSS_UNITLESS_VAR_KEYS) {
+        if (Object.prototype.hasOwnProperty.call(CSS_UNITLESS_VAR_KEYS, key)) {
+          el.style.setProperty(CSS_UNITLESS_VAR_KEYS[key], getCssVarValue(merged, key));
         }
       }
     }

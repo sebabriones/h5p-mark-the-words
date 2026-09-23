@@ -7,7 +7,7 @@
   "author": "sbriones (CFRD-UDEC)",
   "majorVersion": 1,
   "minorVersion": 0,
-  "patchVersion": 10,
+  "patchVersion": 12,
   "runnable": 1,
   "embedTypes": [
     "iframe"

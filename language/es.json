@@ -511,7 +511,7 @@
             },
             {
               "label": "Color de fondo de la palabra",
-              "default": "transparent"
+              "description": "Dejar vacío para transparente."
             },
             {
               "label": "Fondo degradado",
@@ -523,11 +523,11 @@
                 },
                 {
                   "label": "Color inicial del degradado",
-                  "default": "transparent"
+                  "description": "Dejar vacío para transparente."
                 },
                 {
                   "label": "Color final del degradado",
-                  "default": "transparent"
+                  "description": "Dejar vacío para transparente."
                 }
               ]
             },
@@ -537,7 +537,7 @@
             },
             {
               "label": "Color de borde de la palabra",
-              "default": "transparent"
+              "description": "Dejar vacío para transparente."
             },
             {
               "label": "Usar fondo degradado al pasar el cursor",
@@ -545,7 +545,7 @@
             },
             {
               "label": "Color de fondo al pasar el cursor",
-              "default": "#ffffff"
+              "description": "Dejar vacío para transparente. Si no se define, el valor por defecto es blanco."
             },
             {
               "label": "Fondo degradado al pasar el cursor",
@@ -557,11 +557,11 @@
                 },
                 {
                   "label": "Color inicial del degradado",
-                  "default": "#ffffff"
+                  "description": "Dejar vacío para transparente."
                 },
                 {
                   "label": "Color final del degradado",
-                  "default": "#ffffff"
+                  "description": "Dejar vacío para transparente."
                 }
               ]
             },
@@ -591,11 +591,11 @@
                 },
                 {
                   "label": "Color inicial del degradado",
-                  "default": "#cee0f4"
+                  "description": "Dejar vacío para transparente."
                 },
                 {
                   "label": "Color final del degradado",
-                  "default": "#cee0f4"
+                  "description": "Dejar vacío para transparente."
                 }
               ]
             },
@@ -611,7 +611,7 @@
         },
         {
           "label": "Texto",
-          "description": "Colores y tamaños de letra del texto a marcar y del contexto.",
+          "description": "Colores, tamaños de letra y altura de línea del texto a marcar y del contexto.",
           "fields": [
             {
               "label": "Color del texto de la pregunta",
@@ -623,6 +623,11 @@
               "default": 1
             },
             {
+              "label": "Altura de línea de la pregunta",
+              "description": "Espaciado entre líneas del texto a marcar. Valores más altos evitan que los destacados se solapen con la línea inferior. El valor por defecto es 1.7.",
+              "default": 1.7
+            },
+            {
               "label": "Color de texto del contexto",
               "default": "#555555"
             },
@@ -630,6 +635,11 @@
               "label": "Tamaño de letra del contexto",
               "description": "Tamaño relativo al área de juego (em). El valor por defecto es 1.",
               "default": 1
+            },
+            {
+              "label": "Altura de línea del contexto",
+              "description": "Espaciado entre líneas del texto de contexto. El valor por defecto es 1.5.",
+              "default": 1.5
             }
           ]
         },

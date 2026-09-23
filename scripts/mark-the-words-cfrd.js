@@ -434,12 +434,14 @@ function applyActivityAppearance(instance) {
 
   appearance = instance.params && instance.params.appearance;
 
-  if (instance.$playArea && instance.$playArea.length) {
-    AppearanceModule.scheduleAppearance(instance.$playArea, appearance);
+  // Vars on root + play area so line-height/colors inherit reliably.
+  if (instance.$container && instance.$container.length) {
+    AppearanceModule.scheduleAppearance(instance.$container, appearance);
+    AppearanceModule.schedulePlayAreaRootBackground(instance.$container, appearance);
   }
 
-  if (instance.$container && instance.$container.length) {
-    AppearanceModule.schedulePlayAreaRootBackground(instance.$container, appearance);
+  if (instance.$playArea && instance.$playArea.length) {
+    AppearanceModule.scheduleAppearance(instance.$playArea, appearance);
   }
 }
 

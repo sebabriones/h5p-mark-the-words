@@ -15,6 +15,10 @@
   --mtw-word-selected-bg: #cee0f4;
   --mtw-word-selected-color: #333333;
   --mtw-word-selected-border: #388eff;
+  --mtw-question-font-size: 1em;
+  --mtw-question-line-height: 1.7;
+  --mtw-context-font-size: 1em;
+  --mtw-context-line-height: 1.5;
   --mtw-question-color: #333333;
   --mtw-context-color: #555555;
   --mtw-question-font-size: 1em;
@@ -186,14 +190,16 @@
   margin: 0;
   color: var(--mtw-question-color, #333333);
   font-size: var(--mtw-question-font-size, 1em);
+  line-height: var(--mtw-question-line-height, 1.7);
 }
 
 .h5p-mark-the-words .h5p-word-inner p {
   padding: 0;
-  margin: 0 0 0.5em;
+  margin: 0 0 0.35em;
   color: inherit;
   font-size: inherit;
   font-weight: 500;
+  line-height: var(--mtw-question-line-height, 1.7);
 }
 
 .h5p-mark-the-words .h5p-word-inner p:last-child {
@@ -254,7 +260,7 @@
 .h5p-mtw-context-text {
   flex: 0 0 auto;
   font-size: var(--mtw-context-font-size, 1em);
-  line-height: 1.5;
+  line-height: var(--mtw-context-line-height, 1.5);
   color: var(--mtw-context-color, #555555);
 }
 
@@ -313,16 +319,19 @@
 
 .h5p-mark-the-words .h5p-word-selectable-words {
   outline: none;
+  line-height: var(--mtw-question-line-height, 1.7);
 }
 
 .h5p-mark-the-words [role="option"] {
   white-space: nowrap;
-  padding: 0.15em 0.2em;
-  border-radius: 0.2em;
+  padding: 0.02em 0.12em;
+  border-radius: 0.15em;
   position: relative;
-  border: 3px solid var(--mtw-word-border, transparent);
+  border: 2px solid var(--mtw-word-border, transparent);
   background: var(--mtw-word-bg, transparent);
   color: var(--mtw-word-color, #333333);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 
 .h5p-mark-the-words [role="option"]:focus {
@@ -346,7 +355,7 @@
 
 .h5p-mark-the-words [aria-selected="true"] {
   background: var(--mtw-word-selected-bg, #cee0f4);
-  border: 3px solid var(--mtw-word-selected-border, #388eff);
+  border: 2px solid var(--mtw-word-selected-border, #388eff);
   color: var(--mtw-word-selected-color, #333333);
 }
 
@@ -356,30 +365,32 @@
   font-weight: bold;
   border: 2px var(--mtw-missed-border, #255c41) dashed;
   background-color: var(--mtw-missed-bg, #b6e4ce);
-  padding: 0.25em;
-  border-radius: 0.3em;
-  margin-left: 0.15em;
+  padding: 0.02em 0.12em;
+  border-radius: 0.15em;
+  margin-left: 0.1em;
 }
 
 /* Correctly answered marking */
 .h5p-mark-the-words [aria-describedby="h5p-description-correct"] {
   display: inline-flex;
-  line-height: 1;
+  align-items: baseline;
+  line-height: inherit;
   color: var(--mtw-correct-color, #255c41);
   background-color: var(--mtw-correct-bg, #b6e4ce);
   border: 1px solid var(--mtw-correct-border, #255c41);
-  padding: 0.25em;
+  padding: 0.02em 0.12em;
   font-weight: 600;
 }
 
 /* Wrongly answered marking */
 .h5p-mark-the-words [aria-describedby="h5p-description-incorrect"] {
   display: inline-flex;
-  line-height: 1;
-  padding: 0.25em;
+  align-items: baseline;
+  line-height: inherit;
+  padding: 0.02em 0.12em;
   color: var(--mtw-wrong-color, #b71c1c);
   background-color: var(--mtw-wrong-bg, #fbd7d8);
-  border: solid 2px var(--mtw-wrong-border, #b71c1c);
+  border: solid 1px var(--mtw-wrong-border, #b71c1c);
   font-weight: bold;
 }
 

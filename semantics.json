@@ -1185,10 +1185,11 @@
             "name": "background",
             "type": "text",
             "label": "Word background color",
-            "default": "transparent",
+            "description": "Leave empty for transparent.",
             "optional": true,
             "spectrum": {
-              "showInput": true
+              "showInput": true,
+              "allowEmpty": true
             },
             "widget": "showWhen",
             "showWhen": {
@@ -1232,10 +1233,11 @@
                 "type": "text",
                 "widget": "colorSelector",
                 "label": "Gradient start color",
-                "default": "transparent",
+                "description": "Leave empty for transparent.",
                 "optional": true,
                 "spectrum": {
-                  "showInput": true
+                  "showInput": true,
+                  "allowEmpty": true
                 }
               },
               {
@@ -1243,10 +1245,11 @@
                 "type": "text",
                 "widget": "colorSelector",
                 "label": "Gradient end color",
-                "default": "transparent",
+                "description": "Leave empty for transparent.",
                 "optional": true,
                 "spectrum": {
-                  "showInput": true
+                  "showInput": true,
+                  "allowEmpty": true
                 }
               }
             ]
@@ -1267,10 +1270,11 @@
             "type": "text",
             "widget": "colorSelector",
             "label": "Word border color",
-            "default": "transparent",
+            "description": "Leave empty for transparent.",
             "optional": true,
             "spectrum": {
-              "showInput": true
+              "showInput": true,
+              "allowEmpty": true
             }
           },
           {
@@ -1283,10 +1287,11 @@
             "name": "hoverBackground",
             "type": "text",
             "label": "Word hover background color",
-            "default": "#ffffff",
+            "description": "Leave empty for transparent. If unset, defaults to white.",
             "optional": true,
             "spectrum": {
-              "showInput": true
+              "showInput": true,
+              "allowEmpty": true
             },
             "widget": "showWhen",
             "showWhen": {
@@ -1330,10 +1335,11 @@
                 "type": "text",
                 "widget": "colorSelector",
                 "label": "Gradient start color",
-                "default": "#ffffff",
+                "description": "Leave empty for transparent.",
                 "optional": true,
                 "spectrum": {
-                  "showInput": true
+                  "showInput": true,
+                  "allowEmpty": true
                 }
               },
               {
@@ -1341,10 +1347,11 @@
                 "type": "text",
                 "widget": "colorSelector",
                 "label": "Gradient end color",
-                "default": "#ffffff",
+                "description": "Leave empty for transparent.",
                 "optional": true,
                 "spectrum": {
-                  "showInput": true
+                  "showInput": true,
+                  "allowEmpty": true
                 }
               }
             ]
@@ -1381,10 +1388,11 @@
             "name": "selectedBackground",
             "type": "text",
             "label": "Selected word background color",
-            "default": "#cee0f4",
+            "description": "Leave empty for transparent. If unset, defaults to light blue.",
             "optional": true,
             "spectrum": {
-              "showInput": true
+              "showInput": true,
+              "allowEmpty": true
             },
             "widget": "showWhen",
             "showWhen": {
@@ -1428,10 +1436,11 @@
                 "type": "text",
                 "widget": "colorSelector",
                 "label": "Gradient start color",
-                "default": "#cee0f4",
+                "description": "Leave empty for transparent.",
                 "optional": true,
                 "spectrum": {
-                  "showInput": true
+                  "showInput": true,
+                  "allowEmpty": true
                 }
               },
               {
@@ -1439,10 +1448,11 @@
                 "type": "text",
                 "widget": "colorSelector",
                 "label": "Gradient end color",
-                "default": "#cee0f4",
+                "description": "Leave empty for transparent.",
                 "optional": true,
                 "spectrum": {
-                  "showInput": true
+                  "showInput": true,
+                  "allowEmpty": true
                 }
               }
             ]
@@ -1477,7 +1487,7 @@
         "label": "Text",
         "importance": "low",
         "optional": true,
-        "description": "Colors and font sizes for the text to mark and context.",
+        "description": "Colors, font sizes and line heights for the text to mark and context.",
         "fields": [
           {
             "name": "question",
@@ -1502,6 +1512,16 @@
             "unit": "em"
           },
           {
+            "name": "questionLineHeight",
+            "type": "number",
+            "label": "Question line height",
+            "description": "Line spacing for the text to mark. Higher values prevent highlights from overlapping the line below. Default is 1.7.",
+            "default": 1.7,
+            "min": 1,
+            "max": 3,
+            "decimals": 2
+          },
+          {
             "name": "context",
             "type": "text",
             "widget": "colorSelector",
@@ -1522,6 +1542,16 @@
             "max": 3,
             "decimals": 2,
             "unit": "em"
+          },
+          {
+            "name": "contextLineHeight",
+            "type": "number",
+            "label": "Context line height",
+            "description": "Line spacing for the context text. Default is 1.5.",
+            "default": 1.5,
+            "min": 1,
+            "max": 3,
+            "decimals": 2
           }
         ]
       },

@@ -506,7 +506,7 @@
             },
             {
               "label": "Word background color",
-              "default": "transparent"
+              "description": "Leave empty for transparent."
             },
             {
               "label": "Gradient background",
@@ -518,11 +518,11 @@
                 },
                 {
                   "label": "Gradient start color",
-                  "default": "transparent"
+                  "description": "Leave empty for transparent."
                 },
                 {
                   "label": "Gradient end color",
-                  "default": "transparent"
+                  "description": "Leave empty for transparent."
                 }
               ]
             },
@@ -532,7 +532,7 @@
             },
             {
               "label": "Word border color",
-              "default": "transparent"
+              "description": "Leave empty for transparent."
             },
             {
               "label": "Use gradient background on hover",
@@ -540,7 +540,7 @@
             },
             {
               "label": "Word hover background color",
-              "default": "#ffffff"
+              "description": "Leave empty for transparent. If unset, defaults to white."
             },
             {
               "label": "Hover gradient background",
@@ -552,11 +552,11 @@
                 },
                 {
                   "label": "Gradient start color",
-                  "default": "#ffffff"
+                  "description": "Leave empty for transparent."
                 },
                 {
                   "label": "Gradient end color",
-                  "default": "#ffffff"
+                  "description": "Leave empty for transparent."
                 }
               ]
             },
@@ -574,7 +574,7 @@
             },
             {
               "label": "Selected word background color",
-              "default": "#cee0f4"
+              "description": "Leave empty for transparent. If unset, defaults to light blue."
             },
             {
               "label": "Selected gradient background",
@@ -586,11 +586,11 @@
                 },
                 {
                   "label": "Gradient start color",
-                  "default": "#cee0f4"
+                  "description": "Leave empty for transparent."
                 },
                 {
                   "label": "Gradient end color",
-                  "default": "#cee0f4"
+                  "description": "Leave empty for transparent."
                 }
               ]
             },
@@ -606,7 +606,7 @@
         },
         {
           "label": "Text",
-          "description": "Colors and font sizes for the text to mark and context.",
+          "description": "Colors, font sizes and line heights for the text to mark and context.",
           "fields": [
             {
               "label": "Question text color",
@@ -618,6 +618,11 @@
               "default": 1
             },
             {
+              "label": "Question line height",
+              "description": "Line spacing for the text to mark. Higher values prevent highlights from overlapping the line below. Default is 1.7.",
+              "default": 1.7
+            },
+            {
               "label": "Context text color",
               "default": "#555555"
             },
@@ -625,6 +630,11 @@
               "label": "Context font size",
               "description": "Text size relative to the play area (em). Default is 1.",
               "default": 1
+            },
+            {
+              "label": "Context line height",
+              "description": "Line spacing for the context text. Default is 1.5.",
+              "default": 1.5
             }
           ]
         },
