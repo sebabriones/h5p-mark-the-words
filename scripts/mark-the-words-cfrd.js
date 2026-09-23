@@ -40,6 +40,7 @@ function getInstructionsOptions(instance) {
     displayMode: instructions.displayMode || 'both',
     introButtonLabel: instructions.introButtonLabel || 'Start',
     tabButtonLabel: instructions.tabButtonLabel || 'Instructions',
+    tabButtonLabelOpen: instructions.tabButtonLabelOpen,
     appearance: H5P.jQuery.extend(true, {}, instructions.appearance || {}),
     animation: H5P.jQuery.extend(true, {}, instructions.animation || {}),
     startCollapsed: instructions.startCollapsed === undefined ?
