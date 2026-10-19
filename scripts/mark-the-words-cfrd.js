@@ -745,8 +745,9 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
 
       if (node instanceof Text) {
         var text = $(node).text();
-        var selectableStrings = text.replace(/(&nbsp;|\r\n|\n|\r)/g, ' ')
-          .match(/ \*[^\* ]+\* | \+[^\+ ]+\+ |[^\s]+/g);
+        var selectableStrings = H5P.MarkTheWordsCFRD.splitSelectableTokens(
+          text.replace(/(&nbsp;|\r\n|\n|\r)/g, ' ')
+        );
 
         if (selectableStrings) {
           selectableStrings.forEach(function (entry) {
@@ -1492,6 +1493,18 @@ H5P.MarkTheWordsCFRD.XapiGenerator = SavedXapiGenerator;
  *
  * @param {string} question MarkTheWords textField (html)
  */
+/**
+ * Split a text node into selectable tokens.
+ * A marked phrase with spaces (*Artemis II*, +Los Angeles+) is one token.
+ * A mark without spaces stays one whitespace token, so ** and ++ escapes remain intact.
+ *
+ * @param {string} str
+ * @return {string[]}
+ */
+H5P.MarkTheWordsCFRD.splitSelectableTokens = function (str) {
+  return String(str).match(/[\[\({⟨¿¡“"«„]*\*[^*]*\s[^*]*\*[,….:;?!\]\)}⟩»”]*|[\[\({⟨¿¡“"«„]*\+[^+]*\s[^+]*\+[,….:;?!\]\)}⟩»”]*|[^\s]+/g);
+};
+
 H5P.MarkTheWordsCFRD.parseText = function (question) {
 
   /**
@@ -1502,7 +1515,7 @@ H5P.MarkTheWordsCFRD.parseText = function (question) {
    * @returns {string[]} array of all words in the given string
    */
   function getWords(str) {
-    return str.match(/ \*[^\*]+\* |[^\s]+/g);
+    return H5P.MarkTheWordsCFRD.splitSelectableTokens(str);
   }
 
   /**

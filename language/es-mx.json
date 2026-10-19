@@ -308,8 +308,8 @@
       "label": "Campodetexto",
       "placeholder": "Esta es una respuesta: *respuesta*.",
       "important": {
-        "description": "<ul><li>Las palabras marcadas se agregan con un asterisco (*).</li><li>Los asteriscos pueden añadirse dentro de las palabras marcadas al añadir otro asterisco, lo que resulta en *palabracorrecta*** =&gt; palabracorrecta*.</li></ul>",
-        "example": "Las palabras correctas están marcadas así: *palabracorrecta*, un asterisco está escrito así: *palabracorrecta***."
+        "description": "<ul><li>Las palabras correctas se marcan con asteriscos (*) antes y después de la palabra.</li><li>Pueden añadirse asteriscos dentro de las palabras marcadas añadiendo otro asterisco, *palabracorrecta*** =&gt; palabracorrecta*.</li><li>Una frase con espacios es una sola opción si queda completa dentro de las marcas: *Artemis II*. No pongas formato dentro de las marcas.</li><li>En el modo &quot;Solo candidatas&quot;, solo son seleccionables las palabras marcadas con * (correcta) o + (distractora). El resto queda como texto plano. Una frase distractora usa las mismas marcas: +Los Angeles+. Un signo más literal se escribe como ++ dentro de las marcas: +palabra+++ =&gt; palabra+.</li></ul>",
+        "example": "Todas seleccionables: Las palabras *correctas* se marcan así, y *Artemis II* es una sola opción. Solo candidatas: Las *correctas* y las +incorrectas+ son clicables; el resto es texto plano."
       }
     },
     {
