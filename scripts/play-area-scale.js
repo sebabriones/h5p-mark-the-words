@@ -12,7 +12,9 @@ H5P.MarkTheWordsCFRD.PlayArea = (function () {
   var BASE_HEIGHT = Math.round(BASE_WIDTH / ASPECT_RATIO);
   var BASE_FONT_SIZE = 16;
   var MIN_SCALE = 0.35;
-  var MAX_SCALE = 1;
+  // Allow growth above the 640px design width so paragraph/font scale up on large monitors.
+  // Mobile still floors at MIN_SCALE so usability does not collapse.
+  var MAX_SCALE = 1.5;
 
   function getDesignSize() {
     return {
