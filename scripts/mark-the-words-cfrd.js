@@ -502,7 +502,8 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
         enableSolutionsButton: true,
         enableCheckButton: true,
         showScorePoints: true,
-        selectionMode: 'all'
+        selectionMode: 'all',
+        caseSensitive: false
       },
       checkAnswerButton: "Check",
       submitAnswerButton: "Submit",
@@ -906,6 +907,11 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
       self.selectableWords.push(selectableWord);
     });
 
+    // Unique-word mode: max score is one point per distinct correct text.
+    if (self.isUniqueWordScoring()) {
+      self.answers = Object.keys(self.getUniqueAnswerGroups()).length;
+    }
+
     self.blankIsCorrect = (self.answers === 0);
     if (self.blankIsCorrect) {
       self.answers = 1;
@@ -1078,15 +1084,119 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
   };
 
   /**
+   * Whether scoring groups identical correct answers as one point.
+   *
+   * @returns {boolean}
+   */
+  MarkTheWords.prototype.isUniqueWordScoring = function () {
+    return !!(this.params.behaviour &&
+      this.params.behaviour.selectionMode === 'allUniqueWord');
+  };
+
+  /**
+   * Normalize answer text for unique-word grouping.
+   *
+   * @param {string} text
+   * @returns {string}
+   */
+  MarkTheWords.prototype.normalizeAnswerKey = function (text) {
+    var value = String(text || '');
+    var behaviour = this.params.behaviour || {};
+    var uniqueOpts = behaviour.uniqueWordOptions;
+    // Flat field (current) with compat for the brief nested group shape.
+    var caseSensitive = !!(behaviour.caseSensitive ||
+      (uniqueOpts && uniqueOpts.caseSensitive));
+    if (!caseSensitive) {
+      return value.toLowerCase();
+    }
+    return value;
+  };
+
+  /**
+   * Group correct answers by normalized text and whether any instance is selected.
+   *
+   * @returns {Object.<string, {covered: boolean, words: Array}>}
+   */
+  MarkTheWords.prototype.getUniqueAnswerGroups = function () {
+    var self = this;
+    var groups = {};
+
+    self.selectableWords.forEach(function (word) {
+      if (!word.isAnswer()) {
+        return;
+      }
+
+      var key = self.normalizeAnswerKey(word.getAnswerText());
+      if (!groups[key]) {
+        groups[key] = {
+          covered: false,
+          words: []
+        };
+      }
+      groups[key].words.push(word);
+      if (word.isSelected()) {
+        groups[key].covered = true;
+      }
+    });
+
+    return groups;
+  };
+
+  /**
+   * Apply unique-word feedback: covered groups → correct, uncovered → incorrect.
+   *
+   * @param {boolean} [withScorePoints]
+   */
+  MarkTheWords.prototype.applyUniqueWordFeedback = function (withScorePoints) {
+    var self = this;
+    var groups = self.getUniqueAnswerGroups();
+    var scorePoints = null;
+    var awarded = {};
+
+    if (withScorePoints && self.params.behaviour.showScorePoints) {
+      scorePoints = new H5P.QuestionCFRD.ScorePoints();
+    }
+
+    self.selectableWords.forEach(function (entry) {
+      entry.clearScorePoint();
+
+      if (entry.isAnswer()) {
+        var key = self.normalizeAnswerKey(entry.getAnswerText());
+        var covered = !!(groups[key] && groups[key].covered);
+        var points = null;
+
+        if (scorePoints && covered && !awarded[key]) {
+          points = scorePoints;
+          awarded[key] = true;
+        }
+
+        entry.markUniqueGroupFeedback(covered, points);
+        return;
+      }
+
+      if (entry.isSelected()) {
+        entry.markCheck(scorePoints);
+      }
+    });
+  };
+
+  /**
    * Mark the words as correct, wrong or missed.
    *
    * @fires MarkTheWords#resize
    */
   MarkTheWords.prototype.setAllMarks = function () {
-    this.selectableWords.forEach(function (entry) {
-      entry.markCheck();
-      entry.clearScorePoint();
-    });
+    var self = this;
+
+    if (self.isUniqueWordScoring()) {
+      self.applyUniqueWordFeedback(false);
+    }
+    else {
+      self.selectableWords.forEach(function (entry) {
+        entry.markCheck();
+        entry.clearScorePoint();
+      });
+    }
 
     /**
      * Resize event
@@ -1103,6 +1213,13 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
    */
   MarkTheWords.prototype.feedbackSelectedWords = function () {
     var self = this;
+
+    if (self.isUniqueWordScoring()) {
+      self.applyUniqueWordFeedback(true);
+      this.$wordContainer.addClass('h5p-disable-hover');
+      this.trigger('resize');
+      return;
+    }
 
     var scorePoints;
     if (self.params.behaviour.showScorePoints) {
@@ -1198,23 +1315,52 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
       missed: 0,
       score: 0
     };
+    var answers;
 
-    // iterate over words, and calculate score
-    var answers = self.selectableWords.reduce(function (result, word) {
-      if (word.isCorrect()) {
-        result.correct++;
-      }
-      else if (word.isWrong()) {
-        result.wrong++;
-      }
-      else if (word.isMissed()) {
-        result.missed++;
-      }
+    if (self.isUniqueWordScoring()) {
+      var groups = self.getUniqueAnswerGroups();
 
-      return result;
-    }, initial);
+      answers = self.selectableWords.reduce(function (result, word) {
+        if (word.isWrong()) {
+          result.wrong++;
+        }
+        return result;
+      }, {
+        correct: 0,
+        wrong: 0,
+        missed: 0,
+        score: 0
+      });
 
-    // if no wrong answers, and black is correct
+      Object.keys(groups).forEach(function (key) {
+        if (groups[key].covered) {
+          answers.correct++;
+        }
+        else {
+          // Uncovered unique groups are treated as incorrect for feedback,
+          // but they do not subtract points (only wrong selections do).
+          answers.missed++;
+        }
+      });
+    }
+    else {
+      // iterate over words, and calculate score
+      answers = self.selectableWords.reduce(function (result, word) {
+        if (word.isCorrect()) {
+          result.correct++;
+        }
+        else if (word.isWrong()) {
+          result.wrong++;
+        }
+        else if (word.isMissed()) {
+          result.missed++;
+        }
+
+        return result;
+      }, initial);
+    }
+
+    // if no wrong answers, and blank is correct
     if (answers.wrong === 0 && self.blankIsCorrect) {
       answers.correct = 1;
     }

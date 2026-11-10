@@ -438,15 +438,22 @@
         },
         {
           "label": "Word selection mode",
-          "description": "All words: every word can be marked (default). Candidates only: only words marked with * (correct) or + (distractor) are selectable; other words are plain text.",
+          "description": "All words: every word can be marked (default). All words with one point per unique word: identical correct answers (*…*) share one point. Candidates only: only words marked with * (correct) or + (distractor) are selectable; other words are plain text.",
           "options": [
             {
               "label": "All words selectable"
             },
             {
+              "label": "All words selectable — one point per unique word"
+            },
+            {
               "label": "Candidates only (* correct, + distractor)"
             }
           ]
+        },
+        {
+          "label": "Distinguish uppercase and lowercase",
+          "description": "Only applies to \"All words selectable — one point per unique word\". When enabled, Uno and uno count as different answers. When disabled, they share the same point."
         }
       ]
     },

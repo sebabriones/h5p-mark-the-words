@@ -144,6 +144,15 @@ H5P.MarkTheWordsCFRD.Word = (function () {
     };
 
     /**
+     * Visible answer text without markers (* / +).
+     *
+     * @return {string}
+     */
+    this.getAnswerText = function () {
+      return handledInput;
+    };
+
+    /**
      * Clears all marks from the word.
      *
      * @public
@@ -178,6 +187,31 @@ H5P.MarkTheWordsCFRD.Word = (function () {
       else if (isAnswer) {
         $word.attr('aria-describedby', Word.ID_MARK_MISSED);
         ariaText.innerHTML = self.params.missedAnswer;
+      }
+    };
+
+    /**
+     * Feedback for unique-word scoring: whole group correct or incorrect (never missed).
+     *
+     * @public
+     * @param {boolean} covered True if at least one instance of this answer text was selected.
+     * @param {H5P.QuestionCFRD.ScorePoints} [scorePoints]
+     */
+    this.markUniqueGroupFeedback = function (covered, scorePoints) {
+      if (!isAnswer) {
+        return;
+      }
+
+      $word.attr(
+        'aria-describedby',
+        covered ? Word.ID_MARK_CORRECT : Word.ID_MARK_INCORRECT
+      );
+      ariaText.innerHTML = covered
+        ? self.params.correctAnswer
+        : self.params.incorrectAnswer;
+
+      if (scorePoints) {
+        $word[0].appendChild(scorePoints.getElement(!!covered));
       }
     };
 

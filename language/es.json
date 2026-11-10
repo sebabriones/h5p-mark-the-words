@@ -437,15 +437,22 @@
         },
         {
           "label": "Modo de selección de palabras",
-          "description": "Todas las palabras: cualquier palabra se puede marcar (predeterminado). Solo candidatas: solo son seleccionables las marcadas con * (correcta) o + (distractora); el resto es texto plano.",
+          "description": "Todas las palabras: cualquier palabra se puede marcar (predeterminado). Todas con un punto por palabra única: las respuestas correctas idénticas (*…*) comparten un punto. Solo candidatas: solo son seleccionables las marcadas con * (correcta) o + (distractora); el resto es texto plano.",
           "options": [
             {
               "label": "Todas las palabras seleccionables"
             },
             {
+              "label": "Todas las palabras seleccionables — un punto por palabra única"
+            },
+            {
               "label": "Solo candidatas (* correcta, + distractora)"
             }
           ]
+        },
+        {
+          "label": "Distinguir mayúsculas y minúsculas",
+          "description": "Solo aplica al modo \"Todas las palabras seleccionables — un punto por palabra única\". Si está activo, Uno y uno cuentan como respuestas distintas. Si está desactivado, comparten el mismo punto."
         }
       ]
     },
