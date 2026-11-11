@@ -34,7 +34,7 @@
   --mtw-missed-border: #255c41;
   --mtw-feedback-icon-correct-color: #255c41;
   --mtw-feedback-icon-wrong-color: #b71c1c;
-  --mtw-feedback-icon-size: 1em;
+  --mtw-feedback-icon-size: 0.85em;
   position: relative;
   background-color: var(--mtw-play-area-bg, #ffffff);
   box-sizing: border-box;
@@ -91,8 +91,16 @@
   min-width: 0;
   min-height: 0;
   max-width: 100%;
+  position: relative;
+  z-index: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
 }
 
+/* Collapsed siblings share the play-area grid cell; keep them from blocking scroll. */
 .h5p-mark-the-words:has(> .h5p-question-scorebar.h5p-question-visible) > .h5p-question-explanation,
 .h5p-mark-the-words:has(> .h5p-question-scorebar.h5p-question-visible) > .h5p-question-feedback:not(.h5p-question-popup),
 .h5p-mark-the-words:has(> .h5p-question-scorebar.h5p-question-visible) > .h5p-hidden-read {
@@ -102,6 +110,8 @@
   min-width: 0;
   max-width: 100%;
   overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .h5p-mark-the-words:has(> .h5p-question-scorebar.h5p-question-visible) > .h5p-question-scorebar.h5p-question-visible,
@@ -152,7 +162,8 @@
   width: 100%;
   flex: 1 1 0;
   min-height: 0;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   background-color: var(--mtw-play-area-bg, #ffffff);
   padding: 0.75em 1em;
   display: flex;
@@ -176,6 +187,24 @@
 
 .h5p-mark-the-words .h5p-mtw-play-area .h5p-question-content.h5p-mtw-with-context {
   overflow: hidden;
+}
+
+/*
+ * After Check the scorebar shrinks the play area. Let content define height
+ * only in that state so .h5p-mtw-play-area can scroll without fake scrollbars
+ * during normal play.
+ */
+.h5p-mark-the-words:has(> .h5p-question-scorebar.h5p-question-visible) .h5p-mtw-play-area .h5p-question-content,
+.h5p-mark-the-words:has(> .h5p-question-scorebar.h5p-question-visible) .h5p-mtw-play-area .h5p-mtw-has-context,
+.h5p-mark-the-words:has(> .h5p-question-scorebar.h5p-question-visible) .h5p-mtw-play-area .h5p-mtw-slide-layout {
+  flex: 0 0 auto;
+  min-height: auto;
+  overflow: visible;
+}
+
+.h5p-mark-the-words:has(> .h5p-question-scorebar.h5p-question-visible) .h5p-mtw-play-area .h5p-mtw-context,
+.h5p-mark-the-words:has(> .h5p-question-scorebar.h5p-question-visible) .h5p-mtw-play-area .h5p-mtw-question-column {
+  overflow: visible;
 }
 
 .h5p-mark-the-words-descriptions {
@@ -359,70 +388,77 @@
   color: var(--mtw-word-selected-color, #333333);
 }
 
-/* Missed word */
+/* Missed / correct / incorrect: keep the same box model as selection so line
+ * height and wrapping barely change after Check (no bold/flex growth). */
 .h5p-mark-the-words [aria-describedby="h5p-description-missed"] {
   color: var(--mtw-missed-color, #255c41);
-  font-weight: bold;
+  font-weight: inherit;
   border: 2px var(--mtw-missed-border, #255c41) dashed;
   background-color: var(--mtw-missed-bg, #b6e4ce);
   padding: 0.02em 0.12em;
   border-radius: 0.15em;
-  margin-left: 0.1em;
 }
 
-/* Correctly answered marking */
 .h5p-mark-the-words [aria-describedby="h5p-description-correct"] {
-  display: inline-flex;
-  align-items: baseline;
-  line-height: inherit;
+  display: inline;
   color: var(--mtw-correct-color, #255c41);
   background-color: var(--mtw-correct-bg, #b6e4ce);
-  border: 1px solid var(--mtw-correct-border, #255c41);
-  padding: 0.02em 0.12em;
-  font-weight: 600;
+  border: 2px solid var(--mtw-correct-border, #255c41);
+  /* Extra right padding reserves icon slot inside the border. */
+  padding: 0.02em calc(var(--mtw-feedback-icon-size, 0.85em) + 0.28em) 0.02em 0.12em;
+  font-weight: inherit;
 }
 
-/* Wrongly answered marking */
 .h5p-mark-the-words [aria-describedby="h5p-description-incorrect"] {
-  display: inline-flex;
-  align-items: baseline;
-  line-height: inherit;
-  padding: 0.02em 0.12em;
+  display: inline;
+  padding: 0.02em calc(var(--mtw-feedback-icon-size, 0.85em) + 0.28em) 0.02em 0.12em;
   color: var(--mtw-wrong-color, #b71c1c);
   background-color: var(--mtw-wrong-bg, #fbd7d8);
-  border: solid 1px var(--mtw-wrong-border, #b71c1c);
-  font-weight: bold;
+  border: 2px solid var(--mtw-wrong-border, #b71c1c);
+  font-weight: inherit;
 }
 
-/* Feedback icons — H5P Font Awesome 4 (Lumi registers as H5PFontAwesome4) */
-.h5p-mark-the-words [aria-describedby="h5p-description-correct"]:after {
-  position: relative;
+/* Icon sits in the reserved right padding, vertically centered, inside the box. */
+.h5p-mark-the-words [aria-describedby="h5p-description-correct"]:after,
+.h5p-mark-the-words [aria-describedby="h5p-description-incorrect"]:after {
+  position: absolute;
+  left: auto;
+  right: 0.12em;
+  top: 50%;
+  transform: translateY(-50%);
+  display: block;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  text-align: center;
   text-decoration: none;
-  content: "\f00c";
   font-family: 'H5PFontAwesome4';
-  font-size: var(--mtw-feedback-icon-size, 1em);
-  color: var(--mtw-feedback-icon-correct-color, var(--mtw-correct-color, #255c41));
-  padding-left: 0.5em;
+  font-size: var(--mtw-feedback-icon-size, 0.85em);
   font-weight: normal;
+  padding: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.h5p-mark-the-words [aria-describedby="h5p-description-correct"]:after {
+  content: "\f00c";
+  color: var(--mtw-feedback-icon-correct-color, var(--mtw-correct-color, #255c41));
 }
 
 .h5p-mark-the-words [aria-describedby="h5p-description-incorrect"]:after {
-  position: relative;
-  display: inline-block;
-  font-family: 'H5PFontAwesome4';
-  text-decoration: none;
   content: "\f00d";
-  font-size: var(--mtw-feedback-icon-size, 1em);
   color: var(--mtw-feedback-icon-wrong-color, var(--mtw-wrong-color, #b71c1c));
-  padding-left: 0.5em;
-  font-weight: normal;
+}
+
+.h5p-mark-the-words .h5p-mtw-play-area.h5p-mtw-feedback-icons-hidden [aria-describedby="h5p-description-correct"],
+.h5p-mark-the-words .h5p-mtw-play-area.h5p-mtw-feedback-icons-hidden [aria-describedby="h5p-description-incorrect"] {
+  padding-right: 0.12em;
 }
 
 .h5p-mark-the-words .h5p-mtw-play-area.h5p-mtw-feedback-icons-hidden [aria-describedby="h5p-description-correct"]:after,
 .h5p-mark-the-words .h5p-mtw-play-area.h5p-mtw-feedback-icons-hidden [aria-describedby="h5p-description-incorrect"]:after {
   content: none;
   display: none;
-  padding-left: 0;
 }
 
 .h5p-mark-the-words .h5p-question-plus-one-container,

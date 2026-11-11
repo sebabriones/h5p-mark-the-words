@@ -141,7 +141,161 @@ function setupPlayAreaLayout($container) {
     $container.children(selector).appendTo($playArea);
   });
 
+  bindPlayAreaWheelContainment($playArea[0]);
+
   return $playArea;
+}
+
+/**
+ * True if point lies inside an element box.
+ *
+ * @param {number} x
+ * @param {number} y
+ * @param {DOMRect} rect
+ * @returns {boolean}
+ */
+function pointInRect(x, y, rect) {
+  return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+}
+
+/**
+ * Find a visible Mark the Words play area under the pointer.
+ * Course Presentation often delivers wheel to `.h5p-presentation-wrapper`
+ * (hit-test bypasses the play area), so we resolve by geometry instead.
+ *
+ * @param {number} x
+ * @param {number} y
+ * @returns {HTMLElement|null}
+ */
+function findPlayAreaUnderPoint(x, y) {
+  var nodes = document.querySelectorAll('.h5p-mtw-play-area');
+  var i;
+  var el;
+  var rect;
+
+  for (i = 0; i < nodes.length; i++) {
+    el = nodes[i];
+    rect = el.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) {
+      continue;
+    }
+    if (pointInRect(x, y, rect)) {
+      return el;
+    }
+  }
+
+  return null;
+}
+
+/** Wheel delta scale (less than 1 = softer steps). */
+var MTW_WHEEL_SCALE = 0.45;
+/** Lerp factor per animation frame toward the target scrollTop. */
+var MTW_WHEEL_LERP = 0.22;
+
+/**
+ * Normalize wheel deltaY to CSS pixels.
+ *
+ * @param {WheelEvent} event
+ * @param {HTMLElement} playArea
+ * @returns {number}
+ */
+function getWheelDeltaPixels(event, playArea) {
+  var delta = event.deltaY;
+
+  if (event.deltaMode === 1) {
+    delta *= 16;
+  }
+  else if (event.deltaMode === 2) {
+    delta *= playArea.clientHeight || 1;
+  }
+
+  return delta * MTW_WHEEL_SCALE;
+}
+
+/**
+ * Animate play-area scrollTop toward its pending target.
+ *
+ * @param {HTMLElement} playArea
+ */
+function animatePlayAreaScroll(playArea) {
+  var target;
+  var current;
+  var next;
+
+  if (!playArea || playArea._mtwWheelRaf) {
+    return;
+  }
+
+  playArea._mtwWheelRaf = window.requestAnimationFrame(function step() {
+    target = playArea._mtwWheelTarget;
+    current = playArea.scrollTop;
+
+    if (typeof target !== 'number' || Math.abs(target - current) < 0.5) {
+      if (typeof target === 'number') {
+        playArea.scrollTop = target;
+      }
+      playArea._mtwWheelRaf = 0;
+      return;
+    }
+
+    next = current + (target - current) * MTW_WHEEL_LERP;
+    playArea.scrollTop = next;
+    playArea._mtwWheelRaf = window.requestAnimationFrame(step);
+  });
+}
+
+/**
+ * Forward wheel to the play area under the pointer (document capture).
+ * Needed inside Course Presentation where the event target is the slide wrapper.
+ * Uses scaled delta + short lerp so the motion feels less abrupt.
+ *
+ * @param {HTMLElement|null} playAreaEl
+ */
+function bindPlayAreaWheelContainment(playAreaEl) {
+  if (playAreaEl) {
+    playAreaEl._mtwWheelBound = true;
+  }
+
+  if (window._mtwDocWheelBound) {
+    return;
+  }
+
+  window._mtwDocWheelBound = true;
+  document.addEventListener('wheel', function (event) {
+    var playArea;
+    var maxScroll;
+    var deltaY;
+    var base;
+    var next;
+
+    playArea = findPlayAreaUnderPoint(event.clientX, event.clientY);
+    if (!playArea) {
+      return;
+    }
+
+    deltaY = getWheelDeltaPixels(event, playArea);
+    if (!deltaY) {
+      return;
+    }
+
+    maxScroll = playArea.scrollHeight - playArea.clientHeight;
+    if (maxScroll <= 1) {
+      return;
+    }
+
+    base = (typeof playArea._mtwWheelTarget === 'number') ?
+      playArea._mtwWheelTarget :
+      playArea.scrollTop;
+    next = Math.min(maxScroll, Math.max(0, base + deltaY));
+    if (next === playArea.scrollTop && next === playArea._mtwWheelTarget) {
+      return;
+    }
+
+    playArea._mtwWheelTarget = next;
+    animatePlayAreaScroll(playArea);
+    event.preventDefault();
+    event.stopPropagation();
+  }, { passive: false, capture: true });
 }
 
 /**
