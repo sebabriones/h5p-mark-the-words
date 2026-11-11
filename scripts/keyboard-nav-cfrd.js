@@ -14,6 +14,13 @@ H5P.KeyboardNav = (function (EventDispatcher) {
     /** @member {boolean} */
     this.selectability = true;
 
+    /**
+     * Optional guard: return false to block selecting a new word.
+     * Deselect is always allowed when selectability is on.
+     * @member {function(HTMLElement):boolean|null}
+     */
+    this.selectionGuard = null;
+
     /** @member {HTMLElement[]|EventTarget[]} */
     this.elements = [];
   }
@@ -157,6 +164,16 @@ H5P.KeyboardNav = (function (EventDispatcher) {
   };
 
   /**
+   * Set a guard that can block selecting additional words (not deselect).
+   *
+   * @param {function(HTMLElement):boolean|null} guardFn
+   * @public
+   */
+  KeyboardNav.prototype.setSelectionGuard = function (guardFn) {
+    this.selectionGuard = (typeof guardFn === 'function') ? guardFn : null;
+  };
+
+  /**
    * Toggles 'aria-selected' on an element, if selectability == true
    *
    * @param {EventTarget|HTMLElement} el The element to select/unselect
@@ -165,9 +182,16 @@ H5P.KeyboardNav = (function (EventDispatcher) {
    */
   KeyboardNav.prototype.toggleSelect = function(el){
     if(this.selectability) {
+      var currentlySelected = isElementSelected(el);
+      var willSelect = !currentlySelected;
+
+      // Selection limit: block only new selections when guard returns false
+      if (willSelect && this.selectionGuard && !this.selectionGuard(el)) {
+        return;
+      }
 
       // toggle selection
-      el.setAttribute('aria-selected', !isElementSelected(el));
+      el.setAttribute('aria-selected', willSelect);
 
       // focus current
       el.setAttribute('tabindex', '0');

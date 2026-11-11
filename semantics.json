@@ -1087,6 +1087,50 @@
             }
           ]
         }
+      },
+      {
+        "name": "limitSelections",
+        "type": "boolean",
+        "label": "Limit number of selections",
+        "description": "When enabled, learners can select at most the configured number of words at a time. Deselecting a word frees a slot for another choice. Applies to all selection modes.",
+        "importance": "low",
+        "default": false
+      },
+      {
+        "name": "selectionLimitOptions",
+        "type": "group",
+        "label": "Selection limit options",
+        "importance": "low",
+        "optional": true,
+        "widget": "showWhen",
+        "showWhen": {
+          "rules": [
+            {
+              "field": "limitSelections",
+              "equals": true
+            }
+          ]
+        },
+        "fields": [
+          {
+            "name": "maxSelections",
+            "type": "number",
+            "label": "Maximum selections",
+            "description": "Maximum number of words that can be selected before checking the answer.",
+            "importance": "low",
+            "default": 1,
+            "min": 1,
+            "step": 1
+          },
+          {
+            "name": "dimBlockedWords",
+            "type": "boolean",
+            "label": "Dim blocked words",
+            "description": "When enabled, words that cannot be selected because the limit was reached are shown with reduced opacity.",
+            "importance": "low",
+            "default": false
+          }
+        ]
       }
     ]
   },

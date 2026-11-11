@@ -658,7 +658,12 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
         showScorePoints: true,
         selectionMode: 'all',
         caseSensitive: false,
-        penalizeWrongSelections: false
+        penalizeWrongSelections: false,
+        limitSelections: false,
+        selectionLimitOptions: {
+          maxSelections: 1,
+          dimBlockedWords: false
+        }
       },
       checkAnswerButton: "Check",
       submitAnswerButton: "Submit",
@@ -1094,6 +1099,7 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
         self.currentKeyboardNavigator.on('select', function () {
           self.isAnswered = true;
           self.triggerXAPI('interacted');
+          self.updateSelectionLimitUi();
         });
 
         self.keyboardNavigators.push(self.currentKeyboardNavigator);
@@ -1108,6 +1114,16 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
       }
       self.selectableWords.push(selectableWord);
     });
+
+    // Selection limit applies across all paragraphs / navigators
+    if (self.isSelectionLimitEnabled()) {
+      var selectionGuard = function () {
+        return self.getSelectedCount() < self.getMaxSelections();
+      };
+      self.keyboardNavigators.forEach(function (navigator) {
+        navigator.setSelectionGuard(selectionGuard);
+      });
+    }
 
     // Unique-word mode: max score is one point per distinct correct text.
     if (self.isUniqueWordScoring()) {
@@ -1266,11 +1282,110 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
 
     if (disable) {
       this.$wordContainer.removeAttr('aria-multiselectable').removeAttr('role');
+      this.clearSelectionLimitUi();
     }
     else {
       this.$wordContainer.attr('aria-multiselectable', 'true')
         .attr('role', 'listbox');
+      this.updateSelectionLimitUi();
     }
+  };
+
+  /**
+   * Whether the author enabled a maximum number of simultaneous selections.
+   *
+   * @returns {boolean}
+   */
+  MarkTheWords.prototype.isSelectionLimitEnabled = function () {
+    return !!(this.params.behaviour && this.params.behaviour.limitSelections);
+  };
+
+  /**
+   * Selection-limit sub-options (nested group, with flat maxSelections fallback).
+   *
+   * @returns {Object}
+   */
+  MarkTheWords.prototype.getSelectionLimitOptions = function () {
+    var behaviour = this.params.behaviour || {};
+    var options = behaviour.selectionLimitOptions || {};
+    return {
+      maxSelections: options.maxSelections != null ?
+        options.maxSelections : behaviour.maxSelections,
+      dimBlockedWords: !!options.dimBlockedWords
+    };
+  };
+
+  /**
+   * Maximum words selectable at once when the limit is enabled.
+   *
+   * @returns {number}
+   */
+  MarkTheWords.prototype.getMaxSelections = function () {
+    var max = parseInt(this.getSelectionLimitOptions().maxSelections, 10);
+    return (isNaN(max) || max < 1) ? 1 : max;
+  };
+
+  /**
+   * Whether blocked words should be visually dimmed at the selection limit.
+   *
+   * @returns {boolean}
+   */
+  MarkTheWords.prototype.shouldDimBlockedWords = function () {
+    return this.isSelectionLimitEnabled() &&
+      !!this.getSelectionLimitOptions().dimBlockedWords;
+  };
+
+  /**
+   * Count currently selected selectable words.
+   *
+   * @returns {number}
+   */
+  MarkTheWords.prototype.getSelectedCount = function () {
+    var count = 0;
+    if (!this.selectableWords) {
+      return 0;
+    }
+    this.selectableWords.forEach(function (word) {
+      if (word.isSelected()) {
+        count++;
+      }
+    });
+    return count;
+  };
+
+  /**
+   * Remove selection-limit visual lock classes.
+   */
+  MarkTheWords.prototype.clearSelectionLimitUi = function () {
+    if (!this.$wordContainer) {
+      return;
+    }
+    this.$wordContainer
+      .removeClass('h5p-mtw-at-selection-limit')
+      .removeClass('h5p-mtw-dim-blocked');
+    this.$wordContainer.find('[role="option"]').removeClass('h5p-mtw-selection-blocked');
+  };
+
+  /**
+   * When at the selection limit, lock unselected words (optional dimming).
+   */
+  MarkTheWords.prototype.updateSelectionLimitUi = function () {
+    if (!this.$wordContainer || !this.isSelectionLimitEnabled()) {
+      this.clearSelectionLimitUi();
+      return;
+    }
+
+    var atLimit = this.getSelectedCount() >= this.getMaxSelections();
+    var dimBlocked = this.shouldDimBlockedWords();
+
+    this.$wordContainer.toggleClass('h5p-mtw-at-selection-limit', atLimit);
+    this.$wordContainer.toggleClass('h5p-mtw-dim-blocked', atLimit && dimBlocked);
+
+    this.$wordContainer.find('[role="option"]').each(function () {
+      var $el = $(this);
+      var selected = $el.attr('aria-selected') === 'true';
+      $el.toggleClass('h5p-mtw-selection-blocked', atLimit && !selected);
+    });
   };
 
   /**
@@ -1717,15 +1832,26 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
       return;
     }
 
-    // Select words from user state
+    // Select words from user state (respect selection limit if enabled)
+    var maxAllowed = self.isSelectionLimitEnabled() ?
+      self.getMaxSelections() : Number.POSITIVE_INFINITY;
+    var applied = 0;
+
     this.previousState.forEach(function (answeredWordIndex) {
       if (isNaN(answeredWordIndex) || answeredWordIndex >= self.selectableWords.length || answeredWordIndex < 0) {
         throw new Error('Stored user state is invalid');
       }
 
+      if (applied >= maxAllowed) {
+        return;
+      }
+
       self.isAnswered = true;
       self.selectableWords[answeredWordIndex].setSelected();
+      applied++;
     });
+
+    self.updateSelectionLimitUi();
   };
 
   /**

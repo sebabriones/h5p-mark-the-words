@@ -370,6 +370,24 @@
   cursor: pointer;
 }
 
+/* Selection limit: unselected words locked until a slot is freed */
+.h5p-mark-the-words .h5p-word-selectable-words.h5p-mtw-at-selection-limit [role="option"].h5p-mtw-selection-blocked {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.h5p-mark-the-words .h5p-word-selectable-words.h5p-mtw-at-selection-limit.h5p-mtw-dim-blocked [role="option"].h5p-mtw-selection-blocked {
+  opacity: 0.55;
+}
+
+.h5p-mark-the-words .h5p-word-selectable-words.h5p-mtw-at-selection-limit:not(.h5p-disable-hover) [role="option"].h5p-mtw-selection-blocked:hover {
+  box-shadow: none;
+  border-color: var(--mtw-word-border, transparent);
+  background: var(--mtw-word-bg, transparent);
+  color: var(--mtw-word-color, #333333);
+  cursor: not-allowed;
+}
+
 .h5p-mark-the-words [aria-selected="true"] {
   background: var(--mtw-word-selected-bg, #cee0f4);
   border: 2px solid var(--mtw-word-selected-border, #388eff);

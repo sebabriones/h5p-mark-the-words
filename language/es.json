@@ -457,6 +457,23 @@
         {
           "label": "Distinguir mayúsculas y minúsculas",
           "description": "Solo aplica al modo \"Todas las palabras seleccionables — un punto por palabra única\". Si está activo, Uno y uno cuentan como respuestas distintas. Si está desactivado, comparten el mismo punto."
+        },
+        {
+          "label": "Limitar número de selecciones",
+          "description": "Si está activado, se puede seleccionar como máximo el número configurado de palabras a la vez. Al deseleccionar una palabra se libera un cupo para elegir otra. Aplica a todos los modos de selección."
+        },
+        {
+          "label": "Opciones del límite de selección",
+          "fields": [
+            {
+              "label": "Máximo de selecciones",
+              "description": "Número máximo de palabras que se pueden seleccionar antes de comprobar la respuesta."
+            },
+            {
+              "label": "Atenuar palabras bloqueadas",
+              "description": "Si está activado, las palabras que no se pueden seleccionar porque se alcanzó el límite se muestran con menor opacidad."
+            }
+          ]
         }
       ]
     },

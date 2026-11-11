@@ -464,6 +464,23 @@
         {
           "label": "Distinguish uppercase and lowercase",
           "description": "Only applies to \"All words selectable — one point per unique word\". When enabled, Uno and uno count as different answers. When disabled, they share the same point."
+        },
+        {
+          "label": "Limit number of selections",
+          "description": "When enabled, learners can select at most the configured number of words at a time. Deselecting a word frees a slot for another choice. Applies to all selection modes."
+        },
+        {
+          "label": "Selection limit options",
+          "fields": [
+            {
+              "label": "Maximum selections",
+              "description": "Maximum number of words that can be selected before checking the answer."
+            },
+            {
+              "label": "Dim blocked words",
+              "description": "When enabled, words that cannot be selected because the limit was reached are shown with reduced opacity."
+            }
+          ]
         }
       ]
     },
