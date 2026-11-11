@@ -884,16 +884,63 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
     }
 
     /**
+     * Strip wrapping marker and collapse doubled escapes (~~ → ~).
+     * Used for locked plain text (~…~) so markers never show in the player.
+     * @param {string} entry
+     * @param {string} marker
+     * @returns {string}
+     */
+    function stripMarkerForDisplay(entry, marker) {
+      var wordString = removeDoubleMarkers(entry, marker);
+      var content = entry;
+
+      if (wordString.charAt(0) === marker && wordString.length > 2) {
+        if (wordString.charAt(wordString.length - 1) === marker) {
+          content = entry.slice(1, entry.length - 1);
+        }
+        else if (wordString.charAt(wordString.length - 2) === marker) {
+          content = entry.slice(1, entry.length - 2);
+        }
+      }
+
+      var index = content.indexOf(marker);
+      while (index !== -1) {
+        content = content.slice(0, index) + content.slice(index + 1);
+        index = content.indexOf(marker, index + 1);
+      }
+
+      return content;
+    }
+
+    /**
+     * In all-words modes every token is selectable except ~…~ (locked plain text).
      * In candidates-only mode, only *…* and +…+ become options.
      * @param {string} entry
      * @returns {boolean}
      */
     function shouldBeSelectable(entry) {
+      if (isWrappedByMarker(entry, '~')) {
+        return false;
+      }
+
       if (!candidatesOnly) {
         return true;
       }
 
       return isWrappedByMarker(entry, '*') || isWrappedByMarker(entry, '+');
+    }
+
+    /**
+     * Plain-text rendering for non-selectable tokens (strip lock markers).
+     * @param {string} entry
+     * @returns {string}
+     */
+    function plainTokenHtml(entry) {
+      var text = entry;
+      if (isWrappedByMarker(entry, '~')) {
+        text = stripMarkerForDisplay(entry, '~');
+      }
+      return self.escapeHTML(text);
     }
 
     for (var i = 0; i < nodes.length; i++) {
@@ -938,7 +985,7 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
                   self.escapeHTML(entry) + '</span>';
               }
               else {
-                html += self.escapeHTML(entry);
+                html += plainTokenHtml(entry);
               }
             }
 
@@ -953,7 +1000,7 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
               this.escapeHTML(text) + '</span>';
           }
           else {
-            html += this.escapeHTML(text);
+            html += plainTokenHtml(text);
           }
         }
       }
@@ -1809,14 +1856,14 @@ H5P.MarkTheWordsCFRD.XapiGenerator = SavedXapiGenerator;
  */
 /**
  * Split a text node into selectable tokens.
- * A marked phrase with spaces (*Artemis II*, +Los Angeles+) is one token.
- * A mark without spaces stays one whitespace token, so ** and ++ escapes remain intact.
+ * A marked phrase with spaces (*Artemis II*, +Los Angeles+, ~locked phrase~) is one token.
+ * A mark without spaces stays one whitespace token, so **, ++ and ~~ escapes remain intact.
  *
  * @param {string} str
  * @return {string[]}
  */
 H5P.MarkTheWordsCFRD.splitSelectableTokens = function (str) {
-  return String(str).match(/[\[\({⟨¿¡“"«„]*\*[^*]*\s[^*]*\*[,….:;?!\]\)}⟩»”]*|[\[\({⟨¿¡“"«„]*\+[^+]*\s[^+]*\+[,….:;?!\]\)}⟩»”]*|[^\s]+/g);
+  return String(str).match(/[\[\({⟨¿¡“"«„]*\*[^*]*\s[^*]*\*[,….:;?!\]\)}⟩»”]*|[\[\({⟨¿¡“"«„]*\+[^+]*\s[^+]*\+[,….:;?!\]\)}⟩»”]*|[\[\({⟨¿¡“"«„]*~[^~]*\s[^~]*~[,….:;?!\]\)}⟩»”]*|[^\s]+/g);
 };
 
 H5P.MarkTheWordsCFRD.parseText = function (question) {
@@ -1857,17 +1904,45 @@ H5P.MarkTheWordsCFRD.parseText = function (question) {
   }
 
   /**
+   * Escape double markers (e.g. ** → *) and remove singles.
+   * @param {string} str
+   * @param {string} marker
+   */
+  function handleMarkers(str, marker) {
+    var markerIndex = str.indexOf(marker);
+
+    while (markerIndex !== -1) {
+      str = str.slice(0, markerIndex) + str.slice(markerIndex + 1, str.length);
+      markerIndex = str.indexOf(marker, markerIndex + 1);
+    }
+    return str;
+  }
+
+  /**
    * Escape double asterisks ** = *, and remove single asterisk.
    * @param {string} str
    */
   function handleAsterisks(str) {
-    var asteriskIndex = str.indexOf('*');
+    return handleMarkers(str, '*');
+  }
 
-    while (asteriskIndex !== -1) {
-      str = str.slice(0, asteriskIndex) + str.slice(asteriskIndex + 1, str.length);
-      asteriskIndex = str.indexOf('*', asteriskIndex + 1);
+  /**
+   * Whether token is locked plain text (~…~) in all-words modes.
+   * @param {string} str
+   * @returns {boolean}
+   */
+  function isLockedPlain(str) {
+    var collapsed = str;
+    var index = str.indexOf('~');
+    while (index !== -1) {
+      if (str.indexOf('~', index + 1) === index + 1) {
+        collapsed = str.slice(0, index) + str.slice(index + 2);
+      }
+      index = str.indexOf('~', index + 1);
     }
-    return str;
+    return collapsed.charAt(0) === '~' && collapsed.length > 2 &&
+      (collapsed.charAt(collapsed.length - 1) === '~' ||
+        collapsed.charAt(collapsed.length - 2) === '~');
   }
 
   /**
@@ -1889,10 +1964,13 @@ H5P.MarkTheWordsCFRD.parseText = function (question) {
     })
     .map(function (w) {
       return removeTrailingPunctuation(w);
+    })
+    .filter(function (w) {
+      return !isLockedPlain(w);
     });
 
   const allSelectableWords = wordsWithAsterisksNotRemovedYet.map(function (w) {
-    return handleAsterisks(w);
+    return handleMarkers(handleAsterisks(w), '~');
   });
 
   const correctWordIndexes = [];

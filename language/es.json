@@ -307,8 +307,8 @@
       "label": "Campo de texto",
       "placeholder": "Esta es una respuesta: *respuesta*.",
       "important": {
-        "description": "<ul><li>Las palabras correctas se marcan con asteriscos (*) antes y después de la palabra.</li><li>Pueden añadirse asteriscos dentro de las palabras marcadas añadiendo otro asterisco, *palabracorrecta*** =&gt; palabracorrecta*.</li><li>Una frase con espacios es una sola opción si queda completa dentro de las marcas: *Artemis II*. No pongas formato dentro de las marcas.</li><li>En el modo &quot;Solo candidatas&quot;, solo son seleccionables las palabras marcadas con * (correcta) o + (distractora). El resto queda como texto plano. Una frase distractora usa las mismas marcas: +Los Angeles+. Un signo más literal se escribe como ++ dentro de las marcas: +palabra+++ =&gt; palabra+.</li></ul>",
-        "example": "Todas seleccionables: Las palabras *correctas* se marcan así, y *Artemis II* es una sola opción. Solo candidatas: Las *correctas* y las +incorrectas+ son clicables; el resto es texto plano."
+        "description": "<ul><li>Las palabras correctas se marcan con asteriscos (*) antes y después de la palabra.</li><li>Pueden añadirse asteriscos dentro de las palabras marcadas añadiendo otro asterisco, *palabracorrecta*** =&gt; palabracorrecta*.</li><li>Una frase con espacios es una sola opción si queda completa dentro de las marcas: *Artemis II*. No pongas formato dentro de las marcas.</li><li>En los modos &quot;Todas seleccionables&quot;, envuelve en tildes el texto que no debe poder seleccionarse: ~1.~ o ~Nota:~. Una tilde literal se escribe como ~~.</li><li>En el modo &quot;Solo candidatas&quot;, solo son seleccionables las palabras marcadas con * (correcta) o + (distractora). El resto queda como texto plano. Una frase distractora usa las mismas marcas: +Los Angeles+. Un signo más literal se escribe como ++ dentro de las marcas: +palabra+++ =&gt; palabra+.</li></ul>",
+        "example": "Todas seleccionables: ~1.~ Este es el *parrafo* de *ejemplo*. Solo candidatas: Las *correctas* y las +incorrectas+ son clicables; el resto es texto plano."
       }
     },
     {
@@ -441,7 +441,7 @@
         },
         {
           "label": "Modo de selección de palabras",
-          "description": "Todas las palabras: cualquier palabra se puede marcar (predeterminado). Todas con un punto por palabra única: las respuestas correctas idénticas (*…*) comparten un punto. Solo candidatas: solo son seleccionables las marcadas con * (correcta) o + (distractora); el resto es texto plano.",
+          "description": "Todas las palabras: cualquier palabra se puede marcar (predeterminado); envuelve en ~…~ el texto no seleccionable. Todas con un punto por palabra única: las respuestas correctas idénticas (*…*) comparten un punto. Solo candidatas: solo son seleccionables las marcadas con * (correcta) o + (distractora); el resto es texto plano.",
           "options": [
             {
               "label": "Todas las palabras seleccionables"

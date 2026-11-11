@@ -73,6 +73,7 @@ H5P.MarkTheWordsCFRD.XapiGenerator = (function ($) {
       description = (decoder.textContent || decoder.innerText || '')
         .replace(/\*/g, '')
         .replace(/\+/g, '')
+        .replace(/~/g, '')
         .replace(/[\n\r]+|[\s]{2,}/g, ' ')
         .trim();
     }

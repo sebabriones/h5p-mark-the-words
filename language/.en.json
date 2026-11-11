@@ -314,8 +314,8 @@
       "label": "Textfield",
       "placeholder": "This is an answer: *answer*.",
       "important": {
-        "description": "<ul><li>Correct words are marked with asterisks (*) before and after the word.</li><li>Asterisks can be added within marked words by adding another asterisk, *correctword*** =&gt; correctword*.</li><li>A phrase with spaces is one selectable option when the whole phrase stays inside the marks: *Artemis II*. Do not put formatting inside the marks.</li><li>In &quot;Candidates only&quot; selection mode, only words marked with * (correct) or + (distractor) are selectable. Other words stay as plain text. A phrase distractor uses the same marks: +Los Angeles+. A literal plus is written as ++ inside the marks: +word+++ =&gt; word+.</li></ul>",
-        "example": "All words selectable: The *correct* words are marked like this, and *Artemis II* is one option. Candidates only: The *correct* and +wrong+ candidates are clickable; the rest is plain text."
+        "description": "<ul><li>Correct words are marked with asterisks (*) before and after the word.</li><li>Asterisks can be added within marked words by adding another asterisk, *correctword*** =&gt; correctword*.</li><li>A phrase with spaces is one selectable option when the whole phrase stays inside the marks: *Artemis II*. Do not put formatting inside the marks.</li><li>In &quot;All words selectable&quot; modes, wrap text in tildes to keep it non-selectable: ~1.~ or ~Note:~. A literal tilde is written as ~~.</li><li>In &quot;Candidates only&quot; selection mode, only words marked with * (correct) or + (distractor) are selectable. Other words stay as plain text. A phrase distractor uses the same marks: +Los Angeles+. A literal plus is written as ++ inside the marks: +word+++ =&gt; word+.</li></ul>",
+        "example": "All words selectable: ~1.~ This is the *paragraph* of *example*. Candidates only: The *correct* and +wrong+ candidates are clickable; the rest is plain text."
       }
     },
     {
@@ -448,7 +448,7 @@
         },
         {
           "label": "Word selection mode",
-          "description": "All words: every word can be marked (default). All words with one point per unique word: identical correct answers (*…*) share one point. Candidates only: only words marked with * (correct) or + (distractor) are selectable; other words are plain text.",
+          "description": "All words: every word can be marked (default); wrap non-selectable text in ~…~. All words with one point per unique word: identical correct answers (*…*) share one point. Candidates only: only words marked with * (correct) or + (distractor) are selectable; other words are plain text.",
           "options": [
             {
               "label": "All words selectable"

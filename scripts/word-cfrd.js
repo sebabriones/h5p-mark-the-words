@@ -50,8 +50,9 @@ H5P.MarkTheWordsCFRD.Word = (function () {
       $word.text(handledInput);
     }
     else {
-      // Escape double asterisks in plain selectable words (all-words mode)
+      // Escape double markers in plain selectable words (all-words mode)
       stripMarkerChar('*');
+      stripMarkerChar('~');
     }
 
     const ariaText = document.createElement('span');
