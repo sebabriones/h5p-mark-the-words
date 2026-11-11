@@ -176,34 +176,21 @@
   padding-top: max(calc(3.25rem * var(--mtw-scale, 1)), var(--h5p-ins-tab-clearance, 2.75rem));
 }
 
+/*
+ * Size to content and center with auto margins. When content is taller than the
+ * play area the margins collapse and the play area scrolls — same before/after
+ * Check, so the paragraph does not jump from center to top.
+ */
 .h5p-mark-the-words .h5p-mtw-play-area .h5p-question-content {
-  flex: 1 1 0;
-  min-height: 0;
+  flex: 0 0 auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  min-height: min-content;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  justify-content: safe center;
 }
 
 .h5p-mark-the-words .h5p-mtw-play-area .h5p-question-content.h5p-mtw-with-context {
-  overflow: hidden;
-}
-
-/*
- * After Check the scorebar shrinks the play area. Let content define height
- * only in that state so .h5p-mtw-play-area can scroll without fake scrollbars
- * during normal play.
- */
-.h5p-mark-the-words:has(> .h5p-question-scorebar.h5p-question-visible) .h5p-mtw-play-area .h5p-question-content,
-.h5p-mark-the-words:has(> .h5p-question-scorebar.h5p-question-visible) .h5p-mtw-play-area .h5p-mtw-has-context,
-.h5p-mark-the-words:has(> .h5p-question-scorebar.h5p-question-visible) .h5p-mtw-play-area .h5p-mtw-slide-layout {
-  flex: 0 0 auto;
-  min-height: auto;
-  overflow: visible;
-}
-
-.h5p-mark-the-words:has(> .h5p-question-scorebar.h5p-question-visible) .h5p-mtw-play-area .h5p-mtw-context,
-.h5p-mark-the-words:has(> .h5p-question-scorebar.h5p-question-visible) .h5p-mtw-play-area .h5p-mtw-question-column {
   overflow: visible;
 }
 
@@ -237,8 +224,8 @@
 
 /* Context panel (texto + imagen) */
 .h5p-mtw-play-area .h5p-mtw-has-context {
-  flex: 1 1 0;
-  min-height: 0;
+  flex: 0 0 auto;
+  min-height: min-content;
   display: flex;
   flex-direction: column;
 }
@@ -249,8 +236,8 @@
   gap: 1em;
   align-items: stretch;
   width: 100%;
-  flex: 1 1 0;
-  min-height: 0;
+  flex: 0 0 auto;
+  min-height: min-content;
   box-sizing: border-box;
 }
 
@@ -277,7 +264,8 @@
   min-width: 0;
   gap: 0.5em;
   text-align: left;
-  overflow-y: auto;
+  /* Play area owns vertical scroll; avoid nested scroll parents. */
+  overflow-y: visible;
   overflow-x: hidden;
 }
 
@@ -328,7 +316,7 @@
   justify-content: center;
   justify-content: safe center;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: visible;
 }
 
 .h5p-mtw-context--text-only .h5p-mtw-context-media,
