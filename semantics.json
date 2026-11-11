@@ -1040,6 +1040,14 @@
         "default": true
       },
       {
+        "name": "penalizeWrongSelections",
+        "type": "boolean",
+        "label": "Penalize incorrect selections",
+        "description": "When enabled, each incorrectly selected word subtracts from the score. Correct answers that were not selected never subtract. When disabled, the score is only the number of correct answers (or unique groups covered).",
+        "importance": "low",
+        "default": false
+      },
+      {
         "name": "selectionMode",
         "type": "select",
         "label": "Word selection mode",
@@ -1101,12 +1109,12 @@
     "common": true
   },
   {
-    "label": "Missed answer text",
+    "label": "Unselected correct answer text",
     "importance": "low",
     "name": "missedAnswer",
     "type": "text",
-    "default": "Answer not found!",
-    "description": "Text used to indicate that an answer is missing",
+    "default": "Correct answer not selected",
+    "description": "Shown with Show solution for correct words the learner did not mark",
     "common": true
   },
   {
@@ -1674,7 +1682,7 @@
       {
         "name": "missedColors",
         "type": "group",
-        "label": "Missed answer colors",
+        "label": "Unselected correct answer colors (Show solution)",
         "importance": "low",
         "optional": true,
         "fields": [
@@ -1682,7 +1690,7 @@
             "name": "background",
             "type": "text",
             "widget": "colorSelector",
-            "label": "Missed answer background color",
+            "label": "Unselected correct answer background color",
             "default": "#b6e4ce",
             "optional": true,
             "spectrum": {
@@ -1693,7 +1701,7 @@
             "name": "text",
             "type": "text",
             "widget": "colorSelector",
-            "label": "Missed answer text color",
+            "label": "Unselected correct answer text color",
             "default": "#255c41",
             "optional": true,
             "spectrum": {
@@ -1704,7 +1712,7 @@
             "name": "border",
             "type": "text",
             "widget": "colorSelector",
-            "label": "Missed answer border color",
+            "label": "Unselected correct answer border color",
             "default": "#255c41",
             "optional": true,
             "spectrum": {

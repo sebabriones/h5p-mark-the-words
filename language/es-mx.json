@@ -437,6 +437,10 @@
           "description": "Mostrar los puntos obtenidos por cada respuesta."
         },
         {
+          "label": "Penalizar selecciones incorrectas",
+          "description": "Si está activado, cada palabra incorrecta seleccionada resta del puntaje. Las respuestas correctas no seleccionadas nunca restan. Si está desactivado, el puntaje es solo el número de respuestas correctas (o grupos únicos cubiertos)."
+        },
+        {
           "label": "Word selection mode",
           "description": "All words: every word can be marked (default). All words with one point per unique word: identical correct answers (*…*) share one point. Candidates only: only words marked with * (correct) or + (distractor) are selectable; other words are plain text.",
           "options": [
@@ -468,9 +472,9 @@
       "description": "Texto utilizado para indicar que una respuesta es incorrecta"
     },
     {
-      "label": "Texto de respuesta faltante",
-      "default": "¡Respuesta no encontrada!",
-      "description": "Texto utilizado para indicar que falta una respuesta"
+      "label": "Texto de respuesta correcta no seleccionada",
+      "default": "Respuesta correcta no seleccionada",
+      "description": "Se muestra con Mostrar solución para las palabras correctas que la persona no marcó"
     },
     {
       "label": "Descripción para Mostrar Solución",
@@ -692,18 +696,18 @@
           ]
         },
         {
-          "label": "Missed answer colors",
+          "label": "Unselected correct answer colors (Show solution)",
           "fields": [
             {
-              "label": "Missed answer background color",
+              "label": "Unselected correct answer background color",
               "default": "#b6e4ce"
             },
             {
-              "label": "Missed answer text color",
+              "label": "Unselected correct answer text color",
               "default": "#255c41"
             },
             {
-              "label": "Missed answer border color",
+              "label": "Unselected correct answer border color",
               "default": "#255c41"
             }
           ]

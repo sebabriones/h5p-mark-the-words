@@ -441,9 +441,9 @@
       "description": "Text used to indicate that an answer is incorrect"
     },
     {
-      "label": "Missed answer text",
-      "default": "Answer not found!",
-      "description": "Text used to indicate that an answer is missing"
+      "label": "Unselected correct answer text",
+      "default": "Correct answer not selected",
+      "description": "Shown with Show solution for correct words the learner did not mark"
     },
     {
       "label": "Description for Display Solution",
@@ -673,18 +673,18 @@
           ]
         },
         {
-          "label": "Missed answer colors",
+          "label": "Unselected correct answer colors (Show solution)",
           "fields": [
             {
-              "label": "Missed answer background color",
+              "label": "Unselected correct answer background color",
               "default": "#b6e4ce"
             },
             {
-              "label": "Missed answer text color",
+              "label": "Unselected correct answer text color",
               "default": "#255c41"
             },
             {
-              "label": "Missed answer border color",
+              "label": "Unselected correct answer border color",
               "default": "#255c41"
             }
           ]

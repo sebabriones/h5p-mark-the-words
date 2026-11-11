@@ -657,7 +657,8 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
         enableCheckButton: true,
         showScorePoints: true,
         selectionMode: 'all',
-        caseSensitive: false
+        caseSensitive: false,
+        penalizeWrongSelections: false
       },
       checkAnswerButton: "Check",
       submitAnswerButton: "Submit",
@@ -667,7 +668,7 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
       showFeedbackButtonLabel: "Show feedback",
       correctAnswer: "Correct!",
       incorrectAnswer: "Incorrect!",
-      missedAnswer: "Answer not found!",
+      missedAnswer: "Correct answer not selected",
       displaySolutionDescription:  "Task is updated to contain the solution.",
       scoreBarLabel: 'You got :num out of :total points',
       a11yFullTextLabel: 'Full readable text',
@@ -1297,11 +1298,14 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
   };
 
   /**
-   * Apply unique-word feedback: covered groups → correct, uncovered → incorrect.
+   * Apply unique-word feedback.
+   * Check: covered → correct; wrong selections → incorrect; uncovered → unmarked.
+   * Show solution: also reveal uncovered as “not selected”.
    *
    * @param {boolean} [withScorePoints]
+   * @param {boolean} [revealUncovered]
    */
-  MarkTheWords.prototype.applyUniqueWordFeedback = function (withScorePoints) {
+  MarkTheWords.prototype.applyUniqueWordFeedback = function (withScorePoints, revealUncovered) {
     var self = this;
     var groups = self.getUniqueAnswerGroups();
     var scorePoints = null;
@@ -1319,12 +1323,18 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
         var covered = !!(groups[key] && groups[key].covered);
         var points = null;
 
+        if (!covered && !revealUncovered) {
+          return;
+        }
+
         if (scorePoints && covered && !awarded[key]) {
           points = scorePoints;
           awarded[key] = true;
         }
 
-        entry.markUniqueGroupFeedback(covered, points);
+        entry.markUniqueGroupFeedback(covered, points, {
+          revealUncovered: !!revealUncovered
+        });
         return;
       }
 
@@ -1335,7 +1345,7 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
   };
 
   /**
-   * Mark the words as correct, wrong or missed.
+   * Mark selected words and reveal unselected correct answers (Show solution).
    *
    * @fires MarkTheWords#resize
    */
@@ -1343,7 +1353,7 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
     var self = this;
 
     if (self.isUniqueWordScoring()) {
-      self.applyUniqueWordFeedback(false);
+      self.applyUniqueWordFeedback(false, true);
     }
     else {
       self.selectableWords.forEach(function (entry) {
@@ -1361,7 +1371,7 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
   };
 
   /**
-   * Mark the selected words as correct or wrong.
+   * Mark selected words as correct or wrong (Check). Does not mark omitted answers.
    *
    * @fires MarkTheWords#resize
    */
@@ -1369,7 +1379,7 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
     var self = this;
 
     if (self.isUniqueWordScoring()) {
-      self.applyUniqueWordFeedback(true);
+      self.applyUniqueWordFeedback(true, false);
       this.$wordContainer.addClass('h5p-disable-hover');
       this.trigger('resize');
       return;
@@ -1491,8 +1501,7 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
           answers.correct++;
         }
         else {
-          // Uncovered unique groups are treated as incorrect for feedback,
-          // but they do not subtract points (only wrong selections do).
+          // Uncovered groups do not subtract; they only fail to add a point.
           answers.missed++;
         }
       });
@@ -1519,8 +1528,13 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
       answers.correct = 1;
     }
 
-    // no negative score
-    answers.score = Math.max(answers.correct - answers.wrong, 0);
+    // Omitted correct answers never subtract. Wrong selections subtract only when enabled.
+    if (self.params.behaviour && self.params.behaviour.penalizeWrongSelections) {
+      answers.score = Math.max(answers.correct - answers.wrong, 0);
+    }
+    else {
+      answers.score = answers.correct;
+    }
 
     return answers;
   };

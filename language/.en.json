@@ -443,6 +443,10 @@
           "description": "Show points earned for each answer."
         },
         {
+          "label": "Penalize incorrect selections",
+          "description": "When enabled, each incorrectly selected word subtracts from the score. Correct answers that were not selected never subtract. When disabled, the score is only the number of correct answers (or unique groups covered)."
+        },
+        {
           "label": "Word selection mode",
           "description": "All words: every word can be marked (default). All words with one point per unique word: identical correct answers (*…*) share one point. Candidates only: only words marked with * (correct) or + (distractor) are selectable; other words are plain text.",
           "options": [
@@ -474,9 +478,9 @@
       "description": "Text used to indicate that an answer is incorrect"
     },
     {
-      "label": "Missed answer text",
-      "default": "Answer not found!",
-      "description": "Text used to indicate that an answer is missing"
+      "label": "Unselected correct answer text",
+      "default": "Correct answer not selected",
+      "description": "Shown with Show solution for correct words the learner did not mark"
     },
     {
       "label": "Description for Display Solution",
@@ -698,18 +702,18 @@
           ]
         },
         {
-          "label": "Missed answer colors",
+          "label": "Unselected correct answer colors (Show solution)",
           "fields": [
             {
-              "label": "Missed answer background color",
+              "label": "Unselected correct answer background color",
               "default": "#b6e4ce"
             },
             {
-              "label": "Missed answer text color",
+              "label": "Unselected correct answer text color",
               "default": "#255c41"
             },
             {
-              "label": "Missed answer border color",
+              "label": "Unselected correct answer border color",
               "default": "#255c41"
             }
           ]

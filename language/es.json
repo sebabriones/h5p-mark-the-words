@@ -436,6 +436,10 @@
           "description": "Mostrar los puntos obtenidos por cada respuesta."
         },
         {
+          "label": "Penalizar selecciones incorrectas",
+          "description": "Si está activado, cada palabra incorrecta seleccionada resta del puntaje. Las respuestas correctas no seleccionadas nunca restan. Si está desactivado, el puntaje es solo el número de respuestas correctas (o grupos únicos cubiertos)."
+        },
+        {
           "label": "Modo de selección de palabras",
           "description": "Todas las palabras: cualquier palabra se puede marcar (predeterminado). Todas con un punto por palabra única: las respuestas correctas idénticas (*…*) comparten un punto. Solo candidatas: solo son seleccionables las marcadas con * (correcta) o + (distractora); el resto es texto plano.",
           "options": [
@@ -467,9 +471,9 @@
       "description": "Texto utilizado para indicar que una respuesta es incorrecta"
     },
     {
-      "label": "Texto de respuesta ausente",
-      "default": "¡Respuesta no encontrada!",
-      "description": "Texto utilizado para indicar que falta una respuesta"
+      "label": "Texto de respuesta correcta no seleccionada",
+      "default": "Respuesta correcta no seleccionada",
+      "description": "Se muestra con Mostrar solución para las palabras correctas que la persona no marcó"
     },
     {
       "label": "Descripción para Mostrar Solución",

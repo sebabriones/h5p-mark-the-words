@@ -191,27 +191,35 @@ H5P.MarkTheWordsCFRD.Word = (function () {
     };
 
     /**
-     * Feedback for unique-word scoring: whole group correct or incorrect (never missed).
+     * Feedback for unique-word scoring.
+     * Covered groups → correct. Uncovered → optional “not selected” (show solution).
      *
      * @public
      * @param {boolean} covered True if at least one instance of this answer text was selected.
      * @param {H5P.QuestionCFRD.ScorePoints} [scorePoints]
+     * @param {{revealUncovered: boolean}} [options]
      */
-    this.markUniqueGroupFeedback = function (covered, scorePoints) {
+    this.markUniqueGroupFeedback = function (covered, scorePoints, options) {
+      var revealUncovered = !!(options && options.revealUncovered);
+
       if (!isAnswer) {
         return;
       }
 
-      $word.attr(
-        'aria-describedby',
-        covered ? Word.ID_MARK_CORRECT : Word.ID_MARK_INCORRECT
-      );
-      ariaText.innerHTML = covered
-        ? self.params.correctAnswer
-        : self.params.incorrectAnswer;
+      if (!covered) {
+        if (!revealUncovered) {
+          return;
+        }
+        $word.attr('aria-describedby', Word.ID_MARK_MISSED);
+        ariaText.innerHTML = self.params.missedAnswer;
+        return;
+      }
+
+      $word.attr('aria-describedby', Word.ID_MARK_CORRECT);
+      ariaText.innerHTML = self.params.correctAnswer;
 
       if (scorePoints) {
-        $word[0].appendChild(scorePoints.getElement(!!covered));
+        $word[0].appendChild(scorePoints.getElement(true));
       }
     };
 

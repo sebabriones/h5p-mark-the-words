@@ -443,7 +443,7 @@
     {
       "label": "Mangler svar tekst",
       "default": "Manglar!",
-      "description": "Text used to indicate that an answer is missing"
+      "description": "Shown with Show solution for correct words the learner did not mark"
     },
     {
       "label": "Beskrivelse for Vis Løsning",
@@ -673,18 +673,18 @@
           ]
         },
         {
-          "label": "Missed answer colors",
+          "label": "Unselected correct answer colors (Show solution)",
           "fields": [
             {
-              "label": "Missed answer background color",
+              "label": "Unselected correct answer background color",
               "default": "#b6e4ce"
             },
             {
-              "label": "Missed answer text color",
+              "label": "Unselected correct answer text color",
               "default": "#255c41"
             },
             {
-              "label": "Missed answer border color",
+              "label": "Unselected correct answer border color",
               "default": "#255c41"
             }
           ]

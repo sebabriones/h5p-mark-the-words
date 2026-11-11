@@ -437,6 +437,10 @@
           "description": "Onyesha pointi zilizopatikana kwa kila jibu."
         },
         {
+          "label": "Penalize incorrect selections",
+          "description": "When enabled, each incorrectly selected word subtracts from the score. Correct answers that were not selected never subtract. When disabled, the score is only the number of correct answers (or unique groups covered)."
+        },
+        {
           "label": "Word selection mode",
           "description": "All words: every word can be marked (default). All words with one point per unique word: identical correct answers (*…*) share one point. Candidates only: only words marked with * (correct) or + (distractor) are selectable; other words are plain text.",
           "options": [
@@ -692,18 +696,18 @@
           ]
         },
         {
-          "label": "Missed answer colors",
+          "label": "Unselected correct answer colors (Show solution)",
           "fields": [
             {
-              "label": "Missed answer background color",
+              "label": "Unselected correct answer background color",
               "default": "#b6e4ce"
             },
             {
-              "label": "Missed answer text color",
+              "label": "Unselected correct answer text color",
               "default": "#255c41"
             },
             {
-              "label": "Missed answer border color",
+              "label": "Unselected correct answer border color",
               "default": "#255c41"
             }
           ]
