@@ -819,6 +819,7 @@
         "default": 1,
         "min": 0.5,
         "max": 3,
+        "decimals": 2,
         "unit": "em",
         "optional": true
       },
@@ -831,6 +832,7 @@
         "default": 1.2,
         "min": 0.5,
         "max": 3,
+        "decimals": 2,
         "unit": "em",
         "optional": true
       },
@@ -926,6 +928,7 @@
                   "default": 1,
                   "min": 0.5,
                   "max": 3,
+                  "decimals": 2,
                   "unit": "em",
                   "optional": true
                 },
