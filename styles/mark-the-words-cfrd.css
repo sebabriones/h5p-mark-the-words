@@ -170,6 +170,17 @@
   flex-direction: column;
 }
 
+/* Popup is hoisted to play-area (not content) so it centers on the visible frame. */
+.h5p-mark-the-words .h5p-mtw-play-area > .h5p-question-feedback.h5p-question-popup {
+  width: min(90%, 100%);
+  max-width: calc(100% - 2em);
+  z-index: 20;
+}
+
+.h5p-mark-the-words .h5p-mtw-play-area > .h5p-question-feedback-tail {
+  z-index: 19;
+}
+
 /* Reserve room for the instructions tab (marker set by H5P.Instructions). */
 .h5p-has-instructions-tab .h5p-mtw-play-area,
 .h5p-container:has(.h5p-instructions-tab-root) .h5p-mtw-play-area {
