@@ -220,6 +220,55 @@
                 }
               },
               {
+                "name": "padding",
+                "type": "group",
+                "label": "Text padding",
+                "importance": "low",
+                "description": "Inner spacing around the intro text and start button, in rem.",
+                "fields": [
+                  {
+                    "name": "top",
+                    "type": "number",
+                    "label": "Top",
+                    "default": 2,
+                    "min": 0,
+                    "max": 8,
+                    "decimals": 2,
+                    "unit": "rem"
+                  },
+                  {
+                    "name": "right",
+                    "type": "number",
+                    "label": "Right",
+                    "default": 2,
+                    "min": 0,
+                    "max": 8,
+                    "decimals": 2,
+                    "unit": "rem"
+                  },
+                  {
+                    "name": "bottom",
+                    "type": "number",
+                    "label": "Bottom",
+                    "default": 2,
+                    "min": 0,
+                    "max": 8,
+                    "decimals": 2,
+                    "unit": "rem"
+                  },
+                  {
+                    "name": "left",
+                    "type": "number",
+                    "label": "Left",
+                    "default": 2,
+                    "min": 0,
+                    "max": 8,
+                    "decimals": 2,
+                    "unit": "rem"
+                  }
+                ]
+              },
+              {
                 "name": "button",
                 "type": "group",
                 "label": "Start button",
@@ -312,15 +361,80 @@
                     }
                   },
                   {
+                    "name": "useHoverGradientBackground",
+                    "type": "boolean",
+                    "label": "Use gradient background on hover",
+                    "default": false
+                  },
+                  {
                     "name": "hoverBackgroundColor",
                     "type": "text",
-                    "widget": "colorSelector",
                     "label": "Button hover background color",
                     "default": "#1356a3",
                     "optional": true,
+                    "widget": "showWhen",
+                    "showWhen": {
+                      "widget": "colorSelector",
+                      "rules": [
+                        {
+                          "field": "useHoverGradientBackground",
+                          "equals": false
+                        }
+                      ]
+                    },
                     "spectrum": {
                       "showInput": true
                     }
+                  },
+                  {
+                    "name": "hoverGradientBackground",
+                    "type": "group",
+                    "label": "Hover gradient background",
+                    "importance": "low",
+                    "widget": "showWhen",
+                    "showWhen": {
+                      "rules": [
+                        {
+                          "field": "useHoverGradientBackground",
+                          "equals": true
+                        }
+                      ]
+                    },
+                    "fields": [
+                      {
+                        "name": "angle",
+                        "type": "number",
+                        "label": "Gradient angle",
+                        "description": "Direction in degrees (0 = upward, 180 = downward).",
+                        "default": 180,
+                        "min": 0,
+                        "max": 360,
+                        "step": 1,
+                        "unit": "°"
+                      },
+                      {
+                        "name": "colorStart",
+                        "type": "text",
+                        "widget": "colorSelector",
+                        "label": "Gradient start color",
+                        "default": "#1356a3",
+                        "optional": true,
+                        "spectrum": {
+                          "showInput": true
+                        }
+                      },
+                      {
+                        "name": "colorEnd",
+                        "type": "text",
+                        "widget": "colorSelector",
+                        "label": "Gradient end color",
+                        "default": "#1356a3",
+                        "optional": true,
+                        "spectrum": {
+                          "showInput": true
+                        }
+                      }
+                    ]
                   },
                   {
                     "name": "hoverTextColor",
@@ -387,6 +501,17 @@
                     "min": 0,
                     "max": 3,
                     "decimals": 2,
+                    "unit": "rem"
+                  },
+                  {
+                    "name": "width",
+                    "type": "number",
+                    "label": "Button width",
+                    "description": "Maximum width of the Start button in rem. The button never exceeds 100% of the available space.",
+                    "default": 18,
+                    "min": 4,
+                    "max": 50,
+                    "decimals": 1,
                     "unit": "rem"
                   }
                 ]
@@ -484,6 +609,55 @@
                 "spectrum": {
                   "showInput": true
                 }
+              },
+              {
+                "name": "padding",
+                "type": "group",
+                "label": "Text padding",
+                "importance": "low",
+                "description": "Inner spacing of the tab content panel, in rem.",
+                "fields": [
+                  {
+                    "name": "top",
+                    "type": "number",
+                    "label": "Top",
+                    "default": 1,
+                    "min": 0,
+                    "max": 8,
+                    "decimals": 2,
+                    "unit": "rem"
+                  },
+                  {
+                    "name": "right",
+                    "type": "number",
+                    "label": "Right",
+                    "default": 1.5,
+                    "min": 0,
+                    "max": 8,
+                    "decimals": 2,
+                    "unit": "rem"
+                  },
+                  {
+                    "name": "bottom",
+                    "type": "number",
+                    "label": "Bottom",
+                    "default": 1,
+                    "min": 0,
+                    "max": 8,
+                    "decimals": 2,
+                    "unit": "rem"
+                  },
+                  {
+                    "name": "left",
+                    "type": "number",
+                    "label": "Left",
+                    "default": 1.5,
+                    "min": 0,
+                    "max": 8,
+                    "decimals": 2,
+                    "unit": "rem"
+                  }
+                ]
               },
               {
                 "name": "contentBorderColor",
@@ -609,15 +783,80 @@
                     }
                   },
                   {
+                    "name": "useHoverGradientBackground",
+                    "type": "boolean",
+                    "label": "Use gradient background on hover",
+                    "default": false
+                  },
+                  {
                     "name": "hoverBackgroundColor",
                     "type": "text",
-                    "widget": "colorSelector",
                     "label": "Button hover background color",
                     "default": "#1356a3",
                     "optional": true,
+                    "widget": "showWhen",
+                    "showWhen": {
+                      "widget": "colorSelector",
+                      "rules": [
+                        {
+                          "field": "useHoverGradientBackground",
+                          "equals": false
+                        }
+                      ]
+                    },
                     "spectrum": {
                       "showInput": true
                     }
+                  },
+                  {
+                    "name": "hoverGradientBackground",
+                    "type": "group",
+                    "label": "Hover gradient background",
+                    "importance": "low",
+                    "widget": "showWhen",
+                    "showWhen": {
+                      "rules": [
+                        {
+                          "field": "useHoverGradientBackground",
+                          "equals": true
+                        }
+                      ]
+                    },
+                    "fields": [
+                      {
+                        "name": "angle",
+                        "type": "number",
+                        "label": "Gradient angle",
+                        "description": "Direction in degrees (0 = upward, 180 = downward).",
+                        "default": 180,
+                        "min": 0,
+                        "max": 360,
+                        "step": 1,
+                        "unit": "°"
+                      },
+                      {
+                        "name": "colorStart",
+                        "type": "text",
+                        "widget": "colorSelector",
+                        "label": "Gradient start color",
+                        "default": "#1356a3",
+                        "optional": true,
+                        "spectrum": {
+                          "showInput": true
+                        }
+                      },
+                      {
+                        "name": "colorEnd",
+                        "type": "text",
+                        "widget": "colorSelector",
+                        "label": "Gradient end color",
+                        "default": "#1356a3",
+                        "optional": true,
+                        "spectrum": {
+                          "showInput": true
+                        }
+                      }
+                    ]
                   },
                   {
                     "name": "hoverTextColor",
