@@ -1050,12 +1050,21 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
             // Remove suffix punctuations from word
             var suffix = entry.match(/[",….:;?!\]\)}⟩»”]+$/);
             var end = entry.length - start;
+            var suffixText = '';
+            var cliticSplit;
             if (suffix !== null) {
               end -= suffix[0].length;
+              suffixText = suffix[0];
             }
 
             // Word
             entry = entry.substr(start, end);
+
+            // *it*'s → selectable correct *it* + selectable clitic 's (not correct).
+            // *it's* stays one token.
+            cliticSplit = H5P.MarkTheWordsCFRD.splitTrailingMarkedClitic(entry);
+            entry = cliticSplit.stem;
+
             if (entry.length) {
               if (shouldBeSelectable(entry)) {
                 html += '<span class="h5p-word-selectable" role="option" aria-selected="false">' +
@@ -1066,8 +1075,15 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
               }
             }
 
-            if (suffix !== null) {
-              html += suffix;
+            // Peeled clitics are always clickable (implicit distractor), including
+            // candidates-only mode where unmarked text would otherwise stay plain.
+            if (cliticSplit.clitic) {
+              html += '<span class="h5p-word-selectable" role="option" aria-selected="false">' +
+                self.escapeHTML(cliticSplit.clitic) + '</span>';
+            }
+
+            if (suffixText) {
+              html += suffixText;
             }
           });
         }
@@ -1157,10 +1173,14 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
     });
 
     let isNewParagraph = true;
-    $wordContainer.find('[role="option"], br').each(function () {
-      if ($(this).is('br')) {
+    // Use a mutable list so Word can inject a peeled clitic span as the next option.
+    var optionNodes = $wordContainer.find('[role="option"], br').get();
+    for (var optionIndex = 0; optionIndex < optionNodes.length; optionIndex++) {
+      var optionNode = optionNodes[optionIndex];
+
+      if (optionNode.nodeName === 'BR' || (optionNode.tagName && optionNode.tagName.toLowerCase() === 'br')) {
         isNewParagraph = true;
-        return;
+        continue;
       }
 
       if (isNewParagraph) {
@@ -1177,15 +1197,27 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
         self.keyboardNavigators.push(self.currentKeyboardNavigator);
         isNewParagraph = false;
       }
-      self.currentKeyboardNavigator.addElement(this);
+      self.currentKeyboardNavigator.addElement(optionNode);
 
       // Add keyboard navigation to this element
-      var selectableWord = new Word($(this), self.params);
+      var selectableWord = new Word($(optionNode), self.params);
       if (selectableWord.isAnswer()) {
         self.answers += 1;
       }
       self.selectableWords.push(selectableWord);
-    });
+
+      // If Word peeled a clitic into a new sibling option, register it next.
+      var injected = optionNode.nextSibling;
+      if (
+        injected &&
+        injected.nodeType === 1 &&
+        injected.getAttribute &&
+        injected.getAttribute('role') === 'option' &&
+        optionNodes.indexOf(injected) === -1
+      ) {
+        optionNodes.splice(optionIndex + 1, 0, injected);
+      }
+    }
 
     // Selection limit applies across all paragraphs / navigators
     if (self.isSelectionLimitEnabled()) {
@@ -2067,6 +2099,74 @@ H5P.MarkTheWordsCFRD.splitSelectableTokens = function (str) {
   return String(str).match(/[\[\({⟨¿¡“"«„]*\*[^*]*\s[^*]*\*[,….:;?!\]\)}⟩»”]*|[\[\({⟨¿¡“"«„]*\+[^+]*\s[^+]*\+[,….:;?!\]\)}⟩»”]*|[\[\({⟨¿¡“"«„]*~[^~]*\s[^~]*~[,….:;?!\]\)}⟩»”]*|[^\s]+/g);
 };
 
+/**
+ * Apostrophe clitics allowed after a closed mark (*it*'s → stem *it*, clitic 's).
+ * Straight and typographic apostrophes.
+ * @type {RegExp}
+ */
+H5P.MarkTheWordsCFRD.APOSTROPHE_CLITIC_SUFFIX =
+  /((?:'|\u2019)(?:s|t|re|ve|ll|d|m))$/i;
+
+/**
+ * Whether a token is wrapped by a marker (* / + / ~), ignoring one trailing
+ * punctuation character after the closing mark (same rule as Word.checkForMarker).
+ *
+ * @param {string} entry
+ * @param {string} marker
+ * @returns {boolean}
+ */
+H5P.MarkTheWordsCFRD.isWrappedByMarker = function (entry, marker) {
+  var wordString = String(entry || '');
+  var index = wordString.indexOf(marker);
+  var collapsed = wordString;
+
+  while (index !== -1) {
+    if (wordString.indexOf(marker, index + 1) === index + 1) {
+      collapsed = wordString.slice(0, index) + wordString.slice(index + 2);
+    }
+    index = wordString.indexOf(marker, index + 1);
+  }
+
+  if (collapsed.charAt(0) !== marker || collapsed.length <= 2) {
+    return false;
+  }
+
+  return collapsed.charAt(collapsed.length - 1) === marker ||
+    collapsed.charAt(collapsed.length - 2) === marker;
+};
+
+/**
+ * Split a trailing apostrophe clitic from a closed mark token.
+ * *it*'s → { stem: '*it*', clitic: "'s" }. *it's* is unchanged.
+ * Plain tokens like O'Brien are unchanged (stem is not a closed mark).
+ *
+ * @param {string} entry
+ * @returns {{stem: string, clitic: string}}
+ */
+H5P.MarkTheWordsCFRD.splitTrailingMarkedClitic = function (entry) {
+  var text = String(entry || '');
+  var match = text.match(H5P.MarkTheWordsCFRD.APOSTROPHE_CLITIC_SUFFIX);
+  var clitic;
+  var stem;
+
+  if (!match) {
+    return { stem: text, clitic: '' };
+  }
+
+  clitic = match[1];
+  stem = text.slice(0, text.length - clitic.length);
+
+  if (
+    H5P.MarkTheWordsCFRD.isWrappedByMarker(stem, '*') ||
+    H5P.MarkTheWordsCFRD.isWrappedByMarker(stem, '+') ||
+    H5P.MarkTheWordsCFRD.isWrappedByMarker(stem, '~')
+  ) {
+    return { stem: stem, clitic: clitic };
+  }
+
+  return { stem: text, clitic: '' };
+};
+
 H5P.MarkTheWordsCFRD.parseText = function (question) {
 
   /**
@@ -2102,6 +2202,14 @@ H5P.MarkTheWordsCFRD.parseText = function (question) {
 
   function removeTrailingPunctuation(str) {
     return str.replace(/[",….:;?!\]\)}⟩»”]+$/, '');
+  }
+
+  function expandTrailingMarkedClitic(str) {
+    var split = H5P.MarkTheWordsCFRD.splitTrailingMarkedClitic(str);
+    if (split.clitic) {
+      return [split.stem, split.clitic];
+    }
+    return [str];
   }
 
   /**
@@ -2166,6 +2274,9 @@ H5P.MarkTheWordsCFRD.parseText = function (question) {
     .map(function (w) {
       return removeTrailingPunctuation(w);
     })
+    .reduce(function (list, w) {
+      return list.concat(expandTrailingMarkedClitic(w));
+    }, [])
     .filter(function (w) {
       return !isLockedPlain(w);
     });
@@ -2197,8 +2308,8 @@ H5P.MarkTheWordsCFRD.parseText = function (question) {
     correctWordIndexes: correctWordIndexes,
     textWithPlaceholders: printableQuestion.match(/[^\s]+/g)
       .reduce(function (textWithPlaceholders, word, index) {
-        word = removeTrailingPunctuation(
-          removeLeadingPunctuation(word));
+        word = expandTrailingMarkedClitic(removeTrailingPunctuation(
+          removeLeadingPunctuation(word)))[0];
 
         return textWithPlaceholders.replace(word, '%' + index);
       }, printableQuestion)

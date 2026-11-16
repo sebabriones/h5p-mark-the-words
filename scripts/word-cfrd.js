@@ -32,6 +32,7 @@ H5P.MarkTheWordsCFRD.Word = (function () {
 
     var input = $word.text();
     var handledInput = input;
+    var peeledClitic = '';
     var candidatesOnly = !!(params && params.behaviour &&
       params.behaviour.selectionMode === 'candidatesOnly');
 
@@ -41,13 +42,35 @@ H5P.MarkTheWordsCFRD.Word = (function () {
     // In candidates-only mode, +…+ marks a selectable distractor
     var isPlusDistractor = !isAnswer && candidatesOnly && checkForMarker('+');
 
+    /**
+     * Insert a peeled clitic as its own selectable option after this word.
+     * @param {string} clitic
+     */
+    function appendSelectableClitic(clitic) {
+      var cliticSpan = document.createElement('span');
+      cliticSpan.className = 'h5p-word-selectable';
+      cliticSpan.setAttribute('role', 'option');
+      cliticSpan.setAttribute('aria-selected', 'false');
+      cliticSpan.textContent = clitic;
+      if ($word[0] && $word[0].parentNode) {
+        $word[0].parentNode.insertBefore(cliticSpan, $word[0].nextSibling);
+      }
+    }
+
     if (isAnswer) {
       stripMarkerChar('*');
       $word.text(handledInput);
+      if (peeledClitic) {
+        // Fallback when HTML did not split yet: keep clitic selectable.
+        appendSelectableClitic(peeledClitic);
+      }
     }
     else if (isPlusDistractor) {
       stripMarkerChar('+');
       $word.text(handledInput);
+      if (peeledClitic) {
+        appendSelectableClitic(peeledClitic);
+      }
     }
     else {
       // Escape double markers in plain selectable words (all-words mode)
@@ -92,15 +115,37 @@ H5P.MarkTheWordsCFRD.Word = (function () {
      */
     function checkForMarker(marker) {
       var wordString = removeDoubleMarkers(input, marker);
+      var cliticMatch = wordString.match(/((?:'|\u2019)(?:s|t|re|ve|ll|d|m))$/i);
+      var clitic = cliticMatch ? cliticMatch[1] : '';
+      var coreString = clitic
+        ? wordString.slice(0, wordString.length - clitic.length)
+        : wordString;
+      var inputCore = clitic
+        ? input.slice(0, input.length - clitic.length)
+        : input;
+      var coreClosed = coreString.charAt(0) === marker && coreString.length > 2 && (
+        coreString.charAt(coreString.length - 1) === marker ||
+        coreString.charAt(coreString.length - 2) === marker
+      );
 
-      if (wordString.charAt(0) === marker && wordString.length > 2) {
-        if (wordString.charAt(wordString.length - 1) === marker) {
-          handledInput = input.slice(1, input.length - 1);
+      // Only peel a clitic when the remainder is a closed mark (*it*'s).
+      // Leave *it's* and plain contractions alone.
+      if (clitic && !coreClosed) {
+        coreString = wordString;
+        inputCore = input;
+        clitic = '';
+      }
+
+      if (coreString.charAt(0) === marker && coreString.length > 2) {
+        if (coreString.charAt(coreString.length - 1) === marker) {
+          handledInput = inputCore.slice(1, inputCore.length - 1);
+          peeledClitic = clitic;
           return true;
         }
         // Punctuation after closing marker
-        else if (wordString.charAt(wordString.length - 2) === marker) {
-          handledInput = input.slice(1, input.length - 2);
+        if (coreString.charAt(coreString.length - 2) === marker) {
+          handledInput = inputCore.slice(1, inputCore.length - 2);
+          peeledClitic = clitic;
           return true;
         }
         return false;
