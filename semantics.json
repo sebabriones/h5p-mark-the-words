@@ -1298,7 +1298,7 @@
         "type": "boolean",
         "label": "Enable \"Show solution\" button",
         "importance": "low",
-        "default": true
+        "default": false
       },
       {
         "name": "enableCheckButton",
@@ -1315,7 +1315,7 @@
         "label": "Show score points",
         "description": "Show points earned for each answer.",
         "importance": "low",
-        "default": true
+        "default": false
       },
       {
         "name": "penalizeWrongSelections",

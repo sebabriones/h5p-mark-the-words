@@ -714,9 +714,9 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
       },
       behaviour: {
         enableRetry: true,
-        enableSolutionsButton: true,
+        enableSolutionsButton: false,
         enableCheckButton: true,
-        showScorePoints: true,
+        showScorePoints: false,
         selectionMode: 'all',
         caseSensitive: false,
         penalizeWrongSelections: false,
