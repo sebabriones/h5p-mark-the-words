@@ -1038,22 +1038,10 @@
         }
       },
       {
-        "name": "feedbackTextColor",
-        "type": "text",
-        "widget": "colorSelector",
-        "label": "Feedback text color",
-        "default": "#333333",
-        "importance": "low",
-        "optional": true,
-        "spectrum": {
-          "showInput": true
-        }
-      },
-      {
         "name": "feedbackBodyFontSize",
         "type": "number",
         "label": "Feedback body font size",
-        "description": "Font size of the main feedback text in the popup (relative to the content font).",
+        "description": "Base font size of the feedback message in the popup (relative to the content font). Per-fragment sizes can also be set in the feedback editor.",
         "importance": "low",
         "default": 1,
         "min": 0.5,
@@ -1116,83 +1104,35 @@
             {
               "name": "feedback",
               "type": "text",
-              "maxLength": 2048,
+              "widget": "html",
               "label": "Feedback for defined score range",
               "importance": "low",
               "placeholder": "Fill in the feedback",
-              "optional": true
+              "optional": true,
+              "enterMode": "p",
+              "tags": [
+                "strong",
+                "em",
+                "u",
+                "del",
+                "code",
+                "br",
+                "p"
+              ],
+              "font": {
+                "size": true,
+                "color": true
+              }
             },
             {
               "name": "appearance",
               "type": "group",
-              "label": "Appearance settings",
+              "label": "Feedback image",
               "importance": "low",
               "expanded": false,
               "optional": true,
+              "description": "Optional image for this score range. Text color and formatting are set in the feedback message editor.",
               "fields": [
-                {
-                  "name": "feedbackLeadText",
-                  "type": "text",
-                  "maxLength": 2048,
-                  "label": "Highlighted lead text",
-                  "importance": "low",
-                  "placeholder": "e.g. Correct! or Incorrect",
-                  "optional": true
-                },
-                {
-                  "name": "feedbackLeadBold",
-                  "type": "boolean",
-                  "label": "Bold lead text",
-                  "importance": "low",
-                  "default": true
-                },
-                {
-                  "name": "feedbackLeadTextColor",
-                  "type": "text",
-                  "widget": "colorSelector",
-                  "label": "Highlighted lead text color",
-                  "default": "#1a73d9",
-                  "importance": "low",
-                  "optional": true,
-                  "spectrum": {
-                    "showInput": true
-                  }
-                },
-                {
-                  "name": "feedbackLeadFontSize",
-                  "type": "number",
-                  "label": "Highlighted lead font size",
-                  "description": "Font size of the highlighted lead text (relative to the content font).",
-                  "importance": "low",
-                  "default": 1,
-                  "min": 0.5,
-                  "max": 3,
-                  "decimals": 2,
-                  "unit": "em",
-                  "optional": true
-                },
-                {
-                  "name": "feedbackTextAlign",
-                  "type": "select",
-                  "label": "Text alignment",
-                  "description": "Only used when no feedback image is set. With an image, text alignment follows image position (left/right: left aligned, above: centered).",
-                  "importance": "low",
-                  "default": "left",
-                  "options": [
-                    {
-                      "value": "left",
-                      "label": "Left"
-                    },
-                    {
-                      "value": "center",
-                      "label": "Center"
-                    },
-                    {
-                      "value": "right",
-                      "label": "Right"
-                    }
-                  ]
-                },
                 {
                   "name": "feedbackImage",
                   "type": "image",

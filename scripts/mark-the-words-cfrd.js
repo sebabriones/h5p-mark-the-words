@@ -437,7 +437,6 @@ function migrateOverallFeedback(params) {
   if (Array.isArray(params.overallFeedback)) {
     params.overallFeedback = {
       popupBackgroundColor: '#ffffff',
-      feedbackTextColor: '#333333',
       feedbackBodyFontSize: 1,
       feedbackCloseIconSize: 1.2,
       overallFeedback: params.overallFeedback
@@ -448,9 +447,6 @@ function migrateOverallFeedback(params) {
   if (params.overallFeedback && typeof params.overallFeedback === 'object') {
     if (!params.overallFeedback.popupBackgroundColor) {
       params.overallFeedback.popupBackgroundColor = '#ffffff';
-    }
-    if (!params.overallFeedback.feedbackTextColor) {
-      params.overallFeedback.feedbackTextColor = '#333333';
     }
     if (params.overallFeedback.feedbackBodyFontSize == null) {
       params.overallFeedback.feedbackBodyFontSize = 1;
@@ -707,7 +703,6 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
       textField: "This is a *nice*, *flexible* content type.",
       overallFeedback: {
         popupBackgroundColor: '#ffffff',
-        feedbackTextColor: '#333333',
         feedbackBodyFontSize: 1,
         feedbackCloseIconSize: 1.2,
         overallFeedback: []
@@ -1682,7 +1677,8 @@ H5P.MarkTheWordsCFRD = (function ($, Question, Word, KeyboardNav, XapiGenerator)
       ratio,
       this.contentId,
       score,
-      max
+      max,
+      { allowHtml: true, omitLead: true }
     );
     var popupSettings;
 

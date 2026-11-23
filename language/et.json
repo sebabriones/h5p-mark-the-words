@@ -1,787 +1,770 @@
 {
-  "semantics": [
-    {
-      "label": "Instructions",
-      "fields": [
-        {
-          "label": "Show instructions",
-          "default": false
-        },
-        {
-          "label": "Instructions text"
-        },
-        {
-          "label": "Display mode",
-          "default": "both",
-          "options": [
-            {
-              "label": "Intro only"
-            },
-            {
-              "label": "Tab only"
-            },
-            {
-              "label": "Intro and tab"
-            }
-          ]
-        },
-        {
-          "label": "Intro button label",
-          "default": "Start"
-        },
-        {
-          "label": "Tab button label",
-          "default": "Instructions"
-        },
-        {
-          "label": "Collapse tab on load",
-          "default": true
-        },
-        {
-          "label": "Animation",
-          "fields": [
-            {
-              "label": "Intro curtain duration",
-              "description": "Opening/closing speed for the intro curtain in milliseconds.",
-              "default": 600
-            },
-            {
-              "label": "Tab open/close duration",
-              "description": "Opening/closing speed for the instructions tab in milliseconds.",
-              "default": 600
-            },
-            {
-              "label": "Tab closed extra offset",
-              "description": "Extra offset (in px) applied when the tab is closed. 0 keeps it flush; higher values hide it more.",
-              "default": 0
-            }
-          ]
-        },
-        {
-          "label": "Instructions appearance",
-          "fields": [
-            {
-              "label": "Intro window",
-              "fields": [
-                {
-                  "label": "Use gradient background",
-                  "default": false
-                },
-                {
-                  "label": "Intro background color",
-                  "default": "#f5f5f5"
-                },
-                {
-                  "label": "Gradient background",
-                  "fields": [
-                    {
-                      "label": "Gradient angle",
-                      "description": "Direction in degrees (0 = upward, 180 = downward).",
-                      "default": 180
-                    },
-                    {
-                      "label": "Gradient start color",
-                      "default": "#f5f5f5"
-                    },
-                    {
-                      "label": "Gradient end color",
-                      "default": "#f5f5f5"
-                    }
-                  ]
-                },
-                {
-                  "label": "Intro text color",
-                  "default": "#333333"
-                },
-                {
-                  "label": "Start button",
-                  "fields": [
-                    {
-                      "label": "Use gradient background",
-                      "default": false
-                    },
-                    {
-                      "label": "Button background color",
-                      "default": "#1a73d9"
-                    },
-                    {
-                      "label": "Gradient background",
-                      "fields": [
-                        {
-                          "label": "Gradient angle",
-                          "description": "Direction in degrees (0 = upward, 180 = downward).",
-                          "default": 180
-                        },
-                        {
-                          "label": "Gradient start color",
-                          "default": "#1a73d9"
-                        },
-                        {
-                          "label": "Gradient end color",
-                          "default": "#1a73d9"
-                        }
-                      ]
-                    },
-                    {
-                      "label": "Button text color",
-                      "default": "#ffffff"
-                    },
-                    {
-                      "label": "Button hover background color",
-                      "default": "#1356a3"
-                    },
-                    {
-                      "label": "Button hover text color",
-                      "default": "#ffffff"
-                    },
-                    {
-                      "label": "Use button border",
-                      "default": false
-                    },
-                    {
-                      "label": "Border settings",
-                      "fields": [
-                        {
-                          "label": "Button border color",
-                          "default": "#1a73d9"
-                        },
-                        {
-                          "label": "Button hover border color",
-                          "default": "#1356a3"
-                        }
-                      ]
-                    },
-                    {
-                      "label": "Button border radius",
-                      "description": "Corner roundness in rem units.",
-                      "default": 0
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "label": "Instructions tab",
-              "fields": [
-                {
-                  "label": "Use gradient background",
-                  "default": false
-                },
-                {
-                  "label": "Tab background color",
-                  "default": "#f5f5f5"
-                },
-                {
-                  "label": "Gradient background",
-                  "fields": [
-                    {
-                      "label": "Gradient angle",
-                      "description": "Direction in degrees (0 = upward, 180 = downward).",
-                      "default": 180
-                    },
-                    {
-                      "label": "Gradient start color",
-                      "default": "#f5f5f5"
-                    },
-                    {
-                      "label": "Gradient end color",
-                      "default": "#f5f5f5"
-                    }
-                  ]
-                },
-                {
-                  "label": "Tab text color",
-                  "default": "#333333"
-                },
-                {
-                  "label": "Tab content border color",
-                  "default": "#dbe2e8"
-                },
-                {
-                  "label": "Tab button position",
-                  "default": "left",
-                  "options": [
-                    {
-                      "label": "Left"
-                    },
-                    {
-                      "label": "Center"
-                    },
-                    {
-                      "label": "Right"
-                    }
-                  ]
-                },
-                {
-                  "label": "Tab button",
-                  "fields": [
-                    {
-                      "label": "Use gradient background",
-                      "default": false
-                    },
-                    {
-                      "label": "Button background color",
-                      "default": "#1a73d9"
-                    },
-                    {
-                      "label": "Gradient background",
-                      "fields": [
-                        {
-                          "label": "Gradient angle",
-                          "description": "Direction in degrees (0 = upward, 180 = downward).",
-                          "default": 180
-                        },
-                        {
-                          "label": "Gradient start color",
-                          "default": "#1a73d9"
-                        },
-                        {
-                          "label": "Gradient end color",
-                          "default": "#1a73d9"
-                        }
-                      ]
-                    },
-                    {
-                      "label": "Button text color",
-                      "default": "#ffffff"
-                    },
-                    {
-                      "label": "Button hover background color",
-                      "default": "#1356a3"
-                    },
-                    {
-                      "label": "Button hover text color",
-                      "default": "#ffffff"
-                    },
-                    {
-                      "label": "Use button border",
-                      "default": false
-                    },
-                    {
-                      "label": "Border settings",
-                      "fields": [
-                        {
-                          "label": "Button border color",
-                          "default": "#1a73d9"
-                        },
-                        {
-                          "label": "Button hover border color",
-                          "default": "#1356a3"
-                        }
-                      ]
-                    },
-                    {
-                      "label": "Button border radius",
-                      "description": "Corner roundness in rem units.",
-                      "default": 0
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "label": "Context (optional)",
-      "fields": [
-        {
-          "label": "Context text",
-          "description": "Optional supporting text shown beside the text to mark."
-        },
-        {
-          "label": "Context image",
-          "fields": [
-            {
-              "label": "Image",
-              "description": "Optional image shown beside the text to mark."
-            },
-            {
-              "label": "Disable image zooming"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "label": "Tekstiväli",
-      "placeholder": "See on vastus: *vastus*.",
-      "important": {
-        "description": "<ul><li>Märgitud sõnad lisatakse tärni (*) kasutades.</li><li>Tärni lisamiseks kasuta topelt-tärni ** = *.</li></ul>",
-        "example": "Õiged sõnad märgitakse nii: *õigesõna*, tärn lisataksenii: *õigesõna***."
-      }
-    },
-    {
-      "label": "Üldine tagasiside",
-      "fields": [
-        {
-          "label": "Popup background color",
-          "default": "#ffffff"
-        },
-        {
-          "label": "Feedback text color",
-          "default": "#333333"
-        },
-        {
-          "widgets": [
-            {
-              "label": "Vaikimisi"
-            }
-          ],
-          "label": "Määratle kohandatud tagasiside igale punktisumma vahemikule",
-          "description": "Kliki \"Lisa vahemik\" nupule vajalike vahemike lisamiseks. Näiteks: 0-20% halb tulemus, 21-91% keskmine tulemus, 91-100% suurepärane tulemus!",
-          "entity": "vahemik",
-          "field": {
-            "fields": [
-              {
-                "label": "Punktisumma vahemik"
-              },
-              {},
-              {
-                "label": "Tagasiside määratletud punktisumma vahemikule",
-                "placeholder": "Sisesta tagasiside"
-              },
-              {
-                "label": "Appearance settings",
-                "fields": [
-                  {
-                    "label": "Highlighted lead text",
-                    "placeholder": "e.g. Correct! or Incorrect"
-                  },
-                  {
-                    "label": "Bold lead text"
-                  },
-                  {
-                    "label": "Highlighted lead text color",
-                    "default": "#1a73d9"
-                  },
-                  {
-                    "label": "Text alignment",
-                    "description": "Only used when no feedback image is set. With an image, text alignment follows image position (left/right: left aligned, above: centered).",
-                    "options": [
+    "semantics":  [
                       {
-                        "label": "Left"
+                          "label":  "Instructions",
+                          "fields":  [
+                                         {
+                                             "label":  "Show instructions",
+                                             "default":  false
+                                         },
+                                         {
+                                             "label":  "Instructions text"
+                                         },
+                                         {
+                                             "label":  "Display mode",
+                                             "default":  "both",
+                                             "options":  [
+                                                             {
+                                                                 "label":  "Intro only"
+                                                             },
+                                                             {
+                                                                 "label":  "Tab only"
+                                                             },
+                                                             {
+                                                                 "label":  "Intro and tab"
+                                                             }
+                                                         ]
+                                         },
+                                         {
+                                             "label":  "Intro button label",
+                                             "default":  "Start"
+                                         },
+                                         {
+                                             "label":  "Tab button label",
+                                             "default":  "Instructions"
+                                         },
+                                         {
+                                             "label":  "Collapse tab on load",
+                                             "default":  true
+                                         },
+                                         {
+                                             "label":  "Animation",
+                                             "fields":  [
+                                                            {
+                                                                "label":  "Intro curtain duration",
+                                                                "description":  "Opening/closing speed for the intro curtain in milliseconds.",
+                                                                "default":  600
+                                                            },
+                                                            {
+                                                                "label":  "Tab open/close duration",
+                                                                "description":  "Opening/closing speed for the instructions tab in milliseconds.",
+                                                                "default":  600
+                                                            },
+                                                            {
+                                                                "label":  "Tab closed extra offset",
+                                                                "description":  "Extra offset (in px) applied when the tab is closed. 0 keeps it flush; higher values hide it more.",
+                                                                "default":  0
+                                                            }
+                                                        ]
+                                         },
+                                         {
+                                             "label":  "Instructions appearance",
+                                             "fields":  [
+                                                            {
+                                                                "label":  "Intro window",
+                                                                "fields":  [
+                                                                               {
+                                                                                   "label":  "Use gradient background",
+                                                                                   "default":  false
+                                                                               },
+                                                                               {
+                                                                                   "label":  "Intro background color",
+                                                                                   "default":  "#f5f5f5"
+                                                                               },
+                                                                               {
+                                                                                   "label":  "Gradient background",
+                                                                                   "fields":  [
+                                                                                                  {
+                                                                                                      "label":  "Gradient angle",
+                                                                                                      "description":  "Direction in degrees (0 = upward, 180 = downward).",
+                                                                                                      "default":  180
+                                                                                                  },
+                                                                                                  {
+                                                                                                      "label":  "Gradient start color",
+                                                                                                      "default":  "#f5f5f5"
+                                                                                                  },
+                                                                                                  {
+                                                                                                      "label":  "Gradient end color",
+                                                                                                      "default":  "#f5f5f5"
+                                                                                                  }
+                                                                                              ]
+                                                                               },
+                                                                               {
+                                                                                   "label":  "Intro text color",
+                                                                                   "default":  "#333333"
+                                                                               },
+                                                                               {
+                                                                                   "label":  "Start button",
+                                                                                   "fields":  [
+                                                                                                  {
+                                                                                                      "label":  "Use gradient background",
+                                                                                                      "default":  false
+                                                                                                  },
+                                                                                                  {
+                                                                                                      "label":  "Button background color",
+                                                                                                      "default":  "#1a73d9"
+                                                                                                  },
+                                                                                                  {
+                                                                                                      "label":  "Gradient background",
+                                                                                                      "fields":  [
+                                                                                                                     {
+                                                                                                                         "label":  "Gradient angle",
+                                                                                                                         "description":  "Direction in degrees (0 = upward, 180 = downward).",
+                                                                                                                         "default":  180
+                                                                                                                     },
+                                                                                                                     {
+                                                                                                                         "label":  "Gradient start color",
+                                                                                                                         "default":  "#1a73d9"
+                                                                                                                     },
+                                                                                                                     {
+                                                                                                                         "label":  "Gradient end color",
+                                                                                                                         "default":  "#1a73d9"
+                                                                                                                     }
+                                                                                                                 ]
+                                                                                                  },
+                                                                                                  {
+                                                                                                      "label":  "Button text color",
+                                                                                                      "default":  "#ffffff"
+                                                                                                  },
+                                                                                                  {
+                                                                                                      "label":  "Button hover background color",
+                                                                                                      "default":  "#1356a3"
+                                                                                                  },
+                                                                                                  {
+                                                                                                      "label":  "Button hover text color",
+                                                                                                      "default":  "#ffffff"
+                                                                                                  },
+                                                                                                  {
+                                                                                                      "label":  "Use button border",
+                                                                                                      "default":  false
+                                                                                                  },
+                                                                                                  {
+                                                                                                      "label":  "Border settings",
+                                                                                                      "fields":  [
+                                                                                                                     {
+                                                                                                                         "label":  "Button border color",
+                                                                                                                         "default":  "#1a73d9"
+                                                                                                                     },
+                                                                                                                     {
+                                                                                                                         "label":  "Button hover border color",
+                                                                                                                         "default":  "#1356a3"
+                                                                                                                     }
+                                                                                                                 ]
+                                                                                                  },
+                                                                                                  {
+                                                                                                      "label":  "Button border radius",
+                                                                                                      "description":  "Corner roundness in rem units.",
+                                                                                                      "default":  0
+                                                                                                  }
+                                                                                              ]
+                                                                               }
+                                                                           ]
+                                                            },
+                                                            {
+                                                                "label":  "Instructions tab",
+                                                                "fields":  [
+                                                                               {
+                                                                                   "label":  "Use gradient background",
+                                                                                   "default":  false
+                                                                               },
+                                                                               {
+                                                                                   "label":  "Tab background color",
+                                                                                   "default":  "#f5f5f5"
+                                                                               },
+                                                                               {
+                                                                                   "label":  "Gradient background",
+                                                                                   "fields":  [
+                                                                                                  {
+                                                                                                      "label":  "Gradient angle",
+                                                                                                      "description":  "Direction in degrees (0 = upward, 180 = downward).",
+                                                                                                      "default":  180
+                                                                                                  },
+                                                                                                  {
+                                                                                                      "label":  "Gradient start color",
+                                                                                                      "default":  "#f5f5f5"
+                                                                                                  },
+                                                                                                  {
+                                                                                                      "label":  "Gradient end color",
+                                                                                                      "default":  "#f5f5f5"
+                                                                                                  }
+                                                                                              ]
+                                                                               },
+                                                                               {
+                                                                                   "label":  "Tab text color",
+                                                                                   "default":  "#333333"
+                                                                               },
+                                                                               {
+                                                                                   "label":  "Tab content border color",
+                                                                                   "default":  "#dbe2e8"
+                                                                               },
+                                                                               {
+                                                                                   "label":  "Tab button position",
+                                                                                   "default":  "left",
+                                                                                   "options":  [
+                                                                                                   {
+                                                                                                       "label":  "Left"
+                                                                                                   },
+                                                                                                   {
+                                                                                                       "label":  "Center"
+                                                                                                   },
+                                                                                                   {
+                                                                                                       "label":  "Right"
+                                                                                                   }
+                                                                                               ]
+                                                                               },
+                                                                               {
+                                                                                   "label":  "Tab button",
+                                                                                   "fields":  [
+                                                                                                  {
+                                                                                                      "label":  "Use gradient background",
+                                                                                                      "default":  false
+                                                                                                  },
+                                                                                                  {
+                                                                                                      "label":  "Button background color",
+                                                                                                      "default":  "#1a73d9"
+                                                                                                  },
+                                                                                                  {
+                                                                                                      "label":  "Gradient background",
+                                                                                                      "fields":  [
+                                                                                                                     {
+                                                                                                                         "label":  "Gradient angle",
+                                                                                                                         "description":  "Direction in degrees (0 = upward, 180 = downward).",
+                                                                                                                         "default":  180
+                                                                                                                     },
+                                                                                                                     {
+                                                                                                                         "label":  "Gradient start color",
+                                                                                                                         "default":  "#1a73d9"
+                                                                                                                     },
+                                                                                                                     {
+                                                                                                                         "label":  "Gradient end color",
+                                                                                                                         "default":  "#1a73d9"
+                                                                                                                     }
+                                                                                                                 ]
+                                                                                                  },
+                                                                                                  {
+                                                                                                      "label":  "Button text color",
+                                                                                                      "default":  "#ffffff"
+                                                                                                  },
+                                                                                                  {
+                                                                                                      "label":  "Button hover background color",
+                                                                                                      "default":  "#1356a3"
+                                                                                                  },
+                                                                                                  {
+                                                                                                      "label":  "Button hover text color",
+                                                                                                      "default":  "#ffffff"
+                                                                                                  },
+                                                                                                  {
+                                                                                                      "label":  "Use button border",
+                                                                                                      "default":  false
+                                                                                                  },
+                                                                                                  {
+                                                                                                      "label":  "Border settings",
+                                                                                                      "fields":  [
+                                                                                                                     {
+                                                                                                                         "label":  "Button border color",
+                                                                                                                         "default":  "#1a73d9"
+                                                                                                                     },
+                                                                                                                     {
+                                                                                                                         "label":  "Button hover border color",
+                                                                                                                         "default":  "#1356a3"
+                                                                                                                     }
+                                                                                                                 ]
+                                                                                                  },
+                                                                                                  {
+                                                                                                      "label":  "Button border radius",
+                                                                                                      "description":  "Corner roundness in rem units.",
+                                                                                                      "default":  0
+                                                                                                  }
+                                                                                              ]
+                                                                               }
+                                                                           ]
+                                                            }
+                                                        ]
+                                         }
+                                     ]
                       },
                       {
-                        "label": "Center"
+                          "label":  "Context (optional)",
+                          "fields":  [
+                                         {
+                                             "label":  "Context text",
+                                             "description":  "Optional supporting text shown beside the text to mark."
+                                         },
+                                         {
+                                             "label":  "Context image",
+                                             "fields":  [
+                                                            {
+                                                                "label":  "Image",
+                                                                "description":  "Optional image shown beside the text to mark."
+                                                            },
+                                                            {
+                                                                "label":  "Disable image zooming"
+                                                            }
+                                                        ]
+                                         }
+                                     ]
                       },
                       {
-                        "label": "Right"
+                          "label":  "Tekstiväli",
+                          "placeholder":  "See on vastus: *vastus*.",
+                          "important":  {
+                                            "description":  "\u003cul\u003e\u003cli\u003eMärgitud sõnad lisatakse tärni (*) kasutades.\u003c/li\u003e\u003cli\u003eTärni lisamiseks kasuta topelt-tärni ** = *.\u003c/li\u003e\u003c/ul\u003e",
+                                            "example":  "Õiged sõnad märgitakse nii: *õigesõna*, tärn lisataksenii: *õigesõna***."
+                                        }
+                      },
+                      {
+                          "label":  "Üldine tagasiside",
+                          "fields":  [
+                                         {
+                                             "label":  "Popup background color",
+                                             "default":  "#ffffff"
+                                         },
+                                         {
+                                             "label":  "Feedback body font size",
+                                             "description":  "Base font size of the feedback message in the popup (relative to the content font). Per-fragment sizes can also be set in the feedback editor.",
+                                             "default":  1
+                                         },
+                                         {
+                                             "label":  "Feedback close icon size",
+                                             "description":  "Size of the close (X) icon on the feedback popup.",
+                                             "default":  1.2
+                                         },
+                                         {
+                                             "widgets":  [
+                                                             {
+                                                                 "label":  "Vaikimisi"
+                                                             }
+                                                         ],
+                                             "label":  "Määratle kohandatud tagasiside igale punktisumma vahemikule",
+                                             "description":  "Kliki \"Lisa vahemik\" nupule vajalike vahemike lisamiseks. Näiteks: 0-20% halb tulemus, 21-91% keskmine tulemus, 91-100% suurepärane tulemus!",
+                                             "entity":  "vahemik",
+                                             "field":  {
+                                                           "fields":  [
+                                                                          {
+                                                                              "label":  "Punktisumma vahemik"
+                                                                          },
+                                                                          {
+
+                                                                          },
+                                                                          {
+                                                                              "label":  "Tagasiside määratletud punktisumma vahemikule",
+                                                                              "placeholder":  "Sisesta tagasiside"
+                                                                          },
+                                                                          {
+                                                                              "label":  "Feedback image",
+                                                                              "description":  "Optional image for this score range. Text color and formatting are set in the feedback message editor.",
+                                                                              "fields":  [
+                                                                                             {
+                                                                                                 "label":  "Feedback image"
+                                                                                             },
+                                                                                             {
+                                                                                                 "label":  "Image position",
+                                                                                                 "options":  [
+                                                                                                                 {
+                                                                                                                     "label":  "Above text"
+                                                                                                                 },
+                                                                                                                 {
+                                                                                                                     "label":  "Left of text"
+                                                                                                                 },
+                                                                                                                 {
+                                                                                                                     "label":  "Right of text"
+                                                                                                                 }
+                                                                                                             ]
+                                                                                             }
+                                                                                         ]
+                                                                          }
+                                                                      ]
+                                                       }
+                                         }
+                                     ]
+                      },
+                      {
+                          "label":  "\"Kontrolli\" nupu tekst",
+                          "default":  "Kontrolli"
+                      },
+                      {
+                          "label":  "Text for \"Submit\" button",
+                          "default":  "Submit"
+                      },
+                      {
+                          "label":  "\"Proovi uuesti\" nupu tekst",
+                          "default":  "Proovi uuesti"
+                      },
+                      {
+                          "label":  "\"Näita lahendust\" nupu tekst",
+                          "default":  "Näita lahendust"
+                      },
+                      {
+                          "label":  "Käitumisseaded.",
+                          "description":  "Nende valikutega saad määrata ülesande käitumise.",
+                          "fields":  [
+                                         {
+                                             "label":  "Luba \"Proovi uuesti\" nupp"
+                                         },
+                                         {
+                                             "label":  "Luba \"Näita lahendust\" nupp"
+                                         },
+                                         {
+                                             "label":  "Luba \"Kontrolli\" nupp"
+                                         },
+                                         {
+                                             "label":  "Näita punktisumma tulemus",
+                                             "description":  "Iga vastusega teenitud punktid."
+                                         }
+                                     ]
+                      },
+                      {
+                          "label":  "Õige vastuse tekst",
+                          "default":  "Õige!",
+                          "description":  "Õigele vastusele osutav tekst"
+                      },
+                      {
+                          "label":  "Vale vastuse tekst",
+                          "default":  "Vale!",
+                          "description":  "Valele vastusele osutav tekst"
+                      },
+                      {
+                          "label":  "Täitmata vastuse tekst",
+                          "default":  "Puudu!",
+                          "description":  "Puuduvale vastusele osutav tekst"
+                      },
+                      {
+                          "label":  "Näita lahendust kirjeldus",
+                          "default":  "Ülesanne on uuendatud ja sisaldab nüüd lahendust.",
+                          "description":  "See tekst teatab kasutajale, et ülesandele on lisatud lahendus."
+                      },
+                      {
+                          "label":  "Punktisumma riba tekstiline esitus tekstilugeri kasutajaile",
+                          "default":  "Sa said :num punkti :total punktist"
+                      },
+                      {
+                          "label":  "Label for the full readable text for assistive technologies",
+                          "default":  "Full readable text"
+                      },
+                      {
+                          "label":  "Label for the text where words can be marked for assistive technologies",
+                          "default":  "Full text where words can be marked"
+                      },
+                      {
+                          "label":  "Solution mode header for assistive technologies",
+                          "default":  "Solution mode"
+                      },
+                      {
+                          "label":  "Checking mode header for assistive technologies",
+                          "default":  "Checking mode"
+                      },
+                      {
+                          "label":  "Assistive technology description for \"Check\" button",
+                          "default":  "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+                      },
+                      {
+                          "label":  "Assistive technology description for \"Show Solution\" button",
+                          "default":  "Show the solution. The task will be marked with its correct solution."
+                      },
+                      {
+                          "label":  "Text for overall feedback popup close button",
+                          "default":  "Close"
+                      },
+                      {
+                          "label":  "Text for \"Show feedback\" button",
+                          "default":  "Show feedback"
+                      },
+                      {
+                          "label":  "Assistive technology description for \"Retry\" button",
+                          "default":  "Retry the task. Reset all responses and start the task over again."
+                      },
+                      {
+                          "label":  "Appearance",
+                          "fields":  [
+                                         {
+                                             "label":  "Play area background color",
+                                             "default":  "#ffffff"
+                                         },
+                                         {
+                                             "label":  "Word colors",
+                                             "fields":  [
+                                                            {
+                                                                "label":  "Use gradient background",
+                                                                "default":  false
+                                                            },
+                                                            {
+                                                                "label":  "Word background color",
+                                                                "description":  "Leave empty for transparent."
+                                                            },
+                                                            {
+                                                                "label":  "Gradient background",
+                                                                "fields":  [
+                                                                               {
+                                                                                   "label":  "Gradient angle",
+                                                                                   "description":  "Direction in degrees (0 = upward, 180 = downward).",
+                                                                                   "default":  180
+                                                                               },
+                                                                               {
+                                                                                   "label":  "Gradient start color",
+                                                                                   "description":  "Leave empty for transparent."
+                                                                               },
+                                                                               {
+                                                                                   "label":  "Gradient end color",
+                                                                                   "description":  "Leave empty for transparent."
+                                                                               }
+                                                                           ]
+                                                            },
+                                                            {
+                                                                "label":  "Word text color",
+                                                                "default":  "#333333"
+                                                            },
+                                                            {
+                                                                "label":  "Word border color",
+                                                                "description":  "Leave empty for transparent."
+                                                            },
+                                                            {
+                                                                "label":  "Use gradient background on hover",
+                                                                "default":  false
+                                                            },
+                                                            {
+                                                                "label":  "Word hover background color",
+                                                                "description":  "Leave empty for transparent. If unset, defaults to white."
+                                                            },
+                                                            {
+                                                                "label":  "Hover gradient background",
+                                                                "fields":  [
+                                                                               {
+                                                                                   "label":  "Gradient angle",
+                                                                                   "description":  "Direction in degrees (0 = upward, 180 = downward).",
+                                                                                   "default":  180
+                                                                               },
+                                                                               {
+                                                                                   "label":  "Gradient start color",
+                                                                                   "description":  "Leave empty for transparent."
+                                                                               },
+                                                                               {
+                                                                                   "label":  "Gradient end color",
+                                                                                   "description":  "Leave empty for transparent."
+                                                                               }
+                                                                           ]
+                                                            },
+                                                            {
+                                                                "label":  "Word hover text color",
+                                                                "default":  "#333333"
+                                                            },
+                                                            {
+                                                                "label":  "Word hover border color",
+                                                                "default":  "#1a73d9"
+                                                            },
+                                                            {
+                                                                "label":  "Use gradient background when selected",
+                                                                "default":  false
+                                                            },
+                                                            {
+                                                                "label":  "Selected word background color",
+                                                                "description":  "Leave empty for transparent. If unset, defaults to light blue."
+                                                            },
+                                                            {
+                                                                "label":  "Selected gradient background",
+                                                                "fields":  [
+                                                                               {
+                                                                                   "label":  "Gradient angle",
+                                                                                   "description":  "Direction in degrees (0 = upward, 180 = downward).",
+                                                                                   "default":  180
+                                                                               },
+                                                                               {
+                                                                                   "label":  "Gradient start color",
+                                                                                   "description":  "Leave empty for transparent."
+                                                                               },
+                                                                               {
+                                                                                   "label":  "Gradient end color",
+                                                                                   "description":  "Leave empty for transparent."
+                                                                               }
+                                                                           ]
+                                                            },
+                                                            {
+                                                                "label":  "Selected word text color",
+                                                                "default":  "#333333"
+                                                            },
+                                                            {
+                                                                "label":  "Selected word border color",
+                                                                "default":  "#388eff"
+                                                            }
+                                                        ]
+                                         },
+                                         {
+                                             "label":  "Text",
+                                             "description":  "Colors, font sizes and line heights for the text to mark and context.",
+                                             "fields":  [
+                                                            {
+                                                                "label":  "Question text color",
+                                                                "default":  "#333333"
+                                                            },
+                                                            {
+                                                                "label":  "Question font size",
+                                                                "description":  "Text size relative to the play area (em). Default is 1.",
+                                                                "default":  1
+                                                            },
+                                                            {
+                                                                "label":  "Question line height",
+                                                                "description":  "Line spacing for the text to mark. Higher values prevent highlights from overlapping the line below. Default is 1.7.",
+                                                                "default":  1.7
+                                                            },
+                                                            {
+                                                                "label":  "Context text color",
+                                                                "default":  "#555555"
+                                                            },
+                                                            {
+                                                                "label":  "Context font size",
+                                                                "description":  "Text size relative to the play area (em). Default is 1.",
+                                                                "default":  1
+                                                            },
+                                                            {
+                                                                "label":  "Context line height",
+                                                                "description":  "Line spacing for the context text. Default is 1.5.",
+                                                                "default":  1.5
+                                                            }
+                                                        ]
+                                         },
+                                         {
+                                             "label":  "Correct answer colors",
+                                             "fields":  [
+                                                            {
+                                                                "label":  "Correct answer background color",
+                                                                "default":  "#b6e4ce"
+                                                            },
+                                                            {
+                                                                "label":  "Correct answer text color",
+                                                                "default":  "#255c41"
+                                                            },
+                                                            {
+                                                                "label":  "Correct answer border color",
+                                                                "default":  "#255c41"
+                                                            }
+                                                        ]
+                                         },
+                                         {
+                                             "label":  "Wrong answer colors",
+                                             "fields":  [
+                                                            {
+                                                                "label":  "Wrong answer background color",
+                                                                "default":  "#fbd7d8"
+                                                            },
+                                                            {
+                                                                "label":  "Wrong answer text color",
+                                                                "default":  "#b71c1c"
+                                                            },
+                                                            {
+                                                                "label":  "Wrong answer border color",
+                                                                "default":  "#b71c1c"
+                                                            }
+                                                        ]
+                                         },
+                                         {
+                                             "label":  "Unselected correct answer colors (Show solution)",
+                                             "fields":  [
+                                                            {
+                                                                "label":  "Unselected correct answer background color",
+                                                                "default":  "#b6e4ce"
+                                                            },
+                                                            {
+                                                                "label":  "Unselected correct answer text color",
+                                                                "default":  "#255c41"
+                                                            },
+                                                            {
+                                                                "label":  "Unselected correct answer border color",
+                                                                "default":  "#255c41"
+                                                            }
+                                                        ]
+                                         },
+                                         {
+                                             "label":  "Correct/wrong feedback icons",
+                                             "description":  "Check and cross icons shown next to marked words after checking answers.",
+                                             "fields":  [
+                                                            {
+                                                                "label":  "Show feedback icons",
+                                                                "description":  "When disabled, only word colors/borders indicate correct and wrong answers.",
+                                                                "default":  true
+                                                            },
+                                                            {
+                                                                "label":  "Correct icon color",
+                                                                "description":  "Defaults to the correct answer text color when not set.",
+                                                                "default":  "#255c41"
+                                                            },
+                                                            {
+                                                                "label":  "Wrong icon color",
+                                                                "description":  "Defaults to the wrong answer text color when not set.",
+                                                                "default":  "#b71c1c"
+                                                            },
+                                                            {
+                                                                "label":  "Feedback icon size",
+                                                                "description":  "Relative size of the correct/wrong icon in em units.",
+                                                                "default":  1
+                                                            }
+                                                        ]
+                                         },
+                                         {
+                                             "label":  "Action buttons (Check, Retry and Show solution)",
+                                             "description":  "Shared style for Check, Try again and Show solution buttons. Border colors apply only when border is enabled.",
+                                             "fields":  [
+                                                            {
+                                                                "label":  "Use gradient background",
+                                                                "default":  false
+                                                            },
+                                                            {
+                                                                "label":  "Button background color",
+                                                                "default":  "#1a73d9"
+                                                            },
+                                                            {
+                                                                "label":  "Gradient background",
+                                                                "fields":  [
+                                                                               {
+                                                                                   "label":  "Gradient angle",
+                                                                                   "description":  "Direction in degrees (0 = upward, 180 = downward).",
+                                                                                   "default":  180
+                                                                               },
+                                                                               {
+                                                                                   "label":  "Gradient start color",
+                                                                                   "default":  "#1a73d9"
+                                                                               },
+                                                                               {
+                                                                                   "label":  "Gradient end color",
+                                                                                   "default":  "#1a73d9"
+                                                                               }
+                                                                           ]
+                                                            },
+                                                            {
+                                                                "label":  "Button text color",
+                                                                "default":  "#ffffff"
+                                                            },
+                                                            {
+                                                                "label":  "Button hover background color",
+                                                                "default":  "#1356a3"
+                                                            },
+                                                            {
+                                                                "label":  "Button hover text color",
+                                                                "default":  "#ffffff"
+                                                            },
+                                                            {
+                                                                "label":  "Use button border",
+                                                                "default":  false
+                                                            },
+                                                            {
+                                                                "label":  "Border settings",
+                                                                "fields":  [
+                                                                               {
+                                                                                   "label":  "Button border color",
+                                                                                   "default":  "#1a73d9"
+                                                                               },
+                                                                               {
+                                                                                   "label":  "Button hover border color",
+                                                                                   "default":  "#1356a3"
+                                                                               }
+                                                                           ]
+                                                            },
+                                                            {
+                                                                "label":  "Button border radius",
+                                                                "description":  "Default is 2em (Joubel UI). Lower values are sharper; higher values are more rounded.",
+                                                                "default":  2
+                                                            }
+                                                        ]
+                                         }
+                                     ]
                       }
-                    ]
-                  },
-                  {
-                    "label": "Feedback image"
-                  },
-                  {
-                    "label": "Image position",
-                    "options": [
-                      {
-                        "label": "Above text"
-                      },
-                      {
-                        "label": "Left of text"
-                      },
-                      {
-                        "label": "Right of text"
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "label": "\"Kontrolli\" nupu tekst",
-      "default": "Kontrolli"
-    },
-    {
-      "label": "Text for \"Submit\" button",
-      "default": "Submit"
-    },
-    {
-      "label": "\"Proovi uuesti\" nupu tekst",
-      "default": "Proovi uuesti"
-    },
-    {
-      "label": "\"Näita lahendust\" nupu tekst",
-      "default": "Näita lahendust"
-    },
-    {
-      "label": "Käitumisseaded.",
-      "description": "Nende valikutega saad määrata ülesande käitumise.",
-      "fields": [
-        {
-          "label": "Luba \"Proovi uuesti\" nupp"
-        },
-        {
-          "label": "Luba \"Näita lahendust\" nupp"
-        },
-        {
-          "label": "Luba \"Kontrolli\" nupp"
-        },
-        {
-          "label": "Näita punktisumma tulemus",
-          "description": "Iga vastusega teenitud punktid."
-        }
-      ]
-    },
-    {
-      "label": "Õige vastuse tekst",
-      "default": "Õige!",
-      "description": "Õigele vastusele osutav tekst"
-    },
-    {
-      "label": "Vale vastuse tekst",
-      "default": "Vale!",
-      "description": "Valele vastusele osutav tekst"
-    },
-    {
-      "label": "Täitmata vastuse tekst",
-      "default": "Puudu!",
-      "description": "Puuduvale vastusele osutav tekst"
-    },
-    {
-      "label": "Näita lahendust kirjeldus",
-      "default": "Ülesanne on uuendatud ja sisaldab nüüd lahendust.",
-      "description": "See tekst teatab kasutajale, et ülesandele on lisatud lahendus."
-    },
-    {
-      "label": "Punktisumma riba tekstiline esitus tekstilugeri kasutajaile",
-      "default": "Sa said :num punkti :total punktist"
-    },
-    {
-      "label": "Label for the full readable text for assistive technologies",
-      "default": "Full readable text"
-    },
-    {
-      "label": "Label for the text where words can be marked for assistive technologies",
-      "default": "Full text where words can be marked"
-    },
-    {
-      "label": "Solution mode header for assistive technologies",
-      "default": "Solution mode"
-    },
-    {
-      "label": "Checking mode header for assistive technologies",
-      "default": "Checking mode"
-    },
-    {
-      "label": "Assistive technology description for \"Check\" button",
-      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
-    },
-    {
-      "label": "Assistive technology description for \"Show Solution\" button",
-      "default": "Show the solution. The task will be marked with its correct solution."
-    },
-    {
-      "label": "Text for overall feedback popup close button",
-      "default": "Close"
-    },
-    {
-      "label": "Text for \"Show feedback\" button",
-      "default": "Show feedback"
-    },
-    {
-      "label": "Assistive technology description for \"Retry\" button",
-      "default": "Retry the task. Reset all responses and start the task over again."
-    },
-    {
-      "label": "Appearance",
-      "fields": [
-        {
-          "label": "Play area background color",
-          "default": "#ffffff"
-        },
-        {
-          "label": "Word colors",
-          "fields": [
-            {
-              "label": "Use gradient background",
-              "default": false
-            },
-            {
-              "label": "Word background color",
-              "description": "Leave empty for transparent."
-            },
-            {
-              "label": "Gradient background",
-              "fields": [
-                {
-                  "label": "Gradient angle",
-                  "description": "Direction in degrees (0 = upward, 180 = downward).",
-                  "default": 180
-                },
-                {
-                  "label": "Gradient start color",
-                  "description": "Leave empty for transparent."
-                },
-                {
-                  "label": "Gradient end color",
-                  "description": "Leave empty for transparent."
-                }
-              ]
-            },
-            {
-              "label": "Word text color",
-              "default": "#333333"
-            },
-            {
-              "label": "Word border color",
-              "description": "Leave empty for transparent."
-            },
-            {
-              "label": "Use gradient background on hover",
-              "default": false
-            },
-            {
-              "label": "Word hover background color",
-              "description": "Leave empty for transparent. If unset, defaults to white."
-            },
-            {
-              "label": "Hover gradient background",
-              "fields": [
-                {
-                  "label": "Gradient angle",
-                  "description": "Direction in degrees (0 = upward, 180 = downward).",
-                  "default": 180
-                },
-                {
-                  "label": "Gradient start color",
-                  "description": "Leave empty for transparent."
-                },
-                {
-                  "label": "Gradient end color",
-                  "description": "Leave empty for transparent."
-                }
-              ]
-            },
-            {
-              "label": "Word hover text color",
-              "default": "#333333"
-            },
-            {
-              "label": "Word hover border color",
-              "default": "#1a73d9"
-            },
-            {
-              "label": "Use gradient background when selected",
-              "default": false
-            },
-            {
-              "label": "Selected word background color",
-              "description": "Leave empty for transparent. If unset, defaults to light blue."
-            },
-            {
-              "label": "Selected gradient background",
-              "fields": [
-                {
-                  "label": "Gradient angle",
-                  "description": "Direction in degrees (0 = upward, 180 = downward).",
-                  "default": 180
-                },
-                {
-                  "label": "Gradient start color",
-                  "description": "Leave empty for transparent."
-                },
-                {
-                  "label": "Gradient end color",
-                  "description": "Leave empty for transparent."
-                }
-              ]
-            },
-            {
-              "label": "Selected word text color",
-              "default": "#333333"
-            },
-            {
-              "label": "Selected word border color",
-              "default": "#388eff"
-            }
-          ]
-        },
-        {
-          "label": "Text",
-          "description": "Colors, font sizes and line heights for the text to mark and context.",
-          "fields": [
-            {
-              "label": "Question text color",
-              "default": "#333333"
-            },
-            {
-              "label": "Question font size",
-              "description": "Text size relative to the play area (em). Default is 1.",
-              "default": 1
-            },
-            {
-              "label": "Question line height",
-              "description": "Line spacing for the text to mark. Higher values prevent highlights from overlapping the line below. Default is 1.7.",
-              "default": 1.7
-            },
-            {
-              "label": "Context text color",
-              "default": "#555555"
-            },
-            {
-              "label": "Context font size",
-              "description": "Text size relative to the play area (em). Default is 1.",
-              "default": 1
-            },
-            {
-              "label": "Context line height",
-              "description": "Line spacing for the context text. Default is 1.5.",
-              "default": 1.5
-            }
-          ]
-        },
-        {
-          "label": "Correct answer colors",
-          "fields": [
-            {
-              "label": "Correct answer background color",
-              "default": "#b6e4ce"
-            },
-            {
-              "label": "Correct answer text color",
-              "default": "#255c41"
-            },
-            {
-              "label": "Correct answer border color",
-              "default": "#255c41"
-            }
-          ]
-        },
-        {
-          "label": "Wrong answer colors",
-          "fields": [
-            {
-              "label": "Wrong answer background color",
-              "default": "#fbd7d8"
-            },
-            {
-              "label": "Wrong answer text color",
-              "default": "#b71c1c"
-            },
-            {
-              "label": "Wrong answer border color",
-              "default": "#b71c1c"
-            }
-          ]
-        },
-        {
-          "label": "Unselected correct answer colors (Show solution)",
-          "fields": [
-            {
-              "label": "Unselected correct answer background color",
-              "default": "#b6e4ce"
-            },
-            {
-              "label": "Unselected correct answer text color",
-              "default": "#255c41"
-            },
-            {
-              "label": "Unselected correct answer border color",
-              "default": "#255c41"
-            }
-          ]
-        },
-        {
-          "label": "Correct/wrong feedback icons",
-          "description": "Check and cross icons shown next to marked words after checking answers.",
-          "fields": [
-            {
-              "label": "Show feedback icons",
-              "description": "When disabled, only word colors/borders indicate correct and wrong answers.",
-              "default": true
-            },
-            {
-              "label": "Correct icon color",
-              "description": "Defaults to the correct answer text color when not set.",
-              "default": "#255c41"
-            },
-            {
-              "label": "Wrong icon color",
-              "description": "Defaults to the wrong answer text color when not set.",
-              "default": "#b71c1c"
-            },
-            {
-              "label": "Feedback icon size",
-              "description": "Relative size of the correct/wrong icon in em units.",
-              "default": 1
-            }
-          ]
-        },
-        {
-          "label": "Action buttons (Check, Retry and Show solution)",
-          "description": "Shared style for Check, Try again and Show solution buttons. Border colors apply only when border is enabled.",
-          "fields": [
-            {
-              "label": "Use gradient background",
-              "default": false
-            },
-            {
-              "label": "Button background color",
-              "default": "#1a73d9"
-            },
-            {
-              "label": "Gradient background",
-              "fields": [
-                {
-                  "label": "Gradient angle",
-                  "description": "Direction in degrees (0 = upward, 180 = downward).",
-                  "default": 180
-                },
-                {
-                  "label": "Gradient start color",
-                  "default": "#1a73d9"
-                },
-                {
-                  "label": "Gradient end color",
-                  "default": "#1a73d9"
-                }
-              ]
-            },
-            {
-              "label": "Button text color",
-              "default": "#ffffff"
-            },
-            {
-              "label": "Button hover background color",
-              "default": "#1356a3"
-            },
-            {
-              "label": "Button hover text color",
-              "default": "#ffffff"
-            },
-            {
-              "label": "Use button border",
-              "default": false
-            },
-            {
-              "label": "Border settings",
-              "fields": [
-                {
-                  "label": "Button border color",
-                  "default": "#1a73d9"
-                },
-                {
-                  "label": "Button hover border color",
-                  "default": "#1356a3"
-                }
-              ]
-            },
-            {
-              "label": "Button border radius",
-              "description": "Default is 2em (Joubel UI). Lower values are sharper; higher values are more rounded.",
-              "default": 2
-            }
-          ]
-        }
-      ]
-    }
-  ]
+                  ]
 }
